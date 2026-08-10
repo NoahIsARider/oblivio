@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>端云协同架构下的人脸识别性能优化 | oblivion is freedom</title>
+  <meta name="description" content="摘要 本研究针对深度学习人脸识别系统的性能优化问题，提出了一种基于端云协同架构的分布式计算方案，并创新性地引入了动态计算划分策略。通过对人脸识别流程中四个关键计算阶段（人脸检测、人脸对齐、特征提取、特征匹配）的性能特征分析，设计并实现了四种...">
+  <meta name="theme-color" content="#e7a1c4">
+  <link rel="icon" type="image/png" href="../icon.png">
+  <link rel="apple-touch-icon" href="../icon.png">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div class="page-shell work-page">
+    <header class="topbar" id="top">
+      <a class="brand" href="https://github.com/NoahIsARider" target="_blank" rel="noreferrer">noahisarider</a>
+      <nav class="topnav" aria-label="Page navigation">
+        <a href="../index.html">Archive</a>
+        <a href="#article">Article</a>
+      </nav>
+      <p class="topbar-status">2025<br>20 images</p>
+    </header>
+
+    <section class="intro-grid" aria-label="Article overview">
+      <article class="intro-block">
+        <h2>Title</h2>
+        <p>端云协同架构下的人脸识别性能优化</p>
+      </article>
+      <article class="intro-block">
+        <h2>Section</h2>
+        <p>Projects and Systems</p>
+      </article>
+      <article class="intro-block">
+        <h2>Summary</h2>
+        <p>摘要 本研究针对深度学习人脸识别系统的性能优化问题，提出了一种基于端云协同架构的分布式计算方案，并创新性地引入了动态计算划分策略。通过对人脸识别流程中四个关键计算阶段（人脸检测、人脸对齐、特征提取、特征匹配）的性能特征分析，设计并实现了四种...</p>
+      </article>
+      <article class="intro-block">
+        <h2>Return</h2>
+        <p><a href="../index.html">Back to the archive index</a><br>Read in the same static public edition.</p>
+      </article>
+    </section>
+
+    <section class="stage-mark" aria-hidden="true">
+      <img class="stage-mark-image" src="../background.png" alt="">
+    </section>
+
+    <section class="article-shell">
+      <article class="article-body" id="article">
+        <h1>端云协同架构下的人脸识别性能优化</h1>
+        <p class="article-meta">2025 / Projects and Systems</p>
+        <p class="article-summary">摘要 本研究针对深度学习人脸识别系统的性能优化问题，提出了一种基于端云协同架构的分布式计算方案，并创新性地引入了动态计算划分策略。通过对人脸识别流程中四个关键计算阶段（人脸检测、人脸对齐、特征提取、特征匹配）的性能特征分析，设计并实现了四种...</p>
+        <div class="article-content">
+<p><strong>摘要</strong></p>
+<p>本研究针对深度学习人脸识别系统的性能优化问题，提出了一种基于端云协同架构的分布式计算方案，并创新性地引入了动态计算划分策略。通过对人脸识别流程中四个关键计算阶段（人脸检测、人脸对齐、特征提取、特征匹配）的性能特征分析，设计并实现了四种端云任务划分策略，并进一步实现了基于"状态感知-时间预测-最优决策"的动态计算划分机制。实验结果表明，最优的静态任务划分策略（端侧执行检测和对齐，云端执行特征提取和匹配）相比传统本地处理模式实现了平均57.4%的性能提升；而引入动态划分策略能够有效应对端侧负载和网络条件的动态变化。本研究的主要贡献在于提出了基于性能特征的任务划分方法，验证了端云协同架构在计算机视觉任务中的显著优势，并为动态计算划分策略提供了完整的实现框架和实验验证，为类似应用场景提供了可参考的架构设计、测试策略和动态优化方法。</p>
+<p><strong>1. 引言</strong></p>
+<p>随着深度学习技术的快速发展，人脸识别系统在安防监控、身份验证、人机交互等领域得到了广泛应用。然而，传统的本地处理模式在面对高分辨率图像和复杂场景时，面临着计算资源不足、处理延迟高等挑战。同时，云端计算虽然具备强大的处理能力，但网络传输延迟和带宽限制也制约了其在实时应用中的表现。端云协同架构作为一种新兴的计算范式，通过合理分配计算任务到端侧和云端，有望充分利用两者的优势，实现整体系统性能的最优化。</p>
+<p>本研究聚焦于深度学习人脸识别系统的端云协同性能优化问题。人脸识别系统通常包含四个关键计算阶段：人脸检测（定位图像中的人脸区域）、人脸对齐（规范化人脸姿态和尺寸）、特征提取（提取人脸特征向量）和特征匹配（与数据库中的已知人脸进行相似度比较）。这些阶段在计算复杂度、数据依赖性和硬件适应性等方面存在显著差异，为端云任务划分提供了丰富的可能性。</p>
+<p>本研究将完成模块划分与最优方案测量任务与动态划分任务，具体目标包括：</p>
+<p>（1）分析人脸识别各计算阶段的性能特征和资源需求；</p>
+<p>（2）设计并实现多种端云任务划分策略；</p>
+<p>（3）通过系统实验评估不同策略的性能表现；</p>
+<p>（4）确定最优的任务划分方案并分析其优势；</p>
+<p>（5）探索动态计算划分策略并通过实验评估其表现。</p>
+<p>本文结构安排如下：第2节以<strong>理论</strong>为关键，详细介绍系统设计与方法，包括应用场景、性能指标、计算划分、动态划分策略，展示系统架构，体现我们对课程相关知识点的运用能力；第3节结合<strong>具体的代码</strong>，进一步介绍我们如何实现系统，体现我们在工程层面的贡献与开发过程中完成的工作；第4节分别展示不同划分方案下的<strong>实验结果</strong>以及动态划分策略的<strong>实验表现</strong>；第5节总结全文工作并展望未来研究方向。</p>
+<p><strong>2. 系统设计与方法</strong></p>
+<p>在这一节里，我们将结合理论与现实、展示算法与技术，全面地介绍我们的系统。内容包括：应用场景、性能指标、完成两个任务所使用的算法与技术和系统的架构展示。</p>
+<p><strong>2.1. 应用场景</strong></p>
+<p>本系统主要针对实时人脸识别应用场景，包括但不限于：</p>
+<ol type="1">
+<li><p><strong>移动设备人脸识别</strong> ：在计算资源受限的智能手机和平板电脑上，通过端云协同提升人脸识别速度和准确率。</p></li>
+<li><p><strong>边缘安防监控</strong> ：在边缘摄像头设备上进行初步人脸检测，将结果传输至云端进行深度处理和身份识别。</p></li>
+<li><p><strong>多用户同时认证</strong> ：在公共场所或企业环境中，需要同时处理多人脸的快速身份验证场景。</p></li>
+<li><p><strong>资源受限环境</strong> ：在IoT设备、嵌入式系统等计算能力有限的环境中，通过云端增强实现高质量人脸识别。</p></li>
+</ol>
+<p>这些应用场景的共同特点是对实时性要求较高，同时面临计算资源和网络条件的限制，端云协同架构能够有效平衡这些矛盾。<strong>为了满足性能的需求，我们采用了"增加资源"和"资源管理"的策略。</strong>在本地CPU基础上增加云端GPU以加快系统中涉及并行运算的深度学习模块计算，在此基础上进行合理的模块划分与资源管理而达到系统性能的最大化</p>
+<p><strong>2.2. 性能指标与测量</strong></p>
+<p>为全面评估系统性能，本研究采用以下关键性能指标：</p>
+<ol type="1">
+<li><p><strong>端到端处理延迟</strong> ：从输入图像到输出识别结果的总时间，以毫秒（ms）为单位。这是衡量系统实时性的最直接指标。</p></li>
+<li><p><strong>本地与云端计算时间</strong> ：针对各处理方案，测量并记录了处理流程中云端服务器（含数据传输开销）与本地客户端各自的耗时分布，通过系统性对比分析，分析本地与云端在计算性能上的差异特征，以及不同功能划分策略对整体执行效率产生的影响。</p></li>
+</ol>
+<p>性能测量方法采用自动化测试脚本，通过精确的时间戳记录每个阶段的开始和结束时间。对于分布式系统，分别记录端侧处理时间、网络传输时间和云端处理时间，以全面分析性能瓶颈。所有测试在系统稳定运行状态下进行多次重复，以减少随机因素的影响。</p>
+<p><strong>2.3. 计算划分</strong></p>
+<p>在正式实验开始前，我们对人脸识别的四个计算阶段进行了深入分析，并设计了多种划分方案：</p>
+<p><strong>1. 各阶段性能特征分析</strong></p>
+<p>根据实验前进行的批量运算（1223张图片），估计了四个计算阶段的时间开销，得到的总体性能特征如下：</p>
+<p>本地CPU：</p>
+<ul>
+<li><p>人脸检测阶段：总耗时123129.89 ms，占比约86.4%，计算密集型任务</p></li>
+<li><p>人脸对齐阶段：总耗时630.9 ms，占比约0.4%，轻量级预处理任务</p></li>
+<li><p>特征提取阶段：总耗时18713.49 ms，占比约13.1%，深度学习密集型任务</p></li>
+<li><p>特征匹配阶段：总耗时109.42 ms，占比约0.1%，计算复杂度随数据库增长</p></li>
+</ul>
+<p>云端GPU（实验前估计阶段批量测试阶段采用的是RTX4060，后面的正式实验使用的是V100，后者价格更贵。此阶段数据仅为代码开发估计使用）</p>
+<ul>
+<li><p>人脸检测阶段：总耗时181394.33 ms，占比约96.9%，计算密集型任务</p></li>
+<li><p>人脸对齐阶段：总耗时1173.86ms，占比约0.6%，轻量级预处理任务</p></li>
+<li><p>特征提取阶段：总耗时4569.27 ms，占比约2.4%，深度学习密集型任务</p></li>
+<li><p>特征匹配阶段：总耗时133.39 ms，占比约0.1%，计算复杂度随数据库增长</p></li>
+</ul>
+<p><strong>2. 端云计算能力对比</strong></p>
+<p>端侧（本地CPU）和云端（GPU服务器）在各阶段的性能差异显著：</p>
+<ul>
+<li><p>人脸检测：云端比本地要慢，这可能是因为第一个任务计算并行度小，而延迟对时间影响大</p></li>
+<li><p>人脸对齐：计算开销极小，两端差异不明显</p></li>
+<li><p>特征提取：云端GPU比本地CPU快约4-5倍，优势最为明显</p></li>
+<li><p>特征匹配：计算开销较小，两端差异不大</p></li>
+</ul>
+<p><strong>3. 网络传输考虑</strong></p>
+<p>不同数据类型的传输开销分析：</p>
+<ul>
+<li><p>原始图像：数据量大，传输开销高</p></li>
+<li><p>检测结果（坐标和特征点）：数据量小，但序列化开销存在</p></li>
+<li><p>对齐后的人脸图像：数据量适中，适合传输</p></li>
+<li><p>特征向量：数据量小，传输效率高</p></li>
+</ul>
+<p><strong>4.</strong> <strong>划分方案</strong></p>
+<p>基于上述分析，我们设计了四种端云协作模式，实现了灵活的计算任务划分：</p>
+<ul>
+<li><p><strong>Full Local</strong> 代表完全在本地进行计算。</p></li>
+<li><p><strong>Edge Detect-&gt;Align</strong> 代表在本地完成前两个模块（检测人脸和人脸对齐），在云端完成后两个模块（特征提取和向量匹配）</p></li>
+<li><p><strong>Edge Detect</strong> 代表在本地完成第一个模块（检测人脸），在云端完成后三个模块（人脸对齐、特征提取和向量匹配）</p></li>
+<li><p><strong>Full Cloud</strong> 代表完全在云端进行计算。</p></li>
+</ul>
+<p>我们并没有设计在本地完成前三个模块，在云端完成最后一个模块的方案。因为最后一个模块（向量匹配）的代码没有为GPU并行计算进行特别设计，其轻量级的计算特性使其适合在任何硬件平台上进行；同时，我们通过实验前的批量试运行也发现最后一个模块在云端不存在显著优势，反而可能比本地要慢。考虑来回的网络延迟，这种划分必然会慢于完全在本地跑的情况，没有必要再花费时间写该划分方案的测试脚本以及消耗云计算平台的租金。</p>
+<p><strong>2.4. 动态计算划分策略</strong></p>
+<p>静态任务划分仅适配固定场景，而实际应用中端侧进程负载、网络延迟的动态波动会显著影响系统性能。本研究基于 “状态感知 - 时间预测 - 最优决策” 的核心逻辑，通过模块化代码实现动态计算划分策略，以适配高资源占用场景。以下从<strong>核心算法介绍、具体策略设计、工程实现</strong>三个方面展开，逐步说明动态计算划分策略落地方式。</p>
+<p><strong>2.4.1 核心算法介绍</strong></p>
+<p>动态计算划分部分因为涉及本地高内存占用的情况，所以在上一部分计算划分中被直接排除的方案（在本地完成前三个模块，在云端完成最后一个模块）可能能够体现出一定优势，所以我们重新引入了该种情况。</p>
+<p>我们认为在现实场景中，本地内存占用与网络延迟可能是动态划分应该考虑的重要因素。结合动态参数与基线数据，我们的系统能够通过算法预测出最优的划分方案。采用的动态划分算法可以用下面的流程图呈现：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image1.jpeg" style="width:5.75in;height:1.27083in" /></p>
+<p>我们将模型动态预测最优划分方案时使用的算法用形式化的语言呈现如下：</p>
+<ul>
+<li><strong>端侧模块执行时间预测</strong></li>
+</ul>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>T</mi><mtext mathvariant="normal">local</mtext><mi>i</mi></msubsup><mo stretchy="false" form="prefix">(</mo><mi>u</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mi>T</mi><mtext mathvariant="normal">base</mtext><mi>i</mi></msubsup><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>u</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">T_{\text{local}}^{i}(u) = T_{\text{base}}^{i} \cdot (1 + u)</annotation></semantics></math></p>
+<p>其中：</p>
+<ul>
+<li><p>T_local(i, u) 表示第i个端侧模块在进程占用率u下的预测执行时间</p></li>
+<li><p>T_base(i) 表示第i个模块的基准执行时间（从config.py读取）</p></li>
+<li><p>u 表示进程占用率，取值范围 [0, 1]</p></li>
+<li><p>i 表示模块编号：1=检测、2=对齐、3=特征提取、4=匹配</p></li>
+<li><p><strong>云端管道执行时间预测</strong></p></li>
+</ul>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>T</mi><mtext mathvariant="normal">cloud</mtext><mi>j</mi></msubsup><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mi>T</mi><mrow><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi></mrow><mi>j</mi></msubsup><mo>+</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">T_{\text{cloud}}^{j}(d) = T_{serve}^{j} + d</annotation></semantics></math></p>
+<p>其中：</p>
+<ul>
+<li><p>T_cloud(j, d) 表示第j个云端管道在网络延迟d下的预测执行时间</p></li>
+<li><p>T_serve(j) 表示第j个云端管道的基准执行时间（从config.py读取）</p></li>
+<li><p>d 表示网络延迟（单位：毫秒）</p></li>
+<li><p>j 表示云端管道编号：0=全云端、1=align开始、2=extract开始、3=match</p></li>
+<li><p><strong>划分方案总时间与最优方案选择</strong></p></li>
+</ul>
+<p><img src="../assets/works/edge-cloud-face-recognition/image2.png" style="width:3.63546in;height:0.60584in" /></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>*</mi><mo>=</mo><mi>a</mi><mi>r</mi><mi>g</mi><mi>m</mi><mi>i</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mi>t</mi></msub><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>k</mi><mo>∈</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">k* = argmin\left( T_{t}otal(k) \right),k \in 0,1,2,3,4</annotation></semantics></math></p>
+<p>其中：</p>
+<ul>
+<li><p>T_total(k) 表示第k种划分方案的总执行时间</p></li>
+<li><p>k 表示方案编号：</p></li>
+<li><p>k=0: 全云端执行</p></li>
+<li><p>k=1: 端侧detect，云端align→extract→match</p></li>
+<li><p>k=2: 端侧detect→align，云端extract→match</p></li>
+<li><p>k=3: 端侧detect→align→extract，云端match</p></li>
+<li><p>k=4: 全端侧执行</p></li>
+<li><p>k* 表示总时间最小的最优方案编号</p></li>
+</ul>
+<blockquote>
+<p><strong>2.4.2 具体策略设计</strong></p>
+</blockquote>
+<blockquote>
+<p>动态策略的核心目标是<strong>实时感知系统状态，自适应选择耗时最优的端云划分方案</strong>，其设计基于两大核心前提：</p>
+</blockquote>
+<ol type="a">
+<li><p><strong>状态可量化</strong>：端侧进程占用率（<em>u</em>，0~1）和网络延迟（<em>d</em>，ms）是影响各模块执行时间的核心变量，可通过系统 API / 网络探测获取；</p></li>
+<li><p><strong>时间可预测</strong>：各模块 / 云端管道的执行时间可基于 “基准时间 + 状态变量修正” 的模型预测，基准时间由calibrate.py通过多轮实测校准（解决基准数据过时 / 不准确导致预测偏差的问题）。</p></li>
+</ol>
+<blockquote>
+<p>策略的数学模型已在前文阐述，此处补充<strong>代码层面的模型落地逻辑</strong>：</p>
+</blockquote>
+<ul>
+<li><p>进程占用的影响：通过calcOccupyExtraTime将占用率转换为额外睡眠时间（模拟资源竞争导致的耗时增加），且在模块执行前后各睡眠一半时间；</p></li>
+<li><p>网络延迟的影响：通过calcLatencyExtraTime将延迟转换为额外睡眠时间，同样在云端管道执行前后各分摊一半；</p></li>
+<li><p>总时间计算：穷举 5 种划分方案，分别累加 “端侧模块预测时间 + 云端管道预测时间”，取最小值对应的方案为最优。</p></li>
+</ul>
+<blockquote>
+<p><strong>2.4.3 动态划分完整执行流程</strong></p>
+</blockquote>
+<blockquote>
+<p>结合代码进行分析，动态划分策略的执行链路可分为 “初始化 - 请求处理 - 决策 - 执行 - 结果返回” 5 个阶段，完整覆盖从状态采集到任务执行的全流程：</p>
+</blockquote>
+<ol type="a">
+<li><p><strong>初始化阶段</strong>系统启动时运行基线数据测试脚本calibrate.py，对图片样本执行 5 轮人脸识别，计算各模块 / 云端管道的执行时间中位数，更新config.py中的基线数据，为后续预测提供基准数据。</p></li>
+<li><p><strong>请求处理阶段</strong>接收到人脸识别请求后，系统通过time_caculate.py实时采集：</p></li>
+</ol>
+<ul>
+<li><p>端侧进程占用率（<em>u</em>）：调用 Windows tasklist/Linux top获取人脸识别进程的 CPU / 内存占用率，映射为 0~1 的系数；</p></li>
+<li><p>网络延迟（<em>d</em>）：通过 gRPC 心跳包的往返时间（RTT）测量端云网络延迟（ms）。</p></li>
+</ul>
+<ol start="3" type="a">
+<li><p><strong>最优方案决策阶段</strong>① time_predictor.py基于<em>u</em>/<em>d</em>和基准时间，预测所有模块的本地执行时间、云端管道的执行时间；② partition_scheme.py调用calculate_total_time实现前文所述的算法，计算 5 种方案的总耗时，返回最优方案编号<em>k</em>∗。到此最优方案决策已经完成，下面是实验中对最优方案的验证阶段。</p></li>
+<li><p><strong>实验验证阶段</strong>根据<em>k</em>∗调用module_wrapper.py封装的模块函数：</p></li>
+</ol>
+<ul>
+<li><p>端侧模块：注入进程占用模拟延迟，执行对应模块（如<em>k</em>∗=2则执行 detect+align）；</p></li>
+<li><p>云端管道：通过 gRPC 调用对应接口，注入网络延迟模拟延迟，执行剩余模块（如<em>k</em>∗=2则执行 extract+match）。</p></li>
+</ul>
+<ol start="5" type="a">
+<li><strong>结果返回阶段</strong>汇总端侧 / 云端各模块的执行耗时，封装人脸识别结果（匹配 top-k 列表），输出至simulate.py/main.py，同时将测试结果写入./result_dynamic_scheduling.txt。</li>
+</ol>
+<p><strong>2.5. 系统设计与架构</strong></p>
+<p><strong>2.5.1 分层架构</strong></p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image3.jpeg" style="width:5.75in;height:3.78125in" /></p>
+<ol type="1">
+<li><strong>应用层</strong></li>
+</ol>
+<p>在应用层，系统通过 simulate 模块模拟实际应用场景下的用户请求，作为整个系统的入口，触发人脸识别流程。该层主要负责业务逻辑的调用与结果展示。</p>
+<ol start="2" type="1">
+<li><strong>调度层</strong></li>
+</ol>
+<p>调度层是系统的核心控制中心，包含 Scheduler 模块，其内部由 Wrapper、PartitionSchema、TimeCalculate 和 TimePredictor 等组件构成。该层根据当前设备状态（如CPU占用率、网络延迟）和任务特征，动态预测不同计算阶段的执行时间，并选择最优的端云任务划分策略（如全云、全端或混合模式），以最小化总响应时间，实现性能优化。</p>
+<ol start="3" type="1">
+<li><strong>接口层</strong></li>
+</ol>
+<p>接口层负责端与云之间的通信抽象与服务暴露。客户端通过 Client Interface 提供 Detect、Align、Extract、Match 等基础操作接口，以及高层封装的 FaceRecognize 和 FaceRegister 服务；服务器端则通过 Rpc Server Interface 提供 ProcessFaceRecognition 接口，基于 gRPC 协议实现高效、低延迟的远程过程调用，支撑端云协同计算。</p>
+<ol start="4" type="1">
+<li><strong>实现层</strong></li>
+</ol>
+<p>实现层为具体功能的执行模块，包含 Compute 组件下的四个核心计算单元：Detection（人脸检测）、Alignment（人脸对齐）、Extraction（特征提取）和 Matcher（特征匹配）。这些模块可部署于终端设备或云服务器，依据调度层决策灵活分配任务，完成人脸识别全流程的计算任务。</p>
+<ol start="5" type="1">
+<li><strong>数据层</strong></li>
+</ol>
+<p>最底层为数据层，即 Storage 层，提供系统所需的数据存储支持。其中 pubfig_face_database 用于存储人脸注册信息及测试数据集，Model 存储深度学习模型文件，为上层计算模块提供模型加载与数据访问能力。</p>
+<p>整体架构通过分层设计实现了高内聚、低耦合，结合 gRPC 实现端云高效通信，并通过智能调度机制动态优化任务分布，有效提升了人脸识别系统的实时性与资源利用率。</p>
+<p><strong>2.5.2 组件-连接器架构</strong></p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image4.jpeg" style="width:5.75in;height:2.13542in" /></p>
+<p>一种划分示例：Client: detect -&gt; align; Server: extract -&gt; match</p>
+<p>通过不同的划分方式，可以实现同一次人脸识别过程在端侧和云端的分布式协同运算，并最终将运算结果传回到端侧用户端</p>
+<p><strong>2.5.3分配架构</strong></p>
+<p><strong>执行架构</strong></p>
+<p>Python<br />
+</p>
+<p>DLFaceDetection/<br />
+</p>
+<p>├── modules/ # 核心算法模块（课程作业 Part B 核心模块）<br />
+</p>
+<p>│ ├── face_detection.py # 人脸检测 (MTCNN)，返回 boxes/landmarks/time_ms<br />
+</p>
+<p>│ ├── face_alignment.py # 人脸对齐，返回 aligned/time_ms<br />
+</p>
+<p>│ ├── feature_extraction.py # 特征提取 (InceptionResnetV1)，embeddings/time_ms<br />
+</p>
+<p>│ └── matcher.py # 特征库管理、匹配与数据库读写 (batch_match_timed)<br />
+</p>
+<p>│<br />
+</p>
+<p>├── dynamic_scheduler/ # 动态调度模块（课程作业 Part C 核心模块）<br />
+</p>
+<p>│ ├── partition_scheme.py # 划分方案枚举与最优方案选择 (find_optimal_partition)<br />
+</p>
+<p>│ ├── time_predictor.py # 时间预测器，基于基准数据预测各方案执行时间<br />
+</p>
+<p>│ ├── time_caculate.py # 进程占用与网络延迟的额外时间计算<br />
+</p>
+<p>│ └── module_wrapper.py # 模块包装器，注入进程占用/网络延迟模拟<br />
+</p>
+<p>│<br />
+</p>
+<p>├── rpc/ # 端云 gRPC 服务与客户端<br />
+</p>
+<p>│ ├── face_recognition.proto # gRPC 接口定义（5种处理阶段：DETECT/ALIGN/EXTRACT/MATCH/FULL）<br />
+</p>
+<p>│ ├── face_recognition_pb2.py # Protobuf 生成代码<br />
+</p>
+<p>│ ├── face_recognition_pb2_grpc.py # gRPC 生成代码<br />
+</p>
+<p>│ ├── face_recognition_pb2.pyi # Python 类型提示文件<br />
+</p>
+<p>│ ├── server.py # gRPC 服务器实现，支持完整与分阶段处理<br />
+</p>
+<p>│ └── ... # 测试脚本及依赖文件<br />
+</p>
+<p>│<br />
+</p>
+<p>├── dataset/ # 预构建/缓存的人脸特征库<br />
+</p>
+<p>│ ├── face_features.pkl # 人脸特征数据库<br />
+</p>
+<p>│ └── pubfig_face_features.pkl # 公众人物特征数据库<br />
+</p>
+<p>│<br />
+</p>
+<p>├── images/ # 测试图像（完整数据集，多人脸场景）<br />
+</p>
+<p>│ ├── 0db62def8dbe3563563cecbdebd192f3.jpg_title=Hugh+Laurie<br />
+</p>
+<p>│ ├── 1a620dd100bfeb8727e1038affdbf4e5.jpg_title=Hugh+Jackman<br />
+</p>
+<p>│ └── ... # 大量 .jpg 测试图像<br />
+</p>
+<p>│<br />
+</p>
+<p>├── images_lite/ # 轻量测试图像集（精简版）<br />
+</p>
+<p>│ └── ...<br />
+</p>
+<p>│<br />
+</p>
+<p>├── outputs/ # Part C 动态划分检验结果输出（性能对比图表）<br />
+</p>
+<p>│ ├── 12-14_12-22-47.png # 时间戳命名的性能对比图<br />
+</p>
+<p>│ └── ...<br />
+</p>
+<p>│<br />
+</p>
+<p>├── config.py # 全局配置（设备/模型源/数据库路径/对齐尺寸/基准时间）<br />
+</p>
+<p>│ # MODULE_BASE_TIMES: 端侧模块基准时间（detect/align/extract/match），同下为动态划分基线数据<br />
+</p>
+<p>│ # SERVE_BASE_TIMES: 云端管道基准时间（4种执行模式）<br />
+</p>
+<p>├── config.py.backup # config.py 的自动备份（calibrate.py 生成）<br />
+</p>
+<p>│<br />
+</p>
+<p>├── simulate.py # 动态调度模拟器（五种划分方案模拟与性能对比）<br />
+</p>
+<p>│ # --test-all: 测试所有方案并生成可视化<br />
+</p>
+<p>│ # --find-optimal: 基于预测模型寻找最优方案<br />
+</p>
+<p>│ # --process-usage/--network-delay: 模拟系统负载与网络条件<br />
+</p>
+<p>│<br />
+</p>
+<p>├── calibrate.py # 自动校准脚本（从实测数据更新 config.py 基准值）<br />
+</p>
+<p>│ # 运行多轮测试 → 计算中位数 → 自动更新 MODULE_BASE_TIMES/SERVE_BASE_TIMES<br />
+</p>
+<p>│<br />
+</p>
+<p>├── CALIBRATE_README.md # calibrate.py 使用说明文档<br />
+</p>
+<p>│<br />
+</p>
+<p>├── main.py # 本地 CLI 工具集<br />
+</p>
+<p>│ # benchmark: 性能基准测试（stagewise 模式）<br />
+</p>
+<p>│ # register: 注册人脸到特征库<br />
+</p>
+<p>│ # rebuild_db: 重建特征数据库（去重）<br />
+</p>
+<p>│ # recognize: 人脸识别（输出 detect/align/extract/match/total 时间）<br />
+</p>
+<p>│ # clean_images: 清理图像<br />
+</p>
+<p>│<br />
+</p>
+<p>├── model_cache.py # 模型与数据库的全局缓存管理（避免重复加载）<br />
+</p>
+<p>├── download_model_with_progress.py # 带进度条的模型下载工具<br />
+</p>
+<p>├── README.md # 项目说明（实验指令与使用方法）<br />
+</p>
+<p>└── ... # 其余构建和测试文件</p>
+<p><strong>部署架构</strong></p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image5.jpeg" style="width:5.75in;height:1.07292in" /></p>
+<p><strong>2.5.关键技术</strong></p>
+<p><strong>淘汰方案及原因</strong></p>
+<p>在系统设计过程中，我们考虑了多种分布式通信和计算框架，特别是基于Docker的计算卸载技术，但最终选择了gRPC作为解决方案。以下是考虑过但最终淘汰的方案及其原因：</p>
+<p><strong>容器计算卸载</strong> ：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image6.jpeg" style="width:5.75in;height:4.63542in" /></p>
+<blockquote>
+<p>我们考虑了容器卸载方案：当本地容器进程达到某种给定条件（如cpu利用率超过80%）时，由Controller将容器卸载到云端并重启运算。</p>
+</blockquote>
+<blockquote>
+<p>这种方案的优点：</p>
+</blockquote>
+<ol type="a">
+<li><p>端侧和云端可以共用完全一样的代码</p></li>
+<li><p>支持任意点划分，划分位置不受模块限制</p></li>
+</ol>
+<blockquote>
+<p>但我们最终没有选择这个方案，是基于以下考量：</p>
+</blockquote>
+<ol type="a">
+<li><p>计算结果返回问题：由于容器需要在端侧和云端两个环境进行运行，最终计算结果必须上传到端侧和云端都能访问到的一个存储环境，并且需要有某种通知机制告知controller计算完成，为此需要通过<strong>消息队列机制</strong>或者<strong>回调机制</strong>进行通知，实现较为复杂</p></li>
+<li><p>非计算延迟大：将容器断点状态迁移到云端，并重新运行起容器会带来计算之外的额外延迟</p></li>
+<li><p>人脸识别各个模块间是串行计算的，无法发挥容器化加速并行运算的优势</p></li>
+</ol>
+<p><strong>最终方案：gRPC</strong></p>
+<p><a href="https://grpc.org.cn/docs/what-is-grpc/introduction/">gRPC</a> 是一个高性能的远程过程调用（RPC）框架，它能让你像调用本地函数一样，轻松调用另一台机器上的服务或方法。它由 Google 开发并开源，特别适合构建需要高效通信的分布式系统，比如微服务、实时应用或跨语言平台。经过综合评估，我们选择gRPC作为分布式通信框架，主要基于以下优势</p>
+<ol type="1">
+<li><p><strong>高性能</strong> ：基于HTTP/2协议，支持多路复用和头部压缩，传输效率高</p></li>
+<li><p><strong>强类型接口</strong> ：使用Protocol Buffers定义服务接口，提供严格的类型检查</p></li>
+<li><p><strong>跨语言支持</strong> ：支持多种编程语言，便于不同平台的集成</p></li>
+<li><p><strong>自动代码生成</strong> ：自动生成客户端和服务器端代码，减少开发工作量</p></li>
+<li><p><strong>流式处理</strong> ：支持双向流式通信，适合视频流等连续数据处理场景</p></li>
+<li><p><strong>序列化效率</strong> ：Protocol Buffers序列化比JSON等格式更高效，数据体积更小</p></li>
+</ol>
+<p>gRPC的这些特性使其特别适合端云协同的人脸识别系统，能够有效减少网络传输开销，提升系统整体性能。在实际实现中，我们定义了清晰的服务接口，支持不同的计算阶段划分，并对序列化和网络传输进行了优化，确保系统在各种网络条件下都能高效运行。</p>
+<p><strong>3. 系统关键实现</strong></p>
+<p>在这一节里，我们将结合关键的代码展示系统实现过程中。从代码的角度，能够更具体地理解我们的系统实现。</p>
+<p><strong>3.1. 人脸识别功能模块</strong></p>
+<p><strong>Detect模块</strong></p>
+<p>Detect模块是人脸识别系统中用于检测图像中人脸位置的关键组件。该模块首先读取输入的图像，然后从全局缓存中获取预加载的人脸检测器模型，以提高效率和响应速度。通过调用检测器的detect方法对图像进行分析，并尝试识别出图像中所有人脸的位置及其相应的概率（置信度）和关键点（landmarks）。如果成功检测到人脸，输出将包含这些信息；否则，返回None。此外，该模块还会记录处理时间，以便于性能评估。最终，返回的结果包括检测到的人脸边界框、概率、关键点、处理时间以及原始图像。</p>
+<p>Python<br />
+</p>
+<p>def detect(device: str, image: Union[str, Any]) -&gt; Dict[str, Any]:<br />
+</p>
+<p>img = read_image(image)<br />
+</p>
+<p># 从全局缓存获取detector<br />
+</p>
+<p>from model_cache import model_cache<br />
+</p>
+<p>detector = model_cache.get_detector(device)<br />
+</p>
+<p><br />
+</p>
+<p>t0 = time.perf_counter()<br />
+</p>
+<p>try:<br />
+</p>
+<p>out = detector.detect(img)<br />
+</p>
+<p>except Exception:<br />
+</p>
+<p>out = None<br />
+</p>
+<p>t1 = time.perf_counter()<br />
+</p>
+<p>boxes = None<br />
+</p>
+<p>probs = None<br />
+</p>
+<p>landmarks = None<br />
+</p>
+<p>if out is not None:<br />
+</p>
+<p>if isinstance(out, tuple):<br />
+</p>
+<p>if len(out) == 3:<br />
+</p>
+<p>boxes, probs, landmarks = out<br />
+</p>
+<p>elif len(out) == 2:<br />
+</p>
+<p>boxes, probs = out<br />
+</p>
+<p>elif len(out) == 1:<br />
+</p>
+<p>boxes = out[0]<br />
+</p>
+<p>else:<br />
+</p>
+<p>boxes = out<br />
+</p>
+<p>return {<br />
+</p>
+<p>"boxes": boxes,<br />
+</p>
+<p>"probs": probs,<br />
+</p>
+<p>"landmarks": landmarks,<br />
+</p>
+<p>"time_ms": (t1 - t0) * 1000.0,<br />
+</p>
+<p>"image": img,<br />
+</p>
+<p>}</p>
+<p><strong>Align模块</strong></p>
+<p>Align模块的主要职责是对检测到的人脸进行对齐操作，这是为了确保在后续步骤中能够更准确地提取特征。基于给定的人脸关键点或边界框，该模块使用仿射变换技术来调整人脸的角度和比例，使其符合一个标准的模板。若提供关键点，则优先使用关键点来进行更精确的对齐；如果没有关键点但提供了边界框，则会根据边界框裁剪并调整大小。最后，该模块返回经过对齐处理后的人脸图像列表以及处理时间（当前实现中未实际计算）。这一过程有助于减少由于人脸姿态、光照等因素引起的变化，提高识别准确性。</p>
+<p>Python<br />
+</p>
+<p>def align(image, boxes=None, landmarks=None, output_size=160):<br />
+</p>
+<p>img_np = _ensure_np(image)<br />
+</p>
+<p>img_pil = Image.fromarray(img_np) if not isinstance(image, Image.Image) else image<br />
+</p>
+<p>aligned = []<br />
+</p>
+<p><br />
+</p>
+<p># 基于关键点对齐(首选方法)<br />
+</p>
+<p>if landmarks is not None:<br />
+</p>
+<p>ref = _reference_5pts(output_size) # 获取参考点<br />
+</p>
+<p>for pts in landmarks:<br />
+</p>
+<p>src = np.array(pts, dtype=np.float32)<br />
+</p>
+<p># 估计仿射变换矩阵<br />
+</p>
+<p>M, _ = cv2.estimateAffinePartial2D(src, ref, method=cv2.LMEDS)<br />
+</p>
+<p>if M is not None:<br />
+</p>
+<p># 应用仿射变换进行对齐<br />
+</p>
+<p>warped = cv2.warpAffine(img_np, M, (output_size, output_size))<br />
+</p>
+<p>aligned.append(warped)<br />
+</p>
+<p><br />
+</p>
+<p># 基于边界框裁剪(备选方法)<br />
+</p>
+<p>elif boxes is not None:<br />
+</p>
+<p>for b in boxes.reshape(-1, 4):<br />
+</p>
+<p>aligned.append(_crop_resize_pil(img_pil, b, output_size))<br />
+</p>
+<p><br />
+</p>
+<p>return {"aligned": [Image.fromarray(a) for a in aligned], "time_ms": 0.0}</p>
+<p><strong>Extract模块</strong></p>
+<p>Extract模块专注于从对齐后的人脸图像中提取特征向量（embeddings），这些特征向量是用于描述每个人脸独特性的高维数值表示。首先，从全局缓存中加载预先训练好的嵌入模型，并确定设备类型（CPU或GPU）。接着，将对齐后的图像分批次转换为张量格式，利用模型进行前向传播计算，得到每张人脸的特征表示。所有批次的特征向量被收集起来并连接成一个完整的数组。除了特征向量之外，该模块还记录了整个提取过程的时间消耗。此步骤对于实现高效且精准的人脸匹配至关重要。</p>
+<p>Python<br />
+</p>
+<p>def extract(device: str, pretrained_source: str, aligned_images: List[Any], batch_size: int = None) -&gt; Dict[str, Any]:<br />
+</p>
+<p>if len(aligned_images) == 0:<br />
+</p>
+<p>return {"embeddings": np.empty((0, 512), dtype=np.float32), "time_ms": 0.0}<br />
+</p>
+<p># 从全局缓存获取模型<br />
+</p>
+<p>from model_cache import model_cache<br />
+</p>
+<p>model = model_cache.get_embedder(device, pretrained_source)<br />
+</p>
+<p>d = torch.device(device if device in ["cpu", "cuda"] else "cpu")<br />
+</p>
+<p>bs = batch_size if batch_size is not None else (32 if d.type == "cuda" else len(aligned_images))<br />
+</p>
+<p>embs = []<br />
+</p>
+<p>t0 = time.perf_counter()<br />
+</p>
+<p>i = 0<br />
+</p>
+<p>while i &lt; len(aligned_images):<br />
+</p>
+<p>j = min(i + bs, len(aligned_images))<br />
+</p>
+<p>batch = _to_tensor(aligned_images[i:j], device)<br />
+</p>
+<p>with _no_grad():<br />
+</p>
+<p>out = model(batch)<br />
+</p>
+<p>if d.type == "cuda":<br />
+</p>
+<p>torch.cuda.synchronize()<br />
+</p>
+<p>e = out.detach().cpu().numpy()<br />
+</p>
+<p>embs.append(e)<br />
+</p>
+<p>i = j<br />
+</p>
+<p>t1 = time.perf_counter()<br />
+</p>
+<p>res = np.concatenate(embs, axis=0) if len(embs) &gt; 0 else np.empty((0, 512), dtype=np.float32)<br />
+</p>
+<p>return {"embeddings": res, "time_ms": (t1 - t0) * 1000.0}</p>
+<p><strong>Match模块</strong></p>
+<p>Match模块负责执行人脸匹配任务，即比较新获得的人脸特征向量与数据库中已有的人脸特征向量之间的相似度。首先，对查询向量进行L2归一化处理，然后计算其与数据库中每个条目之间的<strong>余弦相似度</strong>。根据相似度得分排序后，选择得分最高的前k个结果作为最可能的匹配对象。如果数据库为空或者特征维度不匹配，则直接返回空列表。此模块实现了快速而有效的匹配逻辑，适用于各种规模的人脸识别应用。</p>
+<p>Python<br />
+</p>
+<p>def match(db: Dict[str, np.ndarray], embedding: np.ndarray, top_k: int = 5) -&gt; List[Tuple[str, float]]:<br />
+</p>
+<p>if len(db) == 0:<br />
+</p>
+<p>return []<br />
+</p>
+<p>q = _l2_normalize(embedding.astype(np.float32))<br />
+</p>
+<p>names = list(db.keys())<br />
+</p>
+<p>mat = np.stack([db[n] for n in names], axis=0)<br />
+</p>
+<p>if mat.shape[1] != q.shape[0]:<br />
+</p>
+<p>return []<br />
+</p>
+<p>sims = mat @ q<br />
+</p>
+<p>idx = np.argsort(-sims)[:top_k]<br />
+</p>
+<p>return [(names[i], float(sims[i])) for i in idx]</p>
+<p><strong>3.2. 动态划分调度器</strong></p>
+<p>动态策略的代码实现集中于./dynamic_scheduler/目录，各模块分工明确、层层调用，其中calibrate.py是保障预测准确性的核心前置脚本，以下结合核心函数说明实现逻辑：</p>
+<p><strong>延迟模拟与模块封装</strong></p>
+<p>该模块是动态策略的 “执行层封装”，核心功能是为原始人脸识别模块注入<strong>进程占用 / 网络延迟的模拟延迟</strong>，还原真实场景下的模块执行耗时。</p>
+<p>Python<br />
+</p>
+<p># module_wrapper.py<br />
+</p>
+<p>def wrap_module(module_func, process_usage: float = 0.0, network_delay: float = 0.0, delay_type: str = "process"):<br />
+</p>
+<p>def wrapped_function(*args, **kwargs):<br />
+</p>
+<p># 计算需要睡眠的时间<br />
+</p>
+<p>if delay_type == "process":<br />
+</p>
+<p>sleep_time = calcOccupyExtraTime(process_usage)<br />
+</p>
+<p>else: # network<br />
+</p>
+<p>sleep_time = calcLatencyExtraTime(network_delay)<br />
+</p>
+<p><br />
+</p>
+<p># 函数执行前睡眠<br />
+</p>
+<p>if sleep_time &gt; 0:<br />
+</p>
+<p>time.sleep(sleep_time)<br />
+</p>
+<p><br />
+</p>
+<p># 执行原函数<br />
+</p>
+<p>result = module_func(*args, **kwargs)<br />
+</p>
+<p><br />
+</p>
+<p># 函数执行后睡眠<br />
+</p>
+<p>if sleep_time &gt; 0:<br />
+</p>
+<p>time.sleep(sleep_time)<br />
+</p>
+<p><br />
+</p>
+<p>return result<br />
+</p>
+<p><br />
+</p>
+<p>return wrapped_function</p>
+<p><strong>延迟时间计算</strong></p>
+<p>该模块是动态策略的 “基础工具层”，负责将 “进程占用率 / 网络延迟” 转换为可直接使用的睡眠时间（秒），是连接状态变量与模拟延迟的核心桥梁。</p>
+<p>Python<br />
+</p>
+<p># time_caculate.py<br />
+</p>
+<p>def calcLatencyExtraTime(network_delay: float) -&gt; float:<br />
+</p>
+<p>"""<br />
+</p>
+<p>计算网络延迟导致的额外时间<br />
+</p>
+<p><br />
+</p>
+<p>参数:<br />
+</p>
+<p>network_delay: 网络延迟(毫秒)<br />
+</p>
+<p><br />
+</p>
+<p>返回:<br />
+</p>
+<p>float: 需要睡眠的时间(秒)<br />
+</p>
+<p>"""<br />
+</p>
+<p># 目前简单实现：网络延迟在函数前后各睡眠一半时间<br />
+</p>
+<p>return network_delay / 1000.0 / 2.0<br />
+</p>
+<p><br />
+</p>
+<p>def calcOccupyExtraTime(process_usage: float, base_time: float = 100.0) -&gt; float:<br />
+</p>
+<p>"""<br />
+</p>
+<p>计算进程占用导致的额外时间<br />
+</p>
+<p><br />
+</p>
+<p>参数:<br />
+</p>
+<p>process_usage: 进程占用率(0-1)<br />
+</p>
+<p>base_time: 基础执行时间(毫秒)<br />
+</p>
+<p><br />
+</p>
+<p>返回:<br />
+</p>
+<p>float: 需要睡眠的时间(秒)<br />
+</p>
+<p>"""<br />
+</p>
+<p># 目前简单实现：根据占用率计算额外时间<br />
+</p>
+<p># 占用率越高，额外时间越长<br />
+</p>
+<p>extra_time_ms = base_time * process_usage<br />
+</p>
+<p>return extra_time_ms / 1000.0 / 2.0</p>
+<p><strong>执行时间预测</strong></p>
+<p>该模块是动态策略的 “预测层”，基于config.py中的基准时间（MODULE_BASE_TIMES/SERVE_BASE_TIMES），结合进程占用率 / 网络延迟，预测单个模块 / 云端管道的执行时间。</p>
+<p>Python<br />
+</p>
+<p># 预测单个模块的执行时间<br />
+</p>
+<p>def predict_module_time(module_name, process_usage, network_delay):<br />
+</p>
+<p># 从config.py读取基准时间<br />
+</p>
+<p>base_time = MODULE_BASE_TIMES.get(module_name, 100.0)<br />
+</p>
+<p># 计算本地执行时间（考虑进程占用）<br />
+</p>
+<p>local_time = base_time * (1 + process_usage)<br />
+</p>
+<p># 计算网络执行时间（考虑网络延迟）<br />
+</p>
+<p>network_time = base_time + network_delay<br />
+</p>
+<p>return {<br />
+</p>
+<p>'local_time': local_time,<br />
+</p>
+<p>'network_time': network_time<br />
+</p>
+<p>}<br />
+</p>
+<p><br />
+</p>
+<p>def predict_serve_time(serve_name, network_delay):<br />
+</p>
+<p># 从config.py读取基准时间<br />
+</p>
+<p>base_time = SERVE_BASE_TIMES.get(serve_name, 200.0)<br />
+</p>
+<p># 计算云端执行时间（考虑网络延迟）<br />
+</p>
+<p>serve_time = base_time + network_delay<br />
+</p>
+<p>return serve_time<br />
+</p>
+<p><br />
+</p>
+<p># 预测所有模块的执行时间<br />
+</p>
+<p>def predict_all_modules_time(process_usage, network_delay):<br />
+</p>
+<p>modules = ['face_detection', 'face_alignment', 'feature_extraction', 'face_matching']<br />
+</p>
+<p>result = {}<br />
+</p>
+<p>for module in modules:<br />
+</p>
+<p>result[module] = predict_module_time(module, process_usage, network_delay)<br />
+</p>
+<p>return result</p>
+<p><strong>最优方案决策</strong></p>
+<p>该模块是动态策略的 “决策层”，通过<strong>穷举法</strong>计算 5 种划分方案的总耗时，选择耗时最小的方案作为最优解，是动态策略的核心决策逻辑。</p>
+<p>Python<br />
+</p>
+<p># partition_scheme.py<br />
+</p>
+<p># 穷举最优划分方案<br />
+</p>
+<p>def find_optimal_partition(process_usage, network_delay):<br />
+</p>
+<p>"""<br />
+</p>
+<p>参数:<br />
+</p>
+<p>process_usage: 模拟进程占用率 (0-1之间)<br />
+</p>
+<p>network_delay: 网络延迟(毫秒)<br />
+</p>
+<p><br />
+</p>
+<p>返回:<br />
+</p>
+<p>int: 最优方案编号 (0-4)<br />
+</p>
+<p>"""<br />
+</p>
+<p># 直接获取所有模块的预测时间<br />
+</p>
+<p>module_times = predict_all_modules_time(process_usage, network_delay)<br />
+</p>
+<p><br />
+</p>
+<p>best_scheme = 4 # 默认全本地<br />
+</p>
+<p>best_time = float('inf')<br />
+</p>
+<p><br />
+</p>
+<p># 穷举所有可能的划分方案 (0-4)<br />
+</p>
+<p>for scheme in range(5):<br />
+</p>
+<p>total_time = calculate_total_time(scheme, process_usage, network_delay)<br />
+</p>
+<p><br />
+</p>
+<p>if total_time &lt; best_time:<br />
+</p>
+<p>best_time = total_time<br />
+</p>
+<p>best_scheme = scheme<br />
+</p>
+<p><br />
+</p>
+<p>return best_scheme</p>
+<p><strong>基准时间自动校准</strong></p>
+<p>calibrate.py脚本是动态策略的 “基准校准层”，解决因硬件环境变化、模块版本更新导致config.py中基准时间不准确的问题，是预测模型有效的前提。</p>
+<p><strong>3.3. Rpc流水线服务</strong></p>
+<p><strong>Protobuf接口定义</strong></p>
+<p>在Protobuf接口定义中，定义了一个名为FaceRecognitionService的服务接口，它提供了一种方法ProcessFaceRecognition用于处理人脸识别流程。该方法接受一个FaceRecognitionRequest请求并返回一个FaceRecognitionResponse响应。此外，还定义了一个枚举类型ProcessingStage，用来表示人脸识别的不同处理阶段：包括全部在云端执行的完整流程（DETECT），部分步骤在端侧执行、其余在云端完成的流程（ALIGN, EXTRACT, MATCH）。这种设计允许灵活配置人脸识别过程中的计算分布，根据实际需求调整不同阶段的执行位置。</p>
+<p>ProtoBuf<br />
+</p>
+<p>// 人脸识别服务接口<br />
+</p>
+<p>service FaceRecognitionService {<br />
+</p>
+<p>// 执行人脸识别流程的指定步骤<br />
+</p>
+<p>rpc ProcessFaceRecognition(FaceRecognitionRequest) returns (FaceRecognitionResponse);<br />
+</p>
+<p>}<br />
+</p>
+<p><br />
+</p>
+<p>// 人脸识别处理阶段枚举 (对应业务需求中的划分方案)<br />
+</p>
+<p>enum ProcessingStage {<br />
+</p>
+<p>DETECT = 0; // detect -&gt; align -&gt; extract -&gt; match (全部在云端)<br />
+</p>
+<p>ALIGN = 1; // align -&gt; extract -&gt; match (detect在端侧)<br />
+</p>
+<p>EXTRACT = 2; // extract -&gt; match (detect-&gt;align在端侧)<br />
+</p>
+<p>MATCH = 3; // match (detect-&gt;align-&gt;extract在端侧)<br />
+</p>
+<p>}</p>
+<p><strong>server实现接口</strong></p>
+<p>Server实现接口提供了ProcessFaceRecognition函数的具体实现，这是处理来自客户端的人脸识别请求的核心逻辑所在。首先，记录了接收请求的时间，并解析请求中包含的处理选项。然后，基于请求中指定的处理阶段，ProcessFaceRecognition实现了一个路由器的功能，将不同的请求路由给不同的流水线工作函数。</p>
+<p>整个实现注重于灵活性和效率，使用ProcessFaceRecognition作为统一接口屏蔽了多种流水线方法的差异。这种设计也利于未来的扩展，只需要增加新的请求状态和路由路径，就可以增加新的流水线工作函数。</p>
+<p>Python<br />
+</p>
+<p>def ProcessFaceRecognition(self, request, context):<br />
+</p>
+<p>"""处理人脸识别请求"""<br />
+</p>
+<p>try:<br />
+</p>
+<p>logger.info(f"收到请求，阶段: {request.stage}, 设备: {request.options.device}")<br />
+</p>
+<p><br />
+</p>
+<p>total_start = processing_start = self._get_time()<br />
+</p>
+<p><br />
+</p>
+<p># 解析处理选项<br />
+</p>
+<p>options = self._parse_options(request.options)<br />
+</p>
+<p><br />
+</p>
+<p># 根据不同阶段处理完整的端云分布式流程<br />
+</p>
+<p>if request.stage == face_recognition_pb2.DETECT:<br />
+</p>
+<p># 端侧什么都不做，云端执行 detect -&gt; align -&gt; extract -&gt; match<br />
+</p>
+<p>result = self._handle_full_pipeline(request, options)<br />
+</p>
+<p>elif request.stage == face_recognition_pb2.ALIGN:<br />
+</p>
+<p># 端侧执行detect，云端执行 align -&gt; extract -&gt; match<br />
+</p>
+<p>result = self._handle_align_extract_match(request, options)<br />
+</p>
+<p>elif request.stage == face_recognition_pb2.EXTRACT:<br />
+</p>
+<p># 端侧执行detect-&gt;align，云端执行 extract -&gt; match<br />
+</p>
+<p>result = self._handle_extract_match(request, options)<br />
+</p>
+<p>elif request.stage == face_recognition_pb2.MATCH:<br />
+</p>
+<p># 端侧执行detect-&gt;align-&gt;extract，云端执行 match<br />
+</p>
+<p>result = self._handle_match_only(request, options)<br />
+</p>
+<p>else:<br />
+</p>
+<p># 不支持的处理阶段处理<br />
+</p>
+<p># ...<br />
+</p>
+<p># ...</p>
+<p><strong>流水线工作函数</strong></p>
+<p>以下展示了流水线工作函数的声明，这里省略了其具体实现，因为我们在层级架构上将核心计算代码模块进行了解耦，所以流水线工作函数可以直接复用detect，align，extract，match的代码。</p>
+<p>Python<br />
+</p>
+<p># 云端执行 detect -&gt; align -&gt; extract -&gt; match<br />
+</p>
+<p>def _handle_full_pipeline(self, request, options):<br />
+</p>
+<p># ...<br />
+</p>
+<p><br />
+</p>
+<p># 云端执行 align -&gt; extract -&gt; match<br />
+</p>
+<p>def _handle_align_extract_match(self, request, options):<br />
+</p>
+<p># ...<br />
+</p>
+<p><br />
+</p>
+<p># 云端执行 extract -&gt; match<br />
+</p>
+<p>def _handle_extract_match(self, request, options):<br />
+</p>
+<p># ...<br />
+</p>
+<p><br />
+</p>
+<p># 云端执行 match<br />
+</p>
+<p>def _handle_match_only(self, request, options):<br />
+</p>
+<p># ...</p>
+<p><strong>3.4. 性能调优实践</strong></p>
+<p><strong>单例模式：ModelCache 模型缓存管理器</strong></p>
+<p>缓存也是提升性能的常用策略之一，我们将其引入了我们的系统中。ModelCache 类采用单例模式设计，用于全局统一管理人脸识别系统中各类模型与数据库的加载与缓存，旨在避免重复初始化带来的资源浪费和性能开销。该类维护了人脸检测器（detector）、特征提取器（embedder）以及多个特征数据库（databases）的缓存状态，并分别记录其对应的设备（device）和预训练来源（pretrained_source）等元信息，以确保在设备或模型配置变更时能够正确重新加载。</p>
+<p>Python<br />
+</p>
+<p># 创建一个全局模型管理器来缓存已加载的模型, 避免重复创建<br />
+</p>
+<p>class ModelCache:<br />
+</p>
+<p>def __init__(self):<br />
+</p>
+<p>self._detector = None<br />
+</p>
+<p>self._detector_device = None<br />
+</p>
+<p>self._embedder = None<br />
+</p>
+<p>self._embedder_device = None<br />
+</p>
+<p>self._embedder_source = None<br />
+</p>
+<p>self._databases = {} # 缓存已加载的数据库<br />
+</p>
+<p><br />
+</p>
+<p>def get_detector(self, device: str):<br />
+</p>
+<p># ...<br />
+</p>
+<p>return self._detector<br />
+</p>
+<p><br />
+</p>
+<p>def get_embedder(self, device: str, pretrained_source: str):<br />
+</p>
+<p># ...<br />
+</p>
+<p>return self._embedder<br />
+</p>
+<p><br />
+</p>
+<p>def get_database(self, path: str):<br />
+</p>
+<p>"""获取缓存的数据库实例，如果不存在则加载"""<br />
+</p>
+<p>if path not in self._databases:<br />
+</p>
+<p>from modules.matcher import load_db<br />
+</p>
+<p>self._databases[path] = load_db(path)<br />
+</p>
+<p>return self._databases[path]<br />
+</p>
+<p><br />
+</p>
+<p>def invalidate_database(self, path: str):<br />
+</p>
+<p>"""使指定路径的数据库缓存失效"""<br />
+</p>
+<p>if path in self._databases:<br />
+</p>
+<p>del self._databases[path]<br />
+</p>
+<p><br />
+</p>
+<p>def clear_database_cache(self):<br />
+</p>
+<p>"""清空所有数据库缓存"""<br />
+</p>
+<p>self._databases.clear()<br />
+</p>
+<p><br />
+</p>
+<p>model_cache = ModelCache()</p>
+<p><strong>4. 实验与结果分析</strong></p>
+<p><strong>4.1. 实验目的</strong></p>
+<p>（1）通过系统实验评估不同划分策略的性能表现；</p>
+<p>（2）确定最优的任务划分方案并分析其优势；</p>
+<p>（3）实现动态计算划分策略并评估其表现。</p>
+<p><strong>4.2. 实验环境设置</strong></p>
+<p>构建特征向量数据库时，我们使用的是<a href="https://www.cs.columbia.edu/CAVE/databases/pubfig/">哥伦比亚大学公众人物脸部数据库</a>（PubFig数据集）。它是一个大型人脸数据集，主要用于人脸识别和身份鉴定，图像是在主体完全不受控制的情况下拍摄的，因此不同图像中姿势、光照、表情、场景、相机、成像条件和参数存在较大差异。测试数据集包含其中三张具有代表性的人脸图像：test1.jpg包含2个正面人脸，图像尺寸为1920×1080，光照条件均匀；test2.jpg为单人特写图像，尺寸1280×720，背景相对简单；test3.jpg为4人合影，尺寸2560×1440，包含不同角度和表情的人脸。实验采用统一的参数配置，对齐输出尺寸设置为160像素，使用vggface2预训练模型，检测置信度阈值设为0.8，匹配返回top-5结果，批处理大小固定为32，确保实验结果的可比性和可重复性。</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image7.png" style="width:5.75in;height:1.72917in" /></p>
+<p><strong>4.3. 结果与分析</strong></p>
+<p><strong>不同划分方案的性能表现</strong></p>
+<p>gRPC框架在初次运行时会耗时较久，网络、操作系统也带来一定的不确定性。为了减少偶然性，对于每一种划分模式，对于每一张图片，我们都<strong>在人工重复测试并发现时间区域稳定后提取出连续三次的测试结果</strong>。</p>
+<p>下面我们将展示测试结果以及测量结果可视化。回忆之前我们的划分方案：</p>
+<p><strong>Full Cloud</strong> 代表完全在云端进行计算；</p>
+<p><strong>Edge Detect-&gt;Align</strong> 代表在本地完成前两个模块（检测人脸和人脸对齐），在云端完成后两个模块（特征提取和向量匹配）；</p>
+<p><strong>Edge Detect</strong> 代表在本地完成第一个模块（检测人脸），在云端完成后三个模块（人脸对齐、特征提取和向量匹配）；</p>
+<p><strong>Full Local</strong> 代表完全在本地进行计算。</p>
+<p>根据实验测试结果，系统在不同测试场景下表现出一致且显著的性能表现趋势。从整体性能对比来看，Edge Detect-Align 模式在所有测试场景中均表现最优，相比传统的 Full Local 模式实现了显著的性能提升。</p>
+<p>具体数据汇总如下表所示：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image8.png" style="width:5.75in;height:2.60417in" /></p>
+<p>为进一步量化性能优势，我们计算了各协作模式相对于 Full Local 的加速百分比，<strong>其中效果最显著的方案为Edge Detect-Align 模式，该方案平均能将性能提升57.4%</strong>：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image9.png" style="width:5.75in;height:1.97917in" /></p>
+<p>各处理阶段的时间分布揭示了本地CPU在特定任务上的性能差异：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image10.png" style="width:5.14583in;height:1.72917in" /></p>
+<p>服务器端实际承担的计算负载（包括传输时间）如下：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image11.png" style="width:5.27083in;height:2.01042in" /></p>
+<p>结合上述表格可见：在 test1.jpg 测试中，Edge Detect-Align 模式处理时间为 83.33 毫秒，相比 Full Local 模式的 187.80 毫秒提升了约 55.6%；在 test2.jpg 中，该模式处理时间为 68.97 毫秒，提升幅度达 66.2%；在 test3.jpg 中，处理时间为 104.18 毫秒，提升 50.3%。这一结果充分验证了端云协同架构的优越性，特别是在处理多人脸场景时，通过合理的任务分配能够有效平衡计算负载和网络开销。</p>
+<p>在完成测量实验后，我们补充做了三次实验，并利用集成进代码的可视化模块进行数据展示，下面的图片中我们可以更加直观地观察不同模式的效果。只要是在稳定后测试，数据的特征是高度一致的，这进一步凸显了我们结论的可靠性。</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image12.png" style="width:5.75in;height:1.45833in" /></p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image13.png" style="width:5.75in;height:1.45833in" /></p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image14.png" style="width:5.75in;height:1.45833in" /></p>
+<p>对三种端云协作模式的深度分析揭示了不同策略的性能特性。<strong>Edge Detect-Align模式表现最优</strong>，其成功因素在于实现了完美的计算负载均衡，将检测和对齐任务分配给端侧CPU，特征提取和匹配任务分配给云端GPU，这种分配方式充分考虑了不同硬件的特性优势。同时该模式在数据传输方面进行了优化，仅需要传输对齐后的小尺寸人脸图像，大大减少了网络带宽需求。Full Cloud模式表现一般，这种模式适合计算能力更弱的客户端或网络条件良好的环境，其优势在于实现简单且能充分利用云端的全面计算能力。Edge Detect模式表现相对不够稳定，其问题主要在于序列化开销较大和网络传输数据量较大双重影响，未能充分发挥硬件优势，需要进一步优化改进。</p>
+<p>系统在可靠性方面表现良好，具备完善的异常处理机制、合理的请求超时设置和网络故障自动重试功能。测试结果具有一定的稳定性，得出的结论是可信的。</p>
+<p><strong>动态计算划分</strong></p>
+<p>如前文所述，我们系统的动态预测流程如下：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image15.jpeg" style="width:5.75in;height:1.66667in" /></p>
+<p>完成动态预测后，我们会使用穷举实测的方法对结果进行检验。我们的验证流程如下：</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image16.jpeg" style="width:5.75in;height:1.52083in" /></p>
+<p>基于上述流程的代码实现，我们针对多种场景开展测试，并且挑选出<strong>4 类典型常规场景 + 异常组合场景进行展示</strong>，核心结果与验证流程如下：</p>
+<p><strong>典型案例分析</strong></p>
+<p><strong>正确案例</strong></p>
+<ol type="1">
+<li>理想场景正确案例：进程占用率 0.0、网络延迟 0.0ms 时，实测方案 2（端侧 detect→align + 云端 extract→match）耗时 92.6ms 为最优，动态划分系统基于calibrate.py校准后的基线值，准确预测方案 2 为最优解，误差仅 2.8%，验证了基准时间校准在理想场景下的有效性。可视化结果如下图：</li>
+</ol>
+<p><img src="../assets/works/edge-cloud-face-recognition/image17.png" style="width:5.75in;height:3.26042in" /></p>
+<ol start="2" type="1">
+<li>高延迟场景正确案例：进程占用率 0.0、网络延迟 100.0ms 时，网络传输开销完全抵消云端计算优势，实测方案 4（全端侧）耗时 138.8ms 为最优，动态系统通过网络延迟感知逻辑，正确选择方案 4，体现对高延迟场景的适配性。可视化结果如下图：</li>
+</ol>
+<p><img src="../assets/works/edge-cloud-face-recognition/image18.png" style="width:5.75in;height:3.26042in" /></p>
+<ol start="3" type="1">
+<li>高负载场景正确案例：进程占用率 0.5、网络延迟 0.0ms 时，尽管端侧资源竞争导致模块耗时增加，但云端 GPU 加速特征提取的收益仍占主导，实测方案 2 耗时 205.4ms 为最优，动态系统准确预测该结果，验证了对高负载常规场景的适配性。可视化结果如下图：</li>
+</ol>
+<p><img src="../assets/works/edge-cloud-face-recognition/image19.png" style="width:5.75in;height:3.26042in" /></p>
+<p><strong>错误案例</strong></p>
+<p>尽管在大多数情况下，我们的系统能够做出完美的预测，但是也会出现一些错误预测的案例。比如高负载 + 中延迟异常场景：进程占用率 0.5、网络延迟 150.0ms 时，实测方案 0（全云端）耗时 263.3ms 为最优，但动态划分系统错误预测方案 4（全端侧）为最快方案。该错误暴露了动态策略的核心缺陷 - <strong>过早绑定基线值（Early Binding）</strong>：校准的基线值仅覆盖低负载 / 高负载 + 低延迟、低负载 + 高延迟等常规场景，未适配 “高负载 + 中延迟” 的组合场景；而预测模型基于 “写死” 的基线值，错误判断 “端侧高负载 + 网络中延迟下全端侧更优”，但实际中云端服务器的 GPU 资源未受端侧负载影响，全云端执行反而耗时更低。</p>
+<p><img src="../assets/works/edge-cloud-face-recognition/image20.png" style="width:5.75in;height:3.26042in" /></p>
+<p><strong>关键发现与反思</strong></p>
+<p>在动态划分模块的设计与实验过程中，我们有下面的发现：</p>
+<ol type="1">
+<li><p>预测准确性：常规场景下（低 / 高负载 + 低延迟、低负载 + 高延迟），预测最优方案与实测最优方案大多数情况下重合（特别是极端环境中），验证了基准时间在常规场景下的有效性；但边际场景（如高负载 + 中延迟）易出现预测错误。</p></li>
+<li><p>工程鲁棒性：calibrate.py的备份机制、time_predictor.py的兜底默认值（如模块基准时间默认 100ms），保证了系统在极端情况下的可用性；但 “过早绑定基线值” 的设计缺陷，导致预测结果高度依赖基线值的覆盖范围与校准质量 - 若基线值未覆盖所有潜在场景，或者基线本身在某种多变环境中就是不具有鲁棒性的，易出现预测偏差，这也是我们系统目前的核心短板。</p></li>
+</ol>
+<p>我们的动态划分模块也有一定的不足，值得我们未来去探索。比如，最明显的就是实验暴露出依赖基线数据并不能保证百分之百的正确率，我们的算法高度依赖基线值的质量。还有，我们的实验在一个相对封闭的环境中进行，我们通过传递参数而不是真实改变带宽、内存等因素，实现沙盒式的处理，这主要是为了强调思维逻辑，而不囿于工程细节与难以完全控制的真实世界。</p>
+<p><strong>5. 结论</strong></p>
+<p>在本项目中，我们实现了一个功能模块划分清晰的人脸识别系统，完成了其云端与本地部署以及通信管道的搭建（基于AutoDL支持的端口转发与gRPC协议），执行了模块划分与最优方案测量任务与动态划分任务，充分掌握了如何<strong>以质量特性”性能”为驱动因素</strong>，完成软件架构设计与开发工作。</p>
+<p>针对模块划分与最优方案测量任务，本项目成功设计并实现了一个基于端云协同架构的深度学习人脸识别系统，通过系统的实验验证和性能分析，取得了显著的研究成果和实践价值。在系统架构方面，我们提出了多种端云协作模式并实现了完整的分布式设计，各功能模块采用高度解耦的模块化架构，支持独立优化和替换，同时实现了硬件感知的智能任务调度，能够根据不同硬件特性合理分配计算任务。在技术实现层面，系统构建了高性能的完整处理流水线，<strong>基于现代gRPC框架实现了分布式计算架构</strong>，并集成了经过优化的预训练模型，在保证识别精度的同时实现了处理速度的优化。实验结果回应了我们的实验假设，证明了分布式架构假设，即端云协同处理的确能够显著超越纯本地处理的性能表现，同时通过合理分配计算任务也能够实现系统整体效率的最优化。从实验结果的定量分析来看，我们完成该任务过程中的主要贡献体现在多个方面。在学术层面，我们通过严格的实验验证了端云分布式架构在人脸识别任务中的显著优势，建立了详细的性能测试基准数据集，并识别出<strong>Edge Detect-Align（在本地完成检测Detect和对齐Alignment，在云端完成提取Extraction和匹配Match）为最优的分布式协作模式，该方案对比完全在本地计算，平均能将性能提升57.4%</strong>。在技术层面，我们提供了完整可用的开源人脸识别系统实现，为类似计算机视觉任务的分布式部署提供了可参考的架构设计，并通过深入的性能分析指明了关键优化方向。在工程实践层面，我们提供了从开发到生产的完整部署方案，识别了系统性能瓶颈并提出了具体的优化策略，同时规划了清晰的系统演进路线。</p>
+<p>针对动态划分任务，我们实现了基于"状态感知-时间预测-最优决策"的动态计算划分策略，通过传入端侧进程占用率和网络延迟参数，使系统能够自适应选择最优任务划分方案，在大多数场景下表现优秀。在工程实践方面，我们提供了从开发到生产的完整部署方案，通过实现动态调度器、基准时间自动校准和异常处理机制，确保了系统的鲁棒性和可用性。<strong>在大多数情况下，系统能够得到可被验证的最优方案</strong>，特别是网速相对较慢与内存占用相对较高时。然而，动态划分策略在边际组合场景（如高负载+中延迟）下存在"过早绑定基线值"的缺陷，预测依赖基线值的质量，因此可能出现错误，这一发现为未来研究指明了方向。未来工作将聚焦于改进预测模型以扩大校准场景覆盖范围，探索基于强化学习的自适应任务划分机制以优化决策策略。</p>
+<p>综上所述，本项目充分证明了端云协同架构在人脸识别任务中的显著优势，EdgeDetect-Align分布式模式对每张测试图片均能实现50%以上的性能提升，而引入动态划分策略后，系统在动态变化的环境下表现也得到了进一步改善。在保持较高识别精度的同时，通过较为合理的任务分配与硬件资源利用，系统整体性能有所提升。这些初步结果表明，所提出的端云协同架构具备一定的潜力，也为后续的优化和探索提供了有益的基础。</p>
+<p><strong>参考文献</strong></p>
+<ol type="1">
+<li><p>gRPC: A High-Performance, Open-Source Universal RPC Framework.​ Google Inc. [Online]. Available: https://grpc.io/docs/what-is-grpc/introduction/</p></li>
+<li><p>Shi, W., Cao, J., Zhang, Q., Li, Y., &amp; Xu, L. (2016). Edge Computing: Vision and Challenges. IEEE Internet of Things Journal, 3(5), 637-646.</p></li>
+<li><p>Mao, Y., You, C., Zhang, J., Huang, K., &amp; Letaief, K. B. (2017). A Survey on Computation Offloading in Mobile Edge Computing. IEEE Access, 5, 6757-6779.</p></li>
+<li><p>Birrell, A. D., &amp; Nelson, B. J. (1984). Implementing remote procedure calls. ACM Transactions on Computer Systems, 2(1), 39-59. https://doi.org/10.1145/357360.357363</p></li>
+</ol>
+        </div>
+      </article>
+      <aside class="article-aside">
+        <h2>Related</h2>
+        <ul class="related-list">
+
+          <li class="link-item">
+            <a href="matchaflow.html" title="MatchaFlow：多智能体软件项目管理模拟系统">
+              <span class="link-title">MatchaFlow：多智能体软件项目管理模拟系统</span>
+              <span class="link-meta">2025</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <p>Built for static deployment and action-based publishing.</p>
+      <p><a href="../index.html">Back to archive</a></p>
+    </footer>
+  </div>
+</body>
+</html>

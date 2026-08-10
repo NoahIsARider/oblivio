@@ -1,0 +1,238 @@
+{
+  "site": {
+    "title": "Knowledge Base",
+    "displayTitle": "Library",
+    "owner": "noahisarider",
+    "ownerUrl": "https://github.com/NoahIsARider",
+    "sourceFile": "word archive / sanitized import",
+    "updatedAt": "August 10, 2026"
+  },
+  "stats": {
+    "totalLinks": 26,
+    "totalSections": 5,
+    "totalBranches": 5
+  },
+  "sections": [
+    {
+      "id": "essays",
+      "title": "Essays",
+      "originalTitle": "Essays",
+      "parent": "Selected Works",
+      "sectionKey": "essays",
+      "note": "Longer critical essays, paper-like arguments, and literary analysis kept in a public reading edition.",
+      "span": "wide",
+      "position": "top-left",
+      "count": 5,
+      "links": [
+        {
+          "title": "《Virgin》背后的哲学探究",
+          "originalTitle": "《Virgin》背后的哲学探究",
+          "href": "works/virgin-philosophy.html",
+          "domain": "2025 / text only"
+        },
+        {
+          "title": "不要太期待世界末日",
+          "originalTitle": "不要太期待世界末日",
+          "href": "works/do-not-expect-the-end-of-the-world.html",
+          "domain": "2025 / 5 images"
+        },
+        {
+          "title": "威尼斯商人：社会的去具身化运动",
+          "originalTitle": "威尼斯商人：社会的去具身化运动",
+          "href": "works/merchant-of-venice-analysis.html",
+          "domain": "2025 / text only"
+        },
+        {
+          "title": "光影之国：1978-1997",
+          "originalTitle": "光影之国：1978-1997",
+          "href": "works/kingdom-of-light-and-shadow.html",
+          "domain": "2024 / 20 images"
+        },
+        {
+          "title": "利用批判性阅读理解迈克尔·翁达杰的历史观",
+          "originalTitle": "利用批判性阅读理解迈克尔·翁达杰的历史观",
+          "href": "works/ondaatje-and-history.html",
+          "domain": "2024 / text only"
+        }
+      ]
+    },
+    {
+      "id": "research-and-analysis",
+      "title": "Research and Analysis",
+      "originalTitle": "Research and Analysis",
+      "parent": "Selected Works",
+      "sectionKey": "research",
+      "note": "Course-derived research pieces, market analysis, ethics writing, and applied investigations with sensitive context removed.",
+      "span": "wide",
+      "position": "top-right",
+      "count": 9,
+      "links": [
+        {
+          "title": "机械降神：基于感知、决策和执行的具身智能技术与发展调研报告",
+          "originalTitle": "机械降神：基于感知、决策和执行的具身智能技术与发展调研报告",
+          "href": "works/embodied-intelligence-survey.html",
+          "domain": "2025 / 1 images"
+        },
+        {
+          "title": "世界水深火热，而我们还在买鞋",
+          "originalTitle": "世界水深火热，而我们还在买鞋",
+          "href": "works/anta-strategy-bani-era.html",
+          "domain": "2025 / text only"
+        },
+        {
+          "title": "无知之罪：聚焦字节跳动的商业伦理分析",
+          "originalTitle": "无知之罪：聚焦字节跳动的商业伦理分析",
+          "href": "works/sins-of-ignorance.html",
+          "domain": "2025 / text only"
+        },
+        {
+          "title": "“觅母（文化复制因子）”对人际关系的影响及调适方案",
+          "originalTitle": "“觅母（文化复制因子）”对人际关系的影响及调适方案",
+          "href": "works/meme-and-relationships.html",
+          "domain": "2024 / 1 images"
+        },
+        {
+          "title": "第四次科学革命语境下的中国特色社会主义",
+          "originalTitle": "第四次科学革命语境下的中国特色社会主义",
+          "href": "works/fourth-scientific-revolution.html",
+          "domain": "2024 / 2 images"
+        },
+        {
+          "title": "风险控制下的比赛顺序决策模型",
+          "originalTitle": "风险控制下的比赛顺序决策模型",
+          "href": "works/risk-controlled-match-ordering.html",
+          "domain": "2024 / 1 images"
+        },
+        {
+          "title": "去中心化投资与对新经济体系的展望",
+          "originalTitle": "去中心化投资与对新经济体系的展望",
+          "href": "works/decentralized-investment.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "特斯拉纯电动车中国市场营销策略研究",
+          "originalTitle": "特斯拉纯电动车中国市场营销策略研究",
+          "href": "works/tesla-marketing-strategy.html",
+          "domain": "2024 / 26 images"
+        },
+        {
+          "title": "针对科大讯飞股票的分析与投资建议",
+          "originalTitle": "针对科大讯飞股票的分析与投资建议",
+          "href": "works/iflytek-stock-analysis.html",
+          "domain": "2024 / 15 images"
+        }
+      ]
+    },
+    {
+      "id": "writing",
+      "title": "Writing",
+      "originalTitle": "Writing",
+      "parent": "Selected Works",
+      "sectionKey": "writing",
+      "note": "Shorter reflective pieces, personal prose, and idea sketches that sit beside the more formal essays.",
+      "span": "standard",
+      "position": "bottom-left",
+      "count": 7,
+      "links": [
+        {
+          "title": "爱与孤寂的故事",
+          "originalTitle": "爱与孤寂的故事",
+          "href": "works/love-and-solitude.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "当我们在剖析婚姻的时候，我们在剖析什么",
+          "originalTitle": "当我们在剖析婚姻的时候，我们在剖析什么",
+          "href": "works/marriage-analysis.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "第一个拥有自己名字的人",
+          "originalTitle": "第一个拥有自己名字的人",
+          "href": "works/first-person-with-a-name.html",
+          "domain": "2024 / 1 images"
+        },
+        {
+          "title": "多次囚徒博弈游戏思考",
+          "originalTitle": "多次囚徒博弈游戏思考",
+          "href": "works/iterated-prisoners-dilemma.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "有关时间旅行的故事",
+          "originalTitle": "有关时间旅行的故事",
+          "href": "works/time-travel-letter.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "The Philosophy of 45 Degrees of Life",
+          "originalTitle": "The Philosophy of 45 Degrees of Life",
+          "href": "works/philosophy-of-45-degrees-of-life.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "远方，远方更远处",
+          "originalTitle": "远方，远方更远处",
+          "href": "works/software-engineering-farther-horizons.html",
+          "domain": "2023 / text only"
+        }
+      ]
+    },
+    {
+      "id": "projects-and-systems",
+      "title": "Projects and Systems",
+      "originalTitle": "Projects and Systems",
+      "parent": "Selected Works",
+      "sectionKey": "project",
+      "note": "Project reports and engineering-oriented work where the article page preserves the full structure and images from the source document.",
+      "span": "standard",
+      "position": "bottom-center",
+      "count": 2,
+      "links": [
+        {
+          "title": "端云协同架构下的人脸识别性能优化",
+          "originalTitle": "端云协同架构下的人脸识别性能优化",
+          "href": "works/edge-cloud-face-recognition.html",
+          "domain": "2025 / 20 images"
+        },
+        {
+          "title": "MatchaFlow：多智能体软件项目管理模拟系统",
+          "originalTitle": "MatchaFlow：多智能体软件项目管理模拟系统",
+          "href": "works/matchaflow.html",
+          "domain": "2025 / 17 images"
+        }
+      ]
+    },
+    {
+      "id": "talks-and-presentation",
+      "title": "Talks and Presentation",
+      "originalTitle": "Talks and Presentation",
+      "parent": "Selected Works",
+      "sectionKey": "talk",
+      "note": "Speech drafts, presentations, and public-facing scripts adapted into the same reading archive.",
+      "span": "standard",
+      "position": "bottom-right",
+      "count": 3,
+      "links": [
+        {
+          "title": "经济学 Presentation",
+          "originalTitle": "经济学 Presentation",
+          "href": "works/economics-presentation.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "PBL 演讲稿",
+          "originalTitle": "PBL 演讲稿",
+          "href": "works/pbl-presentation-script.html",
+          "domain": "2024 / text only"
+        },
+        {
+          "title": "Self Introduction Pre",
+          "originalTitle": "Self Introduction Pre",
+          "href": "works/self-introduction-pre.html",
+          "domain": "2024 / text only"
+        }
+      ]
+    }
+  ]
+}
