@@ -8,54 +8,11 @@
     "updatedAt": "August 10, 2026"
   },
   "stats": {
-    "totalLinks": 26,
+    "totalLinks": 32,
     "totalSections": 5,
     "totalBranches": 5
   },
   "sections": [
-    {
-      "id": "essays",
-      "title": "Essays",
-      "originalTitle": "Essays",
-      "parent": "Selected Works",
-      "sectionKey": "essays",
-      "note": "Longer critical essays, paper-like arguments, and literary analysis kept in a public reading edition.",
-      "span": "wide",
-      "position": "top-left",
-      "count": 5,
-      "links": [
-        {
-          "title": "《Virgin》背后的哲学探究",
-          "originalTitle": "《Virgin》背后的哲学探究",
-          "href": "works/virgin-philosophy.html",
-          "domain": "2025 / text only"
-        },
-        {
-          "title": "不要太期待世界末日",
-          "originalTitle": "不要太期待世界末日",
-          "href": "works/do-not-expect-the-end-of-the-world.html",
-          "domain": "2025 / 5 images"
-        },
-        {
-          "title": "威尼斯商人：社会的去具身化运动",
-          "originalTitle": "威尼斯商人：社会的去具身化运动",
-          "href": "works/merchant-of-venice-analysis.html",
-          "domain": "2025 / text only"
-        },
-        {
-          "title": "光影之国：1978-1997",
-          "originalTitle": "光影之国：1978-1997",
-          "href": "works/kingdom-of-light-and-shadow.html",
-          "domain": "2024 / 20 images"
-        },
-        {
-          "title": "利用批判性阅读理解迈克尔·翁达杰的历史观",
-          "originalTitle": "利用批判性阅读理解迈克尔·翁达杰的历史观",
-          "href": "works/ondaatje-and-history.html",
-          "domain": "2024 / text only"
-        }
-      ]
-    },
     {
       "id": "research-and-analysis",
       "title": "Research and Analysis",
@@ -64,7 +21,7 @@
       "sectionKey": "research",
       "note": "Course-derived research pieces, market analysis, ethics writing, and applied investigations with sensitive context removed.",
       "span": "wide",
-      "position": "top-right",
+      "position": "top-left",
       "count": 9,
       "links": [
         {
@@ -120,6 +77,85 @@
           "originalTitle": "针对科大讯飞股票的分析与投资建议",
           "href": "works/iflytek-stock-analysis.html",
           "domain": "2024 / 15 images"
+        }
+      ]
+    },
+    {
+      "id": "essays",
+      "title": "Essays",
+      "originalTitle": "Essays",
+      "parent": "Selected Works",
+      "sectionKey": "essays",
+      "note": "Longer critical essays, paper-like arguments, and literary analysis kept in a public reading edition.",
+      "span": "wide",
+      "position": "top-right",
+      "count": 11,
+      "links": [
+        {
+          "title": "《呼朋引伴》中的孤独叙事与现代性困境研究",
+          "originalTitle": "《呼朋引伴》中的孤独叙事与现代性困境研究",
+          "href": "works/cmon-cmon-loneliness-and-modernity.html",
+          "domain": "2026 / text only"
+        },
+        {
+          "title": "情感与平面性：维也纳分离派艺术研究",
+          "originalTitle": "情感与平面性：维也纳分离派艺术研究",
+          "href": "works/vienna-secession-emotion-and-flatness.html",
+          "domain": "2026 / text only"
+        },
+        {
+          "title": "索菲亚·科波拉电影中的微妙情绪捕捉：《处女之死》与《迷失东京》研究",
+          "originalTitle": "索菲亚·科波拉电影中的微妙情绪捕捉：《处女之死》与《迷失东京》研究",
+          "href": "works/sofia-coppola-subtle-emotions.html",
+          "domain": "2026 / text only"
+        },
+        {
+          "title": "夏日终曲：《珍妮特星球》中的季节情绪与成长仪式",
+          "originalTitle": "夏日终曲：《珍妮特星球》中的季节情绪与成长仪式",
+          "href": "works/janet-planet-summer-and-coming-of-age.html",
+          "domain": "2026 / text only"
+        },
+        {
+          "title": "印象派音乐的当代回响：Caroline《Caroline 2》中的光影与情绪",
+          "originalTitle": "印象派音乐的当代回响：Caroline《Caroline 2》中的光影与情绪",
+          "href": "works/caroline-2-impressionist-echoes.html",
+          "domain": "2026 / text only"
+        },
+        {
+          "title": "Annahstasia《Tether》专辑研究：身份认同与现代民谣的革新实践",
+          "originalTitle": "Annahstasia《Tether》专辑研究：身份认同与现代民谣的革新实践",
+          "href": "works/annahstasia-tether-identity-and-folk-innovation.html",
+          "domain": "2026 / text only"
+        },
+        {
+          "title": "《Virgin》背后的哲学探究",
+          "originalTitle": "《Virgin》背后的哲学探究",
+          "href": "works/virgin-philosophy.html",
+          "domain": "2025 / text only"
+        },
+        {
+          "title": "不要太期待世界末日",
+          "originalTitle": "不要太期待世界末日",
+          "href": "works/do-not-expect-the-end-of-the-world.html",
+          "domain": "2025 / 5 images"
+        },
+        {
+          "title": "威尼斯商人：社会的去具身化运动",
+          "originalTitle": "威尼斯商人：社会的去具身化运动",
+          "href": "works/merchant-of-venice-analysis.html",
+          "domain": "2025 / text only"
+        },
+        {
+          "title": "光影之国：1978-1997",
+          "originalTitle": "光影之国：1978-1997",
+          "href": "works/kingdom-of-light-and-shadow.html",
+          "domain": "2024 / 20 images"
+        },
+        {
+          "title": "利用批判性阅读理解迈克尔·翁达杰的历史观",
+          "originalTitle": "利用批判性阅读理解迈克尔·翁达杰的历史观",
+          "href": "works/ondaatje-and-history.html",
+          "domain": "2024 / text only"
         }
       ]
     },

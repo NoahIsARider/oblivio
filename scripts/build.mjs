@@ -17,14 +17,14 @@ const categoryMeta = {
     title: "Essays",
     note: "Longer critical essays, paper-like arguments, and literary analysis kept in a public reading edition.",
     span: "wide",
-    position: "top-left",
+    position: "top-right",
   },
   research: {
     id: "research-and-analysis",
     title: "Research and Analysis",
     note: "Course-derived research pieces, market analysis, ethics writing, and applied investigations with sensitive context removed.",
     span: "wide",
-    position: "top-right",
+    position: "top-left",
   },
   writing: {
     id: "writing",
@@ -49,7 +49,7 @@ const categoryMeta = {
   },
 };
 
-const categoryOrder = ["essays", "research", "writing", "project", "talk"];
+const categoryOrder = ["research", "essays", "writing", "project", "talk"];
 const writingSlugs = new Set([
   "first-person-with-a-name",
   "philosophy-of-45-degrees-of-life",
@@ -119,6 +119,11 @@ function readManifest() {
 }
 
 function getSectionKey(item) {
+  const explicitSection = typeof item.section === "string" ? item.section.trim().toLowerCase() : "";
+  if (explicitSection && categoryMeta[explicitSection]) {
+    return explicitSection;
+  }
+
   if (item.category === "essay") {
     return writingSlugs.has(item.slug) ? "writing" : "essays";
   }
