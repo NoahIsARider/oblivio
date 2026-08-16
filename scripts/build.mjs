@@ -67,6 +67,20 @@ function firstGlyph(title) {
   }
   return "?";
 }
+
+function firstImageOf(item) {
+  const fragmentPath = path.join(contentWorksDir, `${item.slug}.html`);
+  if (!fs.existsSync(fragmentPath)) {
+    return null;
+  }
+  const html = fs.readFileSync(fragmentPath, "utf8");
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (!match) {
+    return null;
+  }
+  const src = match[1].replace(/^\.\.\//, "");
+  return src;
+}
 const writingSlugs = new Set([
   "first-person-with-a-name",
   "philosophy-of-45-degrees-of-life",
@@ -307,6 +321,7 @@ function renderMinimalArchive(items) {
         categoryShort: meta.short,
         medium: `${meta.label} / ${item.imageCount > 0 ? `${item.imageCount} images` : "text only"}`,
         glyph: firstGlyph(item.title),
+        image: item.imageCount > 0 ? firstImageOf(item) : null,
       };
     })
     .sort(
@@ -328,21 +343,26 @@ function renderMinimalArchive(items) {
   ].join("\n");
 
   const rows = entries
-    .map(
-      (entry) => `
+    .map((entry) => {
+      const cover = entry.image
+        ? `<div class="work-cover" aria-hidden="true">
+            <img class="cover-img" src="${escapeAttribute(entry.image)}" alt="" loading="lazy">
+          </div>`
+        : `<div class="work-cover work-cover-text" aria-hidden="true">
+            <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
+            <span class="cover-char">${escapeHtml(entry.glyph)}</span>
+            <span class="cover-year">${escapeHtml(entry.year)}</span>
+          </div>`;
+      return `
         <li class="work-row" data-category="${escapeAttribute(entry.category)}">
           <div class="work-info">
             <h3 class="work-title"><a href="${escapeAttribute(entry.href)}">${escapeHtml(entry.title)}</a></h3>
             <p class="work-medium">${escapeHtml(entry.medium)}</p>
           </div>
           <span class="work-year">${escapeHtml(entry.year)}</span>
-          <div class="work-cover" aria-hidden="true">
-            <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
-            <span class="cover-char">${escapeHtml(entry.glyph)}</span>
-            <span class="cover-year">${escapeHtml(entry.year)}</span>
-          </div>
-        </li>`,
-    )
+${cover}
+        </li>`;
+    })
     .join("\n");
 
   return `<!DOCTYPE html>

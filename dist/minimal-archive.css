@@ -206,6 +206,13 @@ a {
   background: var(--cover-bg);
 }
 
+.cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .cover-cat,
 .cover-year {
   font-family: var(--font-mono);
