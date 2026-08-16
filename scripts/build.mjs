@@ -50,6 +50,23 @@ const categoryMeta = {
 };
 
 const categoryOrder = ["research", "essays", "writing", "project", "talk"];
+
+const archiveCategoryMeta = {
+  research: { label: "Research", short: "RSRCH" },
+  essays: { label: "Essays", short: "ESSAY" },
+  writing: { label: "Writing", short: "WRITE" },
+  project: { label: "Projects", short: "PROJ" },
+  talk: { label: "Talks", short: "TALK" },
+};
+
+function firstGlyph(title) {
+  for (const ch of String(title)) {
+    if (/[\p{L}\p{N}]/u.test(ch)) {
+      return ch.toUpperCase();
+    }
+  }
+  return "?";
+}
 const writingSlugs = new Set([
   "first-person-with-a-name",
   "philosophy-of-45-degrees-of-life",
@@ -265,10 +282,142 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.</p>
+      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
+</body>
+</html>`;
+}
+
+function renderMinimalArchive(items) {
+  const entries = items
+    .map((item) => {
+      const sectionKey = getSectionKey(item);
+      const meta = archiveCategoryMeta[sectionKey] || {
+        label: item.category,
+        short: String(item.category).toUpperCase(),
+      };
+      return {
+        title: item.title,
+        href: item.href,
+        year: item.year,
+        category: sectionKey,
+        categoryLabel: meta.label,
+        categoryShort: meta.short,
+        medium: `${meta.label} / ${item.imageCount > 0 ? `${item.imageCount} images` : "text only"}`,
+        glyph: firstGlyph(item.title),
+      };
+    })
+    .sort(
+      (left, right) =>
+        Number(right.year) - Number(left.year) ||
+        left.title.localeCompare(right.title, "zh-Hans-CN"),
+    );
+
+  const dataJson = JSON.stringify(entries, null, 2);
+
+  const catNav = [
+    `<button type="button" class="cat-btn active" data-filter="all">All</button>`,
+    ...categoryOrder
+      .filter((key) => entries.some((entry) => entry.category === key))
+      .map(
+        (key) =>
+          `<button type="button" class="cat-btn" data-filter="${escapeAttribute(key)}">${escapeHtml(archiveCategoryMeta[key].label)}</button>`,
+      ),
+  ].join("\n");
+
+  const rows = entries
+    .map(
+      (entry) => `
+        <li class="work-row" data-category="${escapeAttribute(entry.category)}">
+          <div class="work-info">
+            <h3 class="work-title"><a href="${escapeAttribute(entry.href)}">${escapeHtml(entry.title)}</a></h3>
+            <p class="work-medium">${escapeHtml(entry.medium)}</p>
+          </div>
+          <span class="work-year">${escapeHtml(entry.year)}</span>
+          <div class="work-cover" aria-hidden="true">
+            <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
+            <span class="cover-char">${escapeHtml(entry.glyph)}</span>
+            <span class="cover-year">${escapeHtml(entry.year)}</span>
+          </div>
+        </li>`,
+    )
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selected Works | oblivion is freedom</title>
+  <meta name="description" content="A minimal typographic index of the same selected works, rendered without image covers.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" href="${iconName}">
+  <link rel="apple-touch-icon" href="${iconName}">
+  <link rel="stylesheet" href="minimal-archive.css">
+</head>
+<body>
+  <div class="archive-shell">
+    <header class="archive-topbar" id="top">
+      <a class="brand" href="index.html">oblivio</a>
+      <p class="archive-status" id="work-count">${entries.length} works</p>
+    </header>
+
+    <div class="archive-grid">
+      <aside class="archive-sidebar">
+        <h2 class="artist-name">Noahisarider</h2>
+        <nav class="cat-nav" aria-label="Filter works by category">
+${catNav}
+        </nav>
+        <div class="sidebar-links">
+          <a href="https://github.com/NoahIsARider" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://codeberg.org/NoahIsARider" target="_blank" rel="noreferrer">Codeberg</a>
+        </div>
+      </aside>
+
+      <main class="archive-main">
+        <ul class="work-list">
+${rows}
+        </ul>
+      </main>
+    </div>
+
+    <footer class="archive-footer">
+      <p>Built for static deployment and action-based publishing.</p>
+      <p><a href="index.html">Archive index</a> · <a href="#top">Back to top</a></p>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    var rows = Array.prototype.slice.call(document.querySelectorAll(".work-row"));
+    var buttons = Array.prototype.slice.call(document.querySelectorAll(".cat-btn"));
+    var count = document.getElementById("work-count");
+    var total = rows.length;
+
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        buttons.forEach(function (other) {
+          other.classList.remove("active");
+        });
+        button.classList.add("active");
+        var filter = button.getAttribute("data-filter");
+        var visible = 0;
+        rows.forEach(function (row) {
+          var show = filter === "all" || row.getAttribute("data-category") === filter;
+          row.style.display = show ? "" : "none";
+          if (show) {
+            visible += 1;
+          }
+        });
+        if (count) {
+          count.textContent = visible + " / " + total + " works";
+        }
+      });
+    });
+  })();
+  </script>
 </body>
 </html>`;
 }
@@ -366,7 +515,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.</p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a></p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
@@ -402,7 +551,12 @@ function writeOutputs(homePage, json, items) {
   writeFile(path.join(distDir, "index.html"), homePage);
   writeFile(path.join(distDir, "knowledge-base.json"), json);
 
+  const minimalArchive = renderMinimalArchive(items);
+  writeFile(path.join(rootDir, "minimal-archive.html"), minimalArchive);
+  writeFile(path.join(distDir, "minimal-archive.html"), minimalArchive);
+
   fs.copyFileSync(stylesPath, path.join(distDir, "styles.css"));
+  fs.copyFileSync(path.join(rootDir, "minimal-archive.css"), path.join(distDir, "minimal-archive.css"));
   fs.copyFileSync(path.join(rootDir, iconName), path.join(distDir, iconName));
   fs.copyFileSync(path.join(rootDir, backgroundName), path.join(distDir, backgroundName));
 
@@ -429,7 +583,7 @@ function main() {
   const json = `${JSON.stringify(data, null, 2)}\n`;
   const homePage = renderHomePage(data);
   writeOutputs(homePage, json, items);
-  console.log(`Generated index.html, knowledge-base.json, and ${items.length} work pages with the existing archive layout.`);
+  console.log(`Generated index.html, knowledge-base.json, minimal-archive.html, and ${items.length} work pages with the existing archive layout.`);
 }
 
 main();
