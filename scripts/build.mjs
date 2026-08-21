@@ -296,7 +296,7 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a> · <a href="dot-archive.html">Dot archive view</a></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
@@ -401,7 +401,7 @@ ${rows}
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="index.html">Archive index</a> · <a href="#top">Back to top</a></p>
+      <p><a href="index.html">Archive index</a> · <a href="dot-archive.html">Dot view</a> · <a href="#top">Back to top</a></p>
     </footer>
   </div>
 
@@ -409,6 +409,134 @@ ${rows}
   (function () {
     var rows = Array.prototype.slice.call(document.querySelectorAll(".work-row"));
     var buttons = Array.prototype.slice.call(document.querySelectorAll(".cat-btn"));
+    var count = document.getElementById("work-count");
+    var total = rows.length;
+
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        buttons.forEach(function (other) {
+          other.classList.remove("active");
+        });
+        button.classList.add("active");
+        var filter = button.getAttribute("data-filter");
+        var visible = 0;
+        rows.forEach(function (row) {
+          var show = filter === "all" || row.getAttribute("data-category") === filter;
+          row.style.display = show ? "" : "none";
+          if (show) {
+            visible += 1;
+          }
+        });
+        if (count) {
+          count.textContent = visible + " / " + total + " works";
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>`;
+}
+
+function renderDotArchive(items) {
+  const entries = items
+    .map((item) => {
+      const sectionKey = getSectionKey(item);
+      const meta = archiveCategoryMeta[sectionKey] || {
+        label: item.category,
+        short: String(item.category).toUpperCase(),
+      };
+      return {
+        title: item.title,
+        href: item.href,
+        year: item.year,
+        category: sectionKey,
+        categoryLabel: meta.label,
+        categoryShort: meta.short,
+        medium: `${meta.label} / ${item.imageCount > 0 ? `${item.imageCount} images` : "text only"}`,
+      };
+    })
+    .sort(
+      (left, right) =>
+        Number(right.year) - Number(left.year) ||
+        left.title.localeCompare(right.title, "zh-Hans-CN"),
+    );
+
+  const catNav = [
+    `<button type="button" class="dot-btn active" data-filter="all">All</button>`,
+    ...categoryOrder
+      .filter((key) => entries.some((entry) => entry.category === key))
+      .map(
+        (key) =>
+          `<button type="button" class="dot-btn" data-filter="${escapeAttribute(key)}">${escapeHtml(archiveCategoryMeta[key].label)}</button>`,
+      ),
+  ].join("\n");
+
+  const rows = entries
+    .map((entry, index) => {
+      return `
+        <li class="dot-row" data-category="${escapeAttribute(entry.category)}">
+          <span class="dot-index">${String(index + 1).padStart(3, "0")}</span>
+          <span class="dot-tag" data-cat="${escapeAttribute(entry.category)}">${escapeHtml(entry.categoryShort)}</span>
+          <div class="dot-info">
+            <h3 class="dot-title"><a href="${escapeAttribute(entry.href)}">${escapeHtml(entry.title)}</a></h3>
+            <p class="dot-meta">${escapeHtml(entry.medium)}</p>
+          </div>
+          <span class="dot-year">${escapeHtml(entry.year)}</span>
+        </li>`;
+    })
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dot Archive | oblivion is freedom</title>
+  <meta name="description" content="A dot-matrix industrial index of the same selected works, rendered on a black speckled gradient.">
+  <meta name="theme-color" content="#060606">
+  <link rel="icon" type="image/png" href="${iconName}">
+  <link rel="apple-touch-icon" href="${iconName}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dot-archive.css">
+</head>
+<body>
+  <div class="dot-shell">
+    <header class="dot-topbar" id="top">
+      <a class="dot-brand" href="index.html">oblivio</a>
+      <p class="dot-status" id="work-count">${entries.length} works</p>
+    </header>
+
+    <div class="dot-console">
+      <nav class="dot-controls" aria-label="Filter works by category">
+        <span class="dot-prompt">filter</span>
+${catNav}
+      </nav>
+
+      <main class="dot-main">
+        <ul class="dot-list">
+${rows}
+        </ul>
+      </main>
+
+      <div class="dot-links">
+        <a href="https://github.com/NoahIsARider" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://codeberg.org/NoahIsARider" target="_blank" rel="noreferrer">Codeberg</a>
+      </div>
+    </div>
+
+    <footer class="dot-footer">
+      <p>Built for static deployment and action-based publishing.</p>
+      <p><a href="index.html">Archive index</a> · <a href="minimal-archive.html">Minimal view</a> · <a href="#top">Back to top</a></p>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    var rows = Array.prototype.slice.call(document.querySelectorAll(".dot-row"));
+    var buttons = Array.prototype.slice.call(document.querySelectorAll(".dot-btn"));
     var count = document.getElementById("work-count");
     var total = rows.length;
 
@@ -531,7 +659,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a> · <a href="../dot-archive.html">Dot archive view</a></p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
@@ -571,8 +699,13 @@ function writeOutputs(homePage, json, items) {
   writeFile(path.join(rootDir, "minimal-archive.html"), minimalArchive);
   writeFile(path.join(distDir, "minimal-archive.html"), minimalArchive);
 
+  const dotArchive = renderDotArchive(items);
+  writeFile(path.join(rootDir, "dot-archive.html"), dotArchive);
+  writeFile(path.join(distDir, "dot-archive.html"), dotArchive);
+
   fs.copyFileSync(stylesPath, path.join(distDir, "styles.css"));
   fs.copyFileSync(path.join(rootDir, "minimal-archive.css"), path.join(distDir, "minimal-archive.css"));
+  fs.copyFileSync(path.join(rootDir, "dot-archive.css"), path.join(distDir, "dot-archive.css"));
   fs.copyFileSync(path.join(rootDir, iconName), path.join(distDir, iconName));
   fs.copyFileSync(path.join(rootDir, backgroundName), path.join(distDir, backgroundName));
 
