@@ -344,11 +344,7 @@ function renderMinimalArchive(items) {
 
   const rows = entries
     .map((entry) => {
-      const cover = entry.image
-        ? `<div class="work-cover" aria-hidden="true">
-            <img class="cover-img" src="${escapeAttribute(entry.image)}" alt="" loading="lazy">
-          </div>`
-        : `<div class="work-cover work-cover-text" aria-hidden="true">
+      const cover = `<div class="work-cover work-cover-text" aria-hidden="true">
             <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
             <span class="cover-char">${escapeHtml(entry.glyph)}</span>
             <span class="cover-year">${escapeHtml(entry.year)}</span>
