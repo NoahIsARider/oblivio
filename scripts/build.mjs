@@ -296,7 +296,7 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a> · <a href="signal-archive.html">Signal view</a></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
@@ -401,7 +401,7 @@ ${rows}
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="index.html">Archive index</a> · <a href="#top">Back to top</a></p>
+      <p><a href="index.html">Archive index</a> · <a href="signal-archive.html">Signal view</a> · <a href="#top">Back to top</a></p>
     </footer>
   </div>
 
@@ -437,6 +437,158 @@ ${rows}
 </body>
 </html>`;
 }
+
+
+function halftoneSphereSVG(size = 460) {
+  const cells = 26;
+  const step = size / cells;
+  const cx = size / 2, cy = size / 2;
+  const out = [];
+  for (let y = 0; y < cells; y++) {
+    for (let x = 0; x < cells; x++) {
+      const px = x * step + step / 2, py = y * step + step / 2;
+      const d = Math.hypot(px - cx, py - cy) / (size / 2);
+      if (d > 0.985) continue;
+      const r = step * 0.46 * Math.pow(1 - d, 0.7);
+      if (r < 0.06) continue;
+      out.push(`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r.toFixed(2)}"/>`);
+    }
+  }
+  return `<svg class="halftone-svg" viewBox="0 0 ${size} ${size}" aria-hidden="true">${out.join("")}</svg>`;
+}
+
+function particleNetSVG(w = 340, h = 240) {
+  // seeded pseudo-random field (deterministic across builds)
+  let s = 7;
+  const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+  const nodes = Array.from({ length: 16 }, () => ({
+    x: 18 + rnd() * (w - 36), y: 18 + rnd() * (h - 36), r: 1.6 + rnd() * 2.4,
+  }));
+  const links = [];
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+      const d = Math.hypot(dx, dy);
+      if (d < 96) links.push(`<line class="net-link" x1="${nodes[i].x.toFixed(1)}" y1="${nodes[i].y.toFixed(1)}" x2="${nodes[j].x.toFixed(1)}" y2="${nodes[j].y.toFixed(1)}"/>`);
+    }
+  }
+  const dots = nodes.map((n, i) =>
+    `<circle class="net-node${i === 3 || i === 9 ? " net-hot glow" : ""}" cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${n.r.toFixed(2)}"/>`).join("");
+  return `<svg class="net-svg" viewBox="0 0 ${w} ${h}" aria-hidden="true">${links.join("")}${dots}</svg>`;
+}
+
+const ASCII_ORGANISM = String.raw`
+        .  .  .     .  .
+     .  *     .  *     .
+   .     o        o     .
+  .        '  .  '        .
+   .     o        o     .
+     .  *     .  *     .
+        .  .  .     .  .`;
+
+function renderSignalArchive(items) {
+  const entries = items
+    .map((item) => {
+      const sectionKey = getSectionKey(item);
+      const meta = archiveCategoryMeta[sectionKey] || { label: item.category, short: String(item.category).toUpperCase() };
+      return {
+        title: item.title,
+        href: item.href,
+        year: item.year,
+        categoryLabel: meta.label,
+        categoryShort: meta.short,
+      };
+    })
+    .sort((l, r) => Number(r.year) - Number(l.year) || l.title.localeCompare(r.title, "zh-Hans-CN"));
+
+  const rows = entries
+    .map((entry, i) => `
+        <li class="signal-row">
+          <span class="row-no mono">${String(i + 1).padStart(3, "0")}</span>
+          <h3 class="row-title"><a href="${escapeAttribute(entry.href)}">${escapeHtml(entry.title)}</a></h3>
+          <span class="row-cat">${escapeHtml(entry.categoryLabel)}</span>
+          <span class="row-year mono">${escapeHtml(entry.year)}</span>
+        </li>`)
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signal | oblivion is freedom</title>
+  <meta name="description" content="A computational index of the selected works — halftone fields, particle networks and strict grid typography.">
+  <meta name="theme-color" content="#f6f5f1">
+  <link rel="icon" type="image/png" href="${iconName}">
+  <link rel="apple-touch-icon" href="${iconName}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="signal-archive.css">
+</head>
+<body>
+  <div class="signal-shell">
+    <header class="signal-topbar" id="top">
+      <a class="signal-brand" href="index.html">OBLIVIO<span class="cursor">▍</span></a>
+      <p class="signal-status mono"><span class="ok">●</span> SYS://ONLINE · ${String(entries.length).padStart(3, "0")} WORKS · ${new Date().getFullYear()}</p>
+    </header>
+
+    <section class="signal-hero">
+      <div class="hero-type">
+        <p class="hero-kicker mono">SELECTED WORKS — ARCHIVE INDEX</p>
+        <h1 class="hero-title">OBLIVIO<span class="accent-dot">.</span></h1>
+        <p class="hero-sub mono">A reading wall of selected works rebuilt from source documents. Halftone dots, particle fields and strict grids — the archive as a generative system.</p>
+      </div>
+      <div class="hero-visual">
+        <div class="halftone-wrap">${halftoneSphereSVG()}</div>
+        <div class="net-wrap">${particleNetSVG()}</div>
+      </div>
+    </section>
+
+    <div class="signal-coords mono">
+      <span>GRID 08 × 24</span>
+      <span class="live">X:<span id="coord-x">0000</span> Y:<span id="coord-y">0000</span></span>
+      <span>REFRESH AUG 2026</span>
+    </div>
+
+    <main class="signal-list">
+      <div class="list-head mono">
+        <span>No.</span><span>Title</span><span>Category</span><span>Year</span>
+      </div>
+      <ol>
+${rows}
+      </ol>
+    </main>
+
+    <footer class="signal-footer">
+      <div class="dot-band" aria-hidden="true"></div>
+      <div class="foot-meta mono">
+        <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
+        <span><a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL VIEW</a></span>
+      </div>
+      <div class="ascii-panel" aria-hidden="true"><pre>${ASCII_ORGANISM.trim()}</pre></div>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    var x = document.getElementById("coord-x");
+    var y = document.getElementById("coord-y");
+    function update() {
+      var sx = window.scrollY || document.documentElement.scrollTop;
+      var mx = (sx / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)) * 9999;
+      var my = Math.round(Math.random() * 9999);
+      x.textContent = String(Math.round(mx)).padStart(4, "0");
+      y.textContent = String(my).padStart(4, "0");
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+  </script>
+</body>
+</html>`;
+}
+
 
 function relatedItems(current, items) {
   return items
@@ -531,7 +683,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a> · <a href="../signal-archive.html">Signal view</a></p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
@@ -571,9 +723,14 @@ function writeOutputs(homePage, json, items) {
   writeFile(path.join(rootDir, "minimal-archive.html"), minimalArchive);
   writeFile(path.join(distDir, "minimal-archive.html"), minimalArchive);
 
+  const signalArchive = renderSignalArchive(items);
+  writeFile(path.join(rootDir, "signal-archive.html"), signalArchive);
+  writeFile(path.join(distDir, "signal-archive.html"), signalArchive);
+
 
   fs.copyFileSync(stylesPath, path.join(distDir, "styles.css"));
   fs.copyFileSync(path.join(rootDir, "minimal-archive.css"), path.join(distDir, "minimal-archive.css"));
+  fs.copyFileSync(path.join(rootDir, "signal-archive.css"), path.join(distDir, "signal-archive.css"));
   fs.copyFileSync(path.join(rootDir, iconName), path.join(distDir, iconName));
   fs.copyFileSync(path.join(rootDir, backgroundName), path.join(distDir, backgroundName));
 
