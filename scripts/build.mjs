@@ -495,28 +495,6 @@ const EMBER_BOOT = [
   "> mounting word archive ........................ ok",
 ];
 
-// dot-matrix signature strip (dot art replaces bitmap heroes)
-const DOT_MATRIX = [
-  ".....#................#.",
-  "....###............##..",
-  "...#####..........####.",
-  "..#######........#####.",
-  ".#########......######.",
-  "###########....#######.",
-  ".......................",
-];
-
-function renderDotMatrix(rows) {
-  return rows
-    .map((row) =>
-      row
-        .split("")
-        .map((ch) => (ch === "#" ? '<span class="lit">\u25cf</span>' : "\u00b7"))
-        .join(""),
-    )
-    .join("\n");
-}
-
 function renderEmberArchive(items) {
   const entries = items
     .map((item) => {
@@ -578,7 +556,6 @@ function renderEmberArchive(items) {
           <div class="hero-visual">
             <div class="halftone-wrap">${halftoneSphereSVG()}</div>
             <div class="net-wrap">${particleNetSVG()}</div>
-            <div class="dot-matrix mono" aria-hidden="true"><pre>${renderDotMatrix(DOT_MATRIX)}</pre></div>
           </div>
         </section>
 
