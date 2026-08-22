@@ -296,7 +296,7 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a> · <a href="signal-archive.html">Signal view</a> · <a href="tui-archive.html">Terminal view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a> · <a href="signal-archive.html">Signal view</a> · <a href="tui-archive.html">Terminal view</a> · <a href="ember-archive.html">Ember view</a></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
@@ -401,7 +401,7 @@ ${rows}
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="index.html">Archive index</a> · <a href="signal-archive.html">Signal view</a> · <a href="tui-archive.html">Terminal view</a> · <a href="#top">Back to top</a></p>
+      <p><a href="index.html">Archive index</a> · <a href="signal-archive.html">Signal view</a> · <a href="tui-archive.html">Terminal view</a> · <a href="ember-archive.html">Ember view</a> · <a href="#top">Back to top</a></p>
     </footer>
   </div>
 
@@ -564,7 +564,7 @@ ${rows}
       <div class="dot-band" aria-hidden="true"></div>
       <div class="foot-meta mono">
         <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
-        <span><a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL VIEW</a> · <a href="tui-archive.html">TERMINAL</a></span>
+        <span><a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL VIEW</a> · <a href="tui-archive.html">TERMINAL</a> · <a href="ember-archive.html">EMBER</a></span>
       </div>
       <div class="ascii-panel" aria-hidden="true"><pre>${ASCII_ORGANISM.trim()}</pre></div>
     </footer>
@@ -685,7 +685,7 @@ ${rows}
         </div>
 
         <div class="tui-nav mono">
-          <a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL</a> · <a href="signal-archive.html">SIGNAL</a>
+          <a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL</a> · <a href="signal-archive.html">SIGNAL</a> · <a href="ember-archive.html">EMBER</a>
         </div>
       </div>
     </div>
@@ -729,6 +729,196 @@ ${rows}
 </html>`;
 }
 
+
+const EMBER_BOOT = [
+  "> oblivio archive kernel v2.2.0 ................ ok",
+  "> warming CRT phosphors ........................ ok",
+  "> calibrating signal grid ...................... ok",
+  "> raising archive boundary ..................... ok",
+  "> indexing knowledge base ...................... ok",
+  "> mounting word archive ........................ ok",
+];
+
+// dot-matrix signature strip (dot art replaces bitmap heroes)
+const DOT_MATRIX = [
+  ".....#................#.",
+  "....###............##..",
+  "...#####..........####.",
+  "..#######........#####.",
+  ".#########......######.",
+  "###########....#######.",
+  ".......................",
+];
+
+function renderDotMatrix(rows) {
+  return rows
+    .map((row) =>
+      row
+        .split("")
+        .map((ch) => (ch === "#" ? '<span class="lit">\u25cf</span>' : "\u00b7"))
+        .join(""),
+    )
+    .join("\n");
+}
+
+function renderEmberArchive(items) {
+  const entries = items
+    .map((item) => {
+      const sectionKey = getSectionKey(item);
+      const meta = archiveCategoryMeta[sectionKey] || { label: item.category, short: String(item.category).toUpperCase() };
+      return {
+        title: item.title,
+        href: item.href,
+        year: item.year,
+        categoryLabel: meta.label,
+      };
+    })
+    .sort((l, r) => Number(r.year) - Number(l.year) || l.title.localeCompare(r.title, "zh-Hans-CN"));
+
+  const rows = entries
+    .map((entry, i) => `
+        <a class="ember-row" href="${escapeAttribute(entry.href)}" tabindex="0">
+          <span class="c-no">${String(i + 1).padStart(3, "0")}</span>
+          <span class="c-title">${escapeHtml(entry.title)}</span>
+          <span class="c-cat">${escapeHtml(entry.categoryLabel)}</span>
+          <span class="c-year">${escapeHtml(entry.year)}</span>
+        </a>`)
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ember | oblivion is freedom</title>
+  <meta name="description" content="An amber CRT terminal merged with computational vision — halftone fields, particle networks and a phosphor index of the selected works.">
+  <meta name="theme-color" content="#0b0703">
+  <link rel="icon" type="image/png" href="${iconName}">
+  <link rel="apple-touch-icon" href="${iconName}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ember-archive.css">
+</head>
+<body>
+  <div class="crt" aria-hidden="true"></div>
+
+  <div class="ember-shell">
+    <div class="ember-window">
+      <div class="ember-titlebar">
+        <span class="win-title">oblivio — ember.sys</span>
+        <span class="win-dots">─ □ ✕</span>
+      </div>
+
+      <div class="ember-body">
+        <div class="boot-log mono" id="boot-log" aria-hidden="true"></div>
+
+        <section class="ember-hero">
+          <div class="hero-type">
+            <p class="hero-kicker">SELECTED WORKS — COMPUTATIONAL TERMINAL</p>
+            <h1 class="hero-logo">OBLIVIO<span style="color:var(--amber-red);-webkit-text-fill-color:var(--amber-red)">.</span></h1>
+            <p class="hero-sub">A reading wall of selected works rebuilt from source documents. Halftone dots and particle fields inside an amber CRT terminal — the archive as a live system.</p>
+          </div>
+          <div class="hero-visual">
+            <div class="halftone-wrap">${halftoneSphereSVG()}</div>
+            <div class="net-wrap">${particleNetSVG()}</div>
+            <div class="dot-matrix mono" aria-hidden="true"><pre>${renderDotMatrix(DOT_MATRIX)}</pre></div>
+          </div>
+        </section>
+
+        <div class="ember-coords mono">
+          <span>GRID 08 × 24</span>
+          <span class="live">X:<span id="coord-x">0000</span> Y:<span id="coord-y">0000</span></span>
+          <span>PHOSPHOR AMBER · AUG 2026</span>
+        </div>
+
+        <div class="ember-menu mono">
+          <span class="menu-item active">ARCHIVE</span>
+          <span class="menu-item">VIEW</span>
+          <span class="menu-item">HELP</span>
+          <span class="menu-spacer"></span>
+          <span class="menu-item" id="menu-clock">00:00:00</span>
+        </div>
+
+        <div class="ember-table mono" role="list">
+          <div class="ember-thead">
+            <span>NO.</span><span>TITLE</span><span>CATEGORY</span><span>YEAR</span>
+          </div>
+${rows}
+        </div>
+
+        <div class="ember-statusbar mono">
+          <span>OBLIVIO // EMBER.SYS</span>
+          <span>${String(entries.length).padStart(3, "0")} WORKS INDEXED</span>
+          <span class="live" id="status-clock">SYS 00:00:00</span>
+        </div>
+
+        <div class="ember-prompt mono">
+          <span class="ps1">oblivio@archive:~$</span> <span class="cmd">cat archive --view=ember --sort=year</span><span class="cursor-block"></span>
+        </div>
+
+        <footer class="ember-footer">
+          <div class="dot-band" aria-hidden="true"></div>
+          <div class="foot-meta mono">
+            <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
+            <span><a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL</a> · <a href="signal-archive.html">SIGNAL</a> · <a href="tui-archive.html">TERMINAL</a></span>
+          </div>
+          <div class="ascii-panel" aria-hidden="true"><pre>${ASCII_ORGANISM.trim()}</pre></div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    // boot log typing
+    var boot = ${JSON.stringify(EMBER_BOOT)};
+    var box = document.getElementById("boot-log");
+    var line = 0, ch = 0;
+    function tick() {
+      if (line >= boot.length) return;
+      var text = boot[line];
+      if (ch <= text.length) {
+        box.textContent = text.slice(0, ch++);
+        setTimeout(tick, 8);
+      } else {
+        box.textContent += "\n";
+        line++; ch = 0;
+        setTimeout(tick, 90);
+      }
+    }
+    tick();
+
+    // clocks
+    var menuClock = document.getElementById("menu-clock");
+    var statusClock = document.getElementById("status-clock");
+    function clock() {
+      var d = new Date();
+      var p = function (n) { return String(n).padStart(2, "0"); };
+      var t = p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+      menuClock.textContent = t;
+      statusClock.textContent = "SYS " + t;
+    }
+    clock();
+    setInterval(clock, 1000);
+
+    // scroll coordinates
+    var x = document.getElementById("coord-x");
+    var y = document.getElementById("coord-y");
+    function update() {
+      var sx = window.scrollY || document.documentElement.scrollTop;
+      var mx = (sx / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)) * 9999;
+      var my = Math.round(Math.random() * 9999);
+      x.textContent = String(Math.round(mx)).padStart(4, "0");
+      y.textContent = String(my).padStart(4, "0");
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+  </script>
+</body>
+</html>`;
+}
 
 function relatedItems(current, items) {
   return items
@@ -823,7 +1013,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a> · <a href="../signal-archive.html">Signal view</a> · <a href="../tui-archive.html">Terminal view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a> · <a href="../signal-archive.html">Signal view</a> · <a href="../tui-archive.html">Terminal view</a> · <a href="../ember-archive.html">Ember view</a></p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
@@ -871,11 +1061,16 @@ function writeOutputs(homePage, json, items) {
   writeFile(path.join(rootDir, "tui-archive.html"), tuiArchive);
   writeFile(path.join(distDir, "tui-archive.html"), tuiArchive);
 
+  const emberArchive = renderEmberArchive(items);
+  writeFile(path.join(rootDir, "ember-archive.html"), emberArchive);
+  writeFile(path.join(distDir, "ember-archive.html"), emberArchive);
+
 
   fs.copyFileSync(stylesPath, path.join(distDir, "styles.css"));
   fs.copyFileSync(path.join(rootDir, "minimal-archive.css"), path.join(distDir, "minimal-archive.css"));
   fs.copyFileSync(path.join(rootDir, "signal-archive.css"), path.join(distDir, "signal-archive.css"));
   fs.copyFileSync(path.join(rootDir, "tui-archive.css"), path.join(distDir, "tui-archive.css"));
+  fs.copyFileSync(path.join(rootDir, "ember-archive.css"), path.join(distDir, "ember-archive.css"));
   fs.copyFileSync(path.join(rootDir, iconName), path.join(distDir, iconName));
   fs.copyFileSync(path.join(rootDir, backgroundName), path.join(distDir, backgroundName));
 
