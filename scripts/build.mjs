@@ -127,6 +127,10 @@ function updatedAt() {
   }).format(new Date());
 }
 
+function imageCountLabel(count) {
+  return count === 1 ? "1 image" : `${count} images`;
+}
+
 function readManifest() {
   if (!fs.existsSync(manifestPath)) {
     throw new Error(`Missing works manifest: ${manifestPath}`);
@@ -138,7 +142,7 @@ function readManifest() {
       ...item,
       excerpt: excerptForList(item.excerpt),
       href: `works/${item.slug}.html`,
-      meta: item.imageCount > 0 ? `${item.year} / ${item.imageCount} images` : `${item.year} / text only`,
+      meta: item.imageCount > 0 ? `${item.year} / ${imageCountLabel(item.imageCount)}` : `${item.year} / text only`,
     }))
     .sort((left, right) => {
       const yearGap = Number(right.year) - Number(left.year);
@@ -304,6 +308,11 @@ function renderHomePage(data) {
 </html>`;
 }
 
+function coverImageFor(slug) {
+  const coverPath = path.join(rootDir, "assets", "covers", `${slug}.jpg`);
+  return fs.existsSync(coverPath) ? `assets/covers/${slug}.jpg` : null;
+}
+
 function renderMinimalArchive(items) {
   const entries = items
     .map((item) => {
@@ -319,9 +328,10 @@ function renderMinimalArchive(items) {
         category: sectionKey,
         categoryLabel: meta.label,
         categoryShort: meta.short,
-        medium: `${meta.label} / ${item.imageCount > 0 ? `${item.imageCount} images` : "text only"}`,
+        medium: `${meta.label} / ${item.imageCount > 0 ? imageCountLabel(item.imageCount) : "text only"}`,
         glyph: firstGlyph(item.title),
         image: item.imageCount > 0 ? firstImageOf(item) : null,
+        cover: coverImageFor(item.slug),
       };
     })
     .sort(
@@ -344,7 +354,11 @@ function renderMinimalArchive(items) {
 
   const rows = entries
     .map((entry) => {
-      const cover = `<div class="work-cover work-cover-text" aria-hidden="true">
+      const cover = entry.cover
+        ? `<div class="work-cover">
+            <img class="cover-img" src="${escapeAttribute(entry.cover)}" alt="" loading="lazy">
+          </div>`
+        : `<div class="work-cover work-cover-text" aria-hidden="true">
             <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
             <span class="cover-char">${escapeHtml(entry.glyph)}</span>
             <span class="cover-year">${escapeHtml(entry.year)}</span>
@@ -702,7 +716,7 @@ function renderWorkPage(item, items) {
         <a href="../index.html">Archive</a>
         <a href="#article">Article</a>
       </nav>
-      <p class="topbar-status">${escapeHtml(item.year)}<br>${item.imageCount > 0 ? `${item.imageCount} images` : "text only"}</p>
+      <p class="topbar-status">${escapeHtml(item.year)}<br>${item.imageCount > 0 ? imageCountLabel(item.imageCount) : "text only"}</p>
     </header>
 
     <section class="intro-grid" aria-label="Article overview">
