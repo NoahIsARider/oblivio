@@ -130,10 +130,10 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 4%; left: -5%; right: -5%; bottom: -28%;
   z-index: 0;
-  background-image: radial-gradient(circle, rgba(232, 137, 24, 0.24) 1.3px, transparent 1.3px);
-  background-size: 13px 13px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 62% at 38% 42%, #000 0%, rgba(0,0,0,0.5) 52%, transparent 76%);
-  mask-image: radial-gradient(ellipse 75% 62% at 38% 42%, #000 0%, rgba(0,0,0,0.5) 52%, transparent 76%);
+  background-image: radial-gradient(circle, rgba(232, 137, 24, 0.55) 1.6px, transparent 1.6px);
+  background-size: 11px 11px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 62% at 38% 42%, #000 0%, rgba(0,0,0,0.75) 55%, transparent 82%);
+  mask-image: radial-gradient(ellipse 75% 62% at 38% 42%, #000 0%, rgba(0,0,0,0.75) 55%, transparent 82%);
   pointer-events: none;
 }
 
@@ -208,8 +208,10 @@ a { color: inherit; text-decoration: none; }
 }
 .ember-row .c-no { color: var(--amber-faint); }
 .ember-row .c-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ember-row .c-cat { color: var(--amber-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
-.ember-row .c-year { text-align: right; color: var(--amber-dim); }
+.ember-row .c-cat { color: var(--amber-red); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+.ember-row .c-year { text-align: right; color: var(--amber-red); }
+.ember-thead span:nth-child(3),
+.ember-thead span:nth-child(4) { color: var(--amber-red); }
 
 /* LED status dot (Signal motif) on hover */
 .ember-row::before {
