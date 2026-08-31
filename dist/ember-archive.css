@@ -204,10 +204,11 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   position: relative;
 }
-.ember-row .c-no { color: var(--amber-faint); }
+.ember-row .c-no { color: var(--amber-red); }
 .ember-row .c-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ember-row .c-cat { color: var(--amber-red); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
 .ember-row .c-year { text-align: right; color: var(--amber-red); }
+.ember-thead span:nth-child(1),
 .ember-thead span:nth-child(3),
 .ember-thead span:nth-child(4) { color: var(--amber-red); }
 
