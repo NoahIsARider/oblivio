@@ -71,7 +71,9 @@ a { color: inherit; text-decoration: none; }
   border-radius: 8px;
   background: var(--bg-panel);
   box-shadow: 0 0 34px rgba(232, 137, 24, 0.12), inset 0 0 70px rgba(232, 137, 24, 0.03);
-  overflow: hidden;
+  /* overflow: clip keeps corner rounding without creating a scroll container,
+     so position: sticky inside (work sidebar) still works */
+  overflow: clip;
 }
 
 .ember-titlebar {
@@ -121,6 +123,21 @@ a { color: inherit; text-decoration: none; }
   margin-top: 18px; font-size: 12px; letter-spacing: 0.06em;
   color: var(--amber-dim); max-width: 46ch; line-height: 1.8;
 }
+
+.hero-type { position: relative; }
+
+.hero-dot-field {
+  position: absolute;
+  top: 4%; left: -5%; right: -5%; bottom: -28%;
+  z-index: 0;
+  background-image: radial-gradient(circle, rgba(232, 137, 24, 0.24) 1.3px, transparent 1.3px);
+  background-size: 13px 13px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 62% at 38% 42%, #000 0%, rgba(0,0,0,0.5) 52%, transparent 76%);
+  mask-image: radial-gradient(ellipse 75% 62% at 38% 42%, #000 0%, rgba(0,0,0,0.5) 52%, transparent 76%);
+  pointer-events: none;
+}
+
+.hero-type > :not(.hero-dot-field) { position: relative; z-index: 1; }
 
 .hero-visual { position: relative; display: flex; justify-content: center; }
 
@@ -289,4 +306,184 @@ a { color: inherit; text-decoration: none; }
   .ember-row .c-cat { display: none; }
   .ember-body { padding: 16px 12px 18px; }
   .hero-logo { font-size: clamp(46px, 14vw, 72px); }
+  .ember-work-title { font-size: clamp(28px, 6vw, 48px) !important; }
+  .ember-work-nav { flex-wrap: wrap; }
+  .ember-work-layout { grid-template-columns: 1fr; }
+  .ember-work-sidebar { position: static; }
+  .ember-work-sidebar .ember-work-related {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--amber-faint);
+  }
+}
+
+/* ---------- work (article) page ---------- */
+
+.ember-work-shell { max-width: 960px; }
+
+.ember-work-header {
+  padding: 8px 0 20px;
+  border-bottom: 1px solid var(--amber-faint);
+  margin-bottom: 18px;
+}
+
+.ember-work-kicker {
+  font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--amber-dim); margin-bottom: 14px;
+}
+
+.ember-work-title {
+  font-family: var(--pixel); font-size: clamp(32px, 5.5vw, 64px);
+  line-height: 1.05; letter-spacing: 0.01em;
+  background: linear-gradient(180deg, #ffb347 0%, #ff8800 45%, #b85700 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(255, 136, 0, 0.25));
+  margin: 0;
+}
+
+.ember-work-meta {
+  font-size: 11px; letter-spacing: 0.16em; color: var(--amber-dim);
+  margin-top: 12px;
+}
+
+.ember-work-summary {
+  font-size: 12px; letter-spacing: 0.04em; color: var(--amber-dim);
+  max-width: 60ch; line-height: 1.8; margin-top: 10px;
+}
+
+.ember-work-nav {
+  display: flex; gap: 18px; align-items: center;
+  padding: 7px 10px; margin-bottom: 18px;
+  border: 1px solid var(--amber-faint);
+  font-size: 12px; letter-spacing: 0.06em;
+}
+.ember-work-nav .menu-item { color: var(--amber-dim); cursor: default; }
+.ember-work-nav .menu-item.active {
+  color: var(--bg); background: var(--amber); padding: 1px 6px; text-shadow: none;
+}
+.ember-work-nav .menu-item a { color: inherit; }
+.ember-work-nav .menu-item a:hover { color: var(--amber-bright); text-shadow: 0 0 6px rgba(255, 179, 71, 0.5); }
+.ember-work-nav .menu-spacer { flex: 1; }
+
+.ember-work-content {
+  font-size: 13px; line-height: 1.85; letter-spacing: 0.01em;
+  max-width: 72ch;
+}
+
+.ember-work-content h2 {
+  font-family: var(--pixel); font-size: 22px; letter-spacing: 0.04em;
+  color: var(--amber-bright); margin: 2rem 0 0.8rem;
+  text-shadow: 0 0 8px rgba(255, 179, 71, 0.3);
+}
+
+.ember-work-content h3 {
+  font-family: var(--pixel); font-size: 17px; letter-spacing: 0.03em;
+  color: var(--amber); margin: 1.5rem 0 0.6rem;
+}
+
+.ember-work-content p { margin: 0 0 1.1rem; }
+
+.ember-work-content blockquote {
+  margin: 1.2rem 0; padding: 0.6rem 1rem;
+  border-left: 2px solid var(--amber-dim);
+  color: var(--amber-dim); font-style: italic;
+}
+
+.ember-work-content img {
+  max-width: 100%; height: auto; margin: 1.2rem 0;
+  border: 1px solid var(--amber-faint);
+  filter: sepia(0.3) contrast(1.1);
+}
+
+.ember-work-content table {
+  width: 100%; border-collapse: collapse; margin: 1.2rem 0;
+  font-size: 12px;
+}
+
+.ember-work-content th,
+.ember-work-content td {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--amber-faint);
+  text-align: left;
+}
+
+.ember-work-content th {
+  color: var(--amber-bright); background: var(--bg-panel);
+  font-weight: 500;
+}
+
+.ember-work-content a {
+  color: var(--amber-bright);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ember-work-content a:hover {
+  color: var(--amber-hot);
+  text-shadow: 0 0 6px rgba(255, 136, 0, 0.5);
+}
+
+.ember-work-related {
+  margin-top: 2rem; padding-top: 1.2rem;
+  border-top: 1px solid var(--amber-faint);
+}
+
+.ember-related-label {
+  font-size: 11px; letter-spacing: 0.18em; color: var(--amber-dim);
+  margin: 0 0 0.8rem;
+}
+
+.ember-related-list {
+  display: flex; flex-direction: column;
+}
+
+.ember-related-row {
+  display: grid; grid-template-columns: 40px 1fr 50px;
+  gap: 10px; padding: 6px 10px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--amber-faint);
+  cursor: pointer;
+}
+
+.ember-related-row .c-no { color: var(--amber-faint); }
+.ember-related-row .c-title {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 12px;
+}
+.ember-related-row .c-year {
+  text-align: right; color: var(--amber-dim); font-size: 11px;
+}
+
+.ember-related-row:hover,
+.ember-related-row:focus-within {
+  background: var(--amber); color: var(--bg); text-shadow: none;
+  outline: none;
+}
+.ember-related-row:hover .c-no,
+.ember-related-row:hover .c-year,
+.ember-related-row:focus-within .c-no,
+.ember-related-row:focus-within .c-year { color: var(--bg); }
+
+/* article layout: content left, sticky related sidebar right */
+.ember-work-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 0.34fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.ember-work-layout .ember-work-content { min-width: 0; }
+
+.ember-work-sidebar {
+  position: sticky;
+  top: 2rem;
+  min-width: 0;
+}
+
+.ember-work-sidebar .ember-work-related {
+  margin-top: 0;
+  padding: 0.5rem 0 0 0.9rem;
+  border-top: none;
+  border-left: 1px solid var(--amber-faint);
 }

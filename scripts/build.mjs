@@ -323,7 +323,7 @@ function renderMinimalArchive(items) {
       };
       return {
         title: item.title,
-        href: item.href,
+        href: `works/minimal/${item.slug}.html`,
         year: item.year,
         category: sectionKey,
         categoryLabel: meta.label,
@@ -516,7 +516,7 @@ function renderEmberArchive(items) {
       const meta = archiveCategoryMeta[sectionKey] || { label: item.category, short: String(item.category).toUpperCase() };
       return {
         title: item.title,
-        href: item.href,
+        href: `works/ember/${item.slug}.html`,
         year: item.year,
         categoryLabel: meta.label,
       };
@@ -565,6 +565,7 @@ function renderEmberArchive(items) {
           <div class="hero-type">
             <p class="hero-kicker">SELECTED WORKS — COMPUTATIONAL TERMINAL</p>
             <h1 class="hero-logo">OBLIVIO<span style="color:var(--amber-red);-webkit-text-fill-color:var(--amber-red)">.</span></h1>
+            <div class="hero-dot-field" aria-hidden="true"></div>
             <p class="hero-sub">A reading wall of selected works rebuilt from source documents. Halftone dots and particle fields inside an amber CRT terminal — the archive as a live system.</p>
           </div>
           <div class="hero-visual">
@@ -681,6 +682,14 @@ function readFragment(slug) {
   return fs.readFileSync(fragmentPath, "utf8").trim();
 }
 
+// Source fragments reference images as `../assets/...` (correct for pink pages
+// at works/<slug>.html, one level below root). The themed pages live one level
+// deeper (works/minimal|ember/<slug>.html) and need an extra `../`.
+function fragmentForDepth(fragment, depth) {
+  const extra = "../".repeat(depth - 1);
+  return fragment.replace(/src="\.\.\/assets\//g, `src="${extra}../assets/`);
+}
+
 function renderWorkPage(item, items) {
   const fragment = readFragment(item.slug);
   const related = relatedItems(item, items);
@@ -768,6 +777,164 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
 </html>`;
 }
 
+function renderWorkPageMinimal(item, items) {
+  const fragment = readFragment(item.slug);
+  const related = relatedItems(item, items);
+  const relatedMarkup = related
+    .map(
+      (entry) => `
+          <li class="related-item">
+            <a href="${escapeAttribute(entry.slug)}.html" title="${escapeAttribute(entry.title)}">
+              <span class="related-title">${escapeHtml(titleToEnglish(entry.title))}</span>
+              <span class="related-meta">${escapeHtml(entry.year)}</span>
+            </a>
+          </li>`,
+    )
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(item.title)} | oblivion is freedom</title>
+  <meta name="description" content="${escapeAttribute(excerptForList(item.excerpt))}">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" href="../../${iconName}">
+  <link rel="apple-touch-icon" href="../../${iconName}">
+  <link rel="stylesheet" href="../../minimal-archive.css">
+</head>
+<body>
+  <div class="archive-shell work-page-shell">
+    <header class="archive-topbar" id="top">
+      <a class="brand" href="../../minimal-archive.html">oblivio</a>
+      <p class="archive-status">${escapeHtml(item.year)} &middot; ${escapeHtml(categoryMeta[getSectionKey(item)]?.title || item.category)}</p>
+    </header>
+
+    <div class="work-header">
+      <p class="work-header-section">${escapeHtml(categoryMeta[getSectionKey(item)]?.title || item.category)}</p>
+      <h1 class="work-header-title">${escapeHtml(item.title)}</h1>
+      <p class="work-header-summary">${escapeHtml(excerptForList(item.excerpt))}</p>
+      <p class="work-header-meta">${escapeHtml(item.year)} / ${imageCountLabel(item.imageCount) || "text only"}</p>
+    </div>
+
+    <div class="work-content-layout">
+      <article class="work-content-body">
+        <div class="work-content">
+${fragmentForDepth(fragment, 2)}
+        </div>
+      </article>
+      <aside class="work-sidebar">
+        <div class="work-sidebar-inner">
+          <p class="sidebar-label">Return</p>
+          <p class="sidebar-link"><a href="../../minimal-archive.html">Back to minimal archive</a></p>
+          <p class="sidebar-label">Also available</p>
+          <p class="sidebar-link"><a href="../../index.html">Archive index</a> &middot; <a href="../../ember-archive.html">Ember view</a></p>
+          <div class="sidebar-related">
+            <p class="sidebar-label">Related</p>
+            <ul class="related-list">
+${relatedMarkup || '              <li class="related-item"><span class="related-meta">No related items in this section.</span></li>'}
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="archive-footer">
+      <p>Built for static deployment and action-based publishing.</p>
+      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../minimal-archive.html">Minimal archive</a> &middot; <a href="../../ember-archive.html">Ember view</a> &middot; <a href="#top">Back to top</a></p>
+    </footer>
+  </div>
+</body>
+</html>`;
+}
+
+function renderWorkPageEmber(item, items) {
+  const fragment = readFragment(item.slug);
+  const related = relatedItems(item, items);
+  const relatedMarkup = related
+    .map(
+      (entry) => `
+          <a class="ember-related-row" href="${escapeAttribute(entry.slug)}.html" tabindex="0">
+            <span class="c-no">${String(related.indexOf(entry) + 1).padStart(3, "0")}</span>
+            <span class="c-title">${escapeHtml(titleToEnglish(entry.title))}</span>
+            <span class="c-year">${escapeHtml(entry.year)}</span>
+          </a>`)
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(item.title)} | ember | oblivion is freedom</title>
+  <meta name="description" content="${escapeAttribute(excerptForList(item.excerpt))}">
+  <meta name="theme-color" content="#0b0703">
+  <link rel="icon" type="image/png" href="../../${iconName}">
+  <link rel="apple-touch-icon" href="../../${iconName}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../ember-archive.css">
+</head>
+<body>
+  <div class="crt" aria-hidden="true"></div>
+
+  <div class="ember-shell ember-work-shell">
+    <div class="ember-window">
+      <div class="ember-titlebar">
+        <span class="win-title">oblivio — reader.sys — ${escapeHtml(item.slug)}</span>
+        <span class="win-dots">─ □ ✕</span>
+      </div>
+
+      <div class="ember-body">
+        <div class="ember-work-header">
+          <p class="ember-work-kicker">READING // ${escapeHtml(categoryMeta[getSectionKey(item)]?.title || item.category).toUpperCase()}</p>
+          <h1 class="ember-work-title">${escapeHtml(item.title)}</h1>
+          <p class="ember-work-meta">${escapeHtml(item.year)} &middot; ${item.imageCount > 0 ? imageCountLabel(item.imageCount) : "text only"}</p>
+          <p class="ember-work-summary">${escapeHtml(excerptForList(item.excerpt))}</p>
+        </div>
+
+        <div class="ember-work-nav mono">
+          <span class="menu-item active">READ</span>
+          <span class="menu-item"><a href="../../ember-archive.html">INDEX</a></span>
+          <span class="menu-spacer"></span>
+          <span class="menu-item"><a href="../../index.html">PINK</a></span>
+          <span class="menu-item"><a href="../../minimal-archive.html">MINIMAL</a></span>
+        </div>
+
+        <div class="ember-work-layout">
+          <article class="ember-work-content">
+${fragmentForDepth(fragment, 2)}
+          </article>
+          <aside class="ember-work-sidebar">
+            <div class="ember-work-related">
+              <p class="ember-related-label mono">// RELATED ENTRIES</p>
+              <div class="ember-related-list mono">
+${relatedMarkup || '                <span class="c-title" style="color:var(--amber-dim)">No related entries found.</span>'}
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="ember-prompt mono">
+          <span class="ps1">oblivio@reader:~$</span> <span class="cmd">cat ${escapeHtml(item.slug)} --view=reader</span><span class="cursor-block"></span>
+        </div>
+
+        <footer class="ember-footer">
+          <div class="dot-band" aria-hidden="true"></div>
+          <div class="foot-meta mono">
+            <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
+            <span><a href="../../index.html">INDEX</a> · <a href="../../minimal-archive.html">MINIMAL</a> · <a href="../../ember-archive.html">EMBER</a></span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
 function ensureInputs() {
   if (!fs.existsSync(stylesPath)) {
     throw new Error(`Missing styles file: ${stylesPath}`);
@@ -818,10 +985,23 @@ function writeOutputs(homePage, json, items) {
     });
   }
 
+  const minimalWorksDir = path.join(worksDir, "minimal");
+  const emberWorksDir = path.join(worksDir, "ember");
+  const distMinimalWorksDir = path.join(distDir, "works", "minimal");
+  const distEmberWorksDir = path.join(distDir, "works", "ember");
+
   for (const item of items) {
-    const page = renderWorkPage(item, items);
-    writeFile(path.join(worksDir, `${item.slug}.html`), page);
-    writeFile(path.join(distDir, "works", `${item.slug}.html`), page);
+    const pinkPage = renderWorkPage(item, items);
+    writeFile(path.join(worksDir, `${item.slug}.html`), pinkPage);
+    writeFile(path.join(distDir, "works", `${item.slug}.html`), pinkPage);
+
+    const minimalPage = renderWorkPageMinimal(item, items);
+    writeFile(path.join(minimalWorksDir, `${item.slug}.html`), minimalPage);
+    writeFile(path.join(distMinimalWorksDir, `${item.slug}.html`), minimalPage);
+
+    const emberPage = renderWorkPageEmber(item, items);
+    writeFile(path.join(emberWorksDir, `${item.slug}.html`), emberPage);
+    writeFile(path.join(distEmberWorksDir, `${item.slug}.html`), emberPage);
   }
 
   fs.writeFileSync(path.join(distDir, ".nojekyll"), "", "utf8");
