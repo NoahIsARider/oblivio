@@ -454,44 +454,6 @@ ${rows}
 }
 
 
-function halftoneSphereSVG(size = 460) {
-  const cells = 26;
-  const step = size / cells;
-  const cx = size / 2, cy = size / 2;
-  const out = [];
-  for (let y = 0; y < cells; y++) {
-    for (let x = 0; x < cells; x++) {
-      const px = x * step + step / 2, py = y * step + step / 2;
-      const d = Math.hypot(px - cx, py - cy) / (size / 2);
-      if (d > 0.985) continue;
-      const r = step * 0.46 * Math.pow(1 - d, 0.7);
-      if (r < 0.06) continue;
-      out.push(`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r.toFixed(2)}"/>`);
-    }
-  }
-  return `<svg class="halftone-svg" viewBox="0 0 ${size} ${size}" aria-hidden="true">${out.join("")}</svg>`;
-}
-
-function particleNetSVG(w = 340, h = 240) {
-  // seeded pseudo-random field (deterministic across builds)
-  let s = 7;
-  const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
-  const nodes = Array.from({ length: 16 }, () => ({
-    x: 18 + rnd() * (w - 36), y: 18 + rnd() * (h - 36), r: 1.6 + rnd() * 2.4,
-  }));
-  const links = [];
-  for (let i = 0; i < nodes.length; i++) {
-    for (let j = i + 1; j < nodes.length; j++) {
-      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-      const d = Math.hypot(dx, dy);
-      if (d < 96) links.push(`<line class="net-link" x1="${nodes[i].x.toFixed(1)}" y1="${nodes[i].y.toFixed(1)}" x2="${nodes[j].x.toFixed(1)}" y2="${nodes[j].y.toFixed(1)}"/>`);
-    }
-  }
-  const dots = nodes.map((n, i) =>
-    `<circle class="net-node${i === 3 || i === 9 ? " net-hot glow" : ""}" cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${n.r.toFixed(2)}"/>`).join("");
-  return `<svg class="net-svg" viewBox="0 0 ${w} ${h}" aria-hidden="true">${links.join("")}${dots}</svg>`;
-}
-
 const ASCII_ORGANISM = String.raw`
         .  .  .     .  .
      .  *     .  *     .
@@ -500,15 +462,6 @@ const ASCII_ORGANISM = String.raw`
    .     o        o     .
      .  *     .  *     .
         .  .  .     .  .`;
-
-const EMBER_BOOT = [
-  "> oblivio archive kernel v2.2.0 ................ ok",
-  "> warming CRT phosphors ........................ ok",
-  "> calibrating signal grid ...................... ok",
-  "> raising archive boundary ..................... ok",
-  "> indexing knowledge base ...................... ok",
-  "> mounting word archive ........................ ok",
-];
 
 function renderEmberArchive(items) {
   const entries = items
@@ -560,27 +513,6 @@ function renderEmberArchive(items) {
       </div>
 
       <div class="ember-body">
-        <div class="boot-log mono" id="boot-log" aria-hidden="true"></div>
-
-        <section class="ember-hero">
-          <div class="hero-dot-field" aria-hidden="true"></div>
-          <div class="hero-type">
-            <p class="hero-kicker">SELECTED WORKS — COMPUTATIONAL TERMINAL</p>
-            <h1 class="hero-logo">OBLIVIO<span style="color:var(--amber-red);-webkit-text-fill-color:var(--amber-red)">.</span></h1>
-            <p class="hero-sub">A reading wall of selected works rebuilt from source documents. Halftone dots and particle fields inside an amber CRT terminal — the archive as a live system.</p>
-          </div>
-          <div class="hero-visual">
-            <div class="halftone-wrap">${halftoneSphereSVG()}</div>
-            <div class="net-wrap">${particleNetSVG()}</div>
-          </div>
-        </section>
-
-        <div class="ember-coords mono">
-          <span>GRID 08 × 24</span>
-          <span class="live">X:<span id="coord-x">0000</span> Y:<span id="coord-y">0000</span></span>
-          <span>PHOSPHOR AMBER · AUG 2026</span>
-        </div>
-
         <div class="ember-menu mono">
           <span class="menu-item active">ARCHIVE</span>
           <span class="menu-item">VIEW</span>
@@ -620,23 +552,6 @@ ${rows}
 
   <script>
   (function () {
-    // boot log typing
-    var boot = ${JSON.stringify(EMBER_BOOT)};
-    var box = document.getElementById("boot-log");
-    var line = 0, ch = 0;
-    function tick() {
-      if (line >= boot.length) return;
-      var text = boot[line];
-      if (ch <= text.length) {
-        box.textContent = text.slice(0, ch++);
-        setTimeout(tick, 8);
-      } else {
-        box.textContent += "\\n";
-        line++; ch = 0;
-        setTimeout(tick, 90);
-      }
-    }
-    tick();
 
     // clocks
     var menuClock = document.getElementById("menu-clock");
@@ -651,18 +566,6 @@ ${rows}
     clock();
     setInterval(clock, 1000);
 
-    // scroll coordinates
-    var x = document.getElementById("coord-x");
-    var y = document.getElementById("coord-y");
-    function update() {
-      var sx = window.scrollY || document.documentElement.scrollTop;
-      var mx = (sx / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)) * 9999;
-      var my = Math.round(Math.random() * 9999);
-      x.textContent = String(Math.round(mx)).padStart(4, "0");
-      y.textContent = String(my).padStart(4, "0");
-    }
-    window.addEventListener("scroll", update, { passive: true });
-    update();
   })();
   </script>
 </body>
