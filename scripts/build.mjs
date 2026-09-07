@@ -268,7 +268,7 @@ function renderHomePage(data) {
       <a class="brand" href="${escapeAttribute(data.site.ownerUrl)}" target="_blank" rel="noreferrer">${escapeHtml(data.site.owner)}</a>
       <nav class="topnav" aria-label="Site sections">
         ${renderTopNav(data.sections)}
-        <a class="nav-archive" href="minimal-archive/" title="Selected works archive">Minimal Archive</a>
+        <a class="nav-archive" href="minimal-archive/" title="Selected works portfolio">Portfolio</a>
       </nav>
       <p class="topbar-status">${data.stats.totalLinks} works<br>${data.stats.totalSections} sections</p>
     </header>
@@ -301,7 +301,7 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="ember-archive.html">Ember view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="ember-archive.html">Amber</a></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
@@ -416,7 +416,7 @@ ${rows}
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="../index.html">Archive index</a> · <a href="../ember-archive.html">Ember view</a> · <a href="#top">Back to top</a></p>
+      <p><a href="../index.html">Archive index</a> · <a href="../ember-archive.html">Amber</a> · <a href="#top">Back to top</a></p>
     </footer>
   </div>
 
@@ -539,7 +539,7 @@ function renderEmberArchive(items) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ember | oblivion is freedom</title>
+  <title>Amber | oblivion is freedom</title>
   <meta name="description" content="An amber CRT terminal merged with computational vision — halftone fields, particle networks and a phosphor index of the selected works.">
   <meta name="theme-color" content="#0b0703">
   <link rel="icon" type="image/png" href="${iconName}">
@@ -597,7 +597,7 @@ ${rows}
         </div>
 
         <div class="ember-statusbar mono">
-          <span>OBLIVIO // EMBER.SYS</span>
+          <span>OBLIVIO // AMBER.SYS</span>
           <span>${String(entries.length).padStart(3, "0")} WORKS INDEXED</span>
           <span class="live" id="status-clock">SYS 00:00:00</span>
         </div>
@@ -631,7 +631,7 @@ ${rows}
         box.textContent = text.slice(0, ch++);
         setTimeout(tick, 8);
       } else {
-        box.textContent += "\n";
+        box.textContent += "\\n";
         line++; ch = 0;
         setTimeout(tick, 90);
       }
@@ -770,7 +770,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="../ember-archive.html">Ember view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../ember-archive.html">Amber</a></p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
@@ -830,7 +830,7 @@ ${fragmentForDepth(fragment, 2)}
           <p class="sidebar-label">Return</p>
           <p class="sidebar-link"><a href="../../minimal-archive/">Back to minimal archive</a></p>
           <p class="sidebar-label">Also available</p>
-          <p class="sidebar-link"><a href="../../index.html">Archive index</a> &middot; <a href="../../ember-archive.html">Ember view</a></p>
+          <p class="sidebar-link"><a href="../../index.html">Archive index</a> &middot; <a href="../../ember-archive.html">Amber</a></p>
           <div class="sidebar-related">
             <p class="sidebar-label">Related</p>
             <ul class="related-list">
@@ -843,7 +843,7 @@ ${relatedMarkup || '              <li class="related-item"><span class="related-
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../minimal-archive/">Minimal archive</a> &middot; <a href="../../ember-archive.html">Ember view</a> &middot; <a href="#top">Back to top</a></p>
+      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../minimal-archive/">Minimal archive</a> &middot; <a href="../../ember-archive.html">Amber</a> &middot; <a href="#top">Back to top</a></p>
     </footer>
   </div>
 </body>
@@ -926,7 +926,7 @@ ${relatedMarkup || '                <span class="c-title" style="color:var(--amb
           <div class="dot-band" aria-hidden="true"></div>
           <div class="foot-meta mono">
             <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
-            <span><a href="../../index.html">INDEX</a> · <a href="../../minimal-archive/">MINIMAL</a> · <a href="../../ember-archive.html">EMBER</a></span>
+            <span><a href="../../index.html">INDEX</a> · <a href="../../minimal-archive/">MINIMAL</a> · <a href="../../ember-archive.html">AMBER</a></span>
           </div>
         </footer>
       </div>
