@@ -474,7 +474,7 @@ ${rows}
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="../index.html">Archive index</a> · <a href="../ember-archive.html">Amber</a> · <a href="#top">Back to top</a></p>
+      <p><a href="../index.html">Archive index</a> · <a href="../ember/">Amber</a> · <a href="#top">Back to top</a></p>
     </footer>
   </div>
 
@@ -553,12 +553,12 @@ function renderEmberArchive(items) {
   <title>Amber | oblivion is freedom</title>
   <meta name="description" content="An amber CRT terminal merged with computational vision — halftone fields, particle networks and a phosphor index of the selected works.">
   <meta name="theme-color" content="#0b0703">
-  <link rel="icon" type="image/png" href="${iconName}">
-  <link rel="apple-touch-icon" href="${iconName}">
+  <link rel="icon" type="image/png" href="../${iconName}">
+  <link rel="apple-touch-icon" href="../${iconName}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ember-archive.css">
+  <link rel="stylesheet" href="../ember-archive.css">
 </head>
 <body>
   <div class="crt" aria-hidden="true"></div>
@@ -600,7 +600,7 @@ ${rows}
           <div class="dot-band" aria-hidden="true"></div>
           <div class="foot-meta mono">
             <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
-            <span><a href="index.html">INDEX</a> · <a href="portfolio/">PORTFOLIO</a></span>
+            <span><a href="../index.html">INDEX</a> · <a href="../portfolio/">PORTFOLIO</a></span>
           </div>
           <div class="ascii-panel" aria-hidden="true"><pre>${ASCII_ORGANISM.trim()}</pre></div>
         </footer>
@@ -791,7 +791,7 @@ ${fragmentForDepth(fragment, 2)}
           <p class="sidebar-label">Return</p>
           <p class="sidebar-link"><a href="../../portfolio/">Back to portfolio</a></p>
           <p class="sidebar-label">Also available</p>
-          <p class="sidebar-link"><a href="../../index.html">Archive index</a> &middot; <a href="../../ember-archive.html">Amber</a></p>
+          <p class="sidebar-link"><a href="../../index.html">Archive index</a> &middot; <a href="../../ember/">Amber</a></p>
           <div class="sidebar-related">
             <p class="sidebar-label">Related</p>
             <ul class="related-list">
@@ -804,7 +804,7 @@ ${relatedMarkup || '              <li class="related-item"><span class="related-
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../portfolio/">Portfolio</a> &middot; <a href="../../ember-archive.html">Amber</a> &middot; <a href="#top">Back to top</a></p>
+      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../portfolio/">Portfolio</a> &middot; <a href="../../ember/">Amber</a> &middot; <a href="#top">Back to top</a></p>
     </footer>
   </div>
 </body>
@@ -859,7 +859,7 @@ function renderWorkPageEmber(item, items) {
 
         <div class="ember-work-nav mono">
           <span class="menu-item active">READ</span>
-          <span class="menu-item"><a href="../../ember-archive.html">INDEX</a></span>
+          <span class="menu-item"><a href="../../ember/">INDEX</a></span>
           <span class="menu-spacer"></span>
           <span class="menu-item"><a href="../../index.html">PINK</a></span>
           <span class="menu-item"><a href="../../portfolio/">PORTFOLIO</a></span>
@@ -887,7 +887,7 @@ ${relatedMarkup || '                <span class="c-title" style="color:var(--amb
           <div class="dot-band" aria-hidden="true"></div>
           <div class="foot-meta mono">
             <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
-            <span><a href="../../index.html">INDEX</a> · <a href="../../portfolio/">PORTFOLIO</a> · <a href="../../ember-archive.html">AMBER</a></span>
+            <span><a href="../../index.html">INDEX</a> · <a href="../../portfolio/">PORTFOLIO</a> · <a href="../../ember/">AMBER</a></span>
           </div>
         </footer>
       </div>
@@ -955,8 +955,11 @@ function writeOutputs(homePage, json, items) {
   writeFile(path.join(distDir, "minimal-archive", "index.html"), oldFolderStub);
 
   const emberArchive = renderEmberArchive(items);
-  writeFile(path.join(rootDir, "ember-archive.html"), emberArchive);
-  writeFile(path.join(distDir, "ember-archive.html"), emberArchive);
+  writeFile(path.join(rootDir, "ember", "index.html"), emberArchive);
+  writeFile(path.join(distDir, "ember", "index.html"), emberArchive);
+  const emberStub = renderRedirectStub("ember/", "ember/");
+  writeFile(path.join(rootDir, "ember-archive.html"), emberStub);
+  writeFile(path.join(distDir, "ember-archive.html"), emberStub);
 
 
   fs.copyFileSync(stylesPath, path.join(distDir, "styles.css"));
@@ -1001,7 +1004,7 @@ function main() {
   const json = `${JSON.stringify(data, null, 2)}\n`;
   const homePage = renderHomePage(data);
   writeOutputs(homePage, json, items);
-  console.log(`Generated index.html, knowledge-base.json, portfolio/index.html, ember-archive.html, and ${items.length} work pages (pink / minimal / ember).`);
+  console.log(`Generated index.html, knowledge-base.json, portfolio/index.html, ember/index.html, and ${items.length} work pages (pink / minimal / ember).`);
 }
 
 main();
