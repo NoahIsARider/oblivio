@@ -266,8 +266,9 @@ function renderHomePage(data) {
   <div class="page-shell">
     <header class="topbar" id="top">
       <a class="brand" href="${escapeAttribute(data.site.ownerUrl)}" target="_blank" rel="noreferrer">${escapeHtml(data.site.owner)}</a>
-      <nav class="topnav" aria-label="Knowledge base sections">
+      <nav class="topnav" aria-label="Site sections">
         ${renderTopNav(data.sections)}
+        <a class="nav-archive" href="minimal-archive/" title="Selected works archive">Minimal Archive</a>
       </nav>
       <p class="topbar-status">${data.stats.totalLinks} works<br>${data.stats.totalSections} sections</p>
     </header>
@@ -300,7 +301,7 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive.html">Minimal archive view</a> · <a href="ember-archive.html">Ember view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="ember-archive.html">Ember view</a></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
@@ -323,7 +324,7 @@ function renderMinimalArchive(items) {
       };
       return {
         title: item.title,
-        href: `works/minimal/${item.slug}.html`,
+        href: `../works/minimal/${item.slug}.html`,
         year: item.year,
         category: sectionKey,
         categoryLabel: meta.label,
@@ -356,7 +357,7 @@ function renderMinimalArchive(items) {
     .map((entry) => {
       const cover = entry.cover
         ? `<div class="work-cover">
-            <img class="cover-img" src="${escapeAttribute(entry.cover)}" alt="" loading="lazy">
+            <img class="cover-img" src="${escapeAttribute("../" + entry.cover)}" alt="" loading="lazy">
           </div>`
         : `<div class="work-cover work-cover-text" aria-hidden="true">
             <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
@@ -381,16 +382,16 @@ ${cover}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Selected Works | oblivion is freedom</title>
-  <meta name="description" content="A minimal typographic index of the same selected works, rendered without image covers.">
+  <meta name="description" content="A quiet typographic archive of selected works — writing, research, and experiments.">
   <meta name="theme-color" content="#ffffff">
-  <link rel="icon" type="image/png" href="${iconName}">
-  <link rel="apple-touch-icon" href="${iconName}">
-  <link rel="stylesheet" href="minimal-archive.css">
+  <link rel="icon" type="image/png" href="../${iconName}">
+  <link rel="apple-touch-icon" href="../${iconName}">
+  <link rel="stylesheet" href="../minimal-archive.css">
 </head>
 <body>
   <div class="archive-shell">
     <header class="archive-topbar" id="top">
-      <a class="brand" href="index.html">oblivio</a>
+      <a class="brand" href="../index.html">oblivio</a>
       <p class="archive-status" id="work-count">${entries.length} works</p>
     </header>
 
@@ -415,7 +416,7 @@ ${rows}
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="index.html">Archive index</a> · <a href="ember-archive.html">Ember view</a> · <a href="#top">Back to top</a></p>
+      <p><a href="../index.html">Archive index</a> · <a href="../ember-archive.html">Ember view</a> · <a href="#top">Back to top</a></p>
     </footer>
   </div>
 
@@ -609,7 +610,7 @@ ${rows}
           <div class="dot-band" aria-hidden="true"></div>
           <div class="foot-meta mono">
             <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
-            <span><a href="index.html">INDEX</a> · <a href="minimal-archive.html">MINIMAL</a></span>
+            <span><a href="index.html">INDEX</a> · <a href="minimal-archive/">MINIMAL</a></span>
           </div>
           <div class="ascii-panel" aria-hidden="true"><pre>${ASCII_ORGANISM.trim()}</pre></div>
         </footer>
@@ -769,7 +770,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive.html">Minimal archive view</a> · <a href="../ember-archive.html">Ember view</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../ember-archive.html">Ember view</a></p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
@@ -807,7 +808,7 @@ function renderWorkPageMinimal(item, items) {
 <body>
   <div class="archive-shell work-page-shell">
     <header class="archive-topbar" id="top">
-      <a class="brand" href="../../minimal-archive.html">oblivio</a>
+      <a class="brand" href="../../minimal-archive/">oblivio</a>
       <p class="archive-status">${escapeHtml(item.year)} &middot; ${escapeHtml(categoryMeta[getSectionKey(item)]?.title || item.category)}</p>
     </header>
 
@@ -827,7 +828,7 @@ ${fragmentForDepth(fragment, 2)}
       <aside class="work-sidebar">
         <div class="work-sidebar-inner">
           <p class="sidebar-label">Return</p>
-          <p class="sidebar-link"><a href="../../minimal-archive.html">Back to minimal archive</a></p>
+          <p class="sidebar-link"><a href="../../minimal-archive/">Back to minimal archive</a></p>
           <p class="sidebar-label">Also available</p>
           <p class="sidebar-link"><a href="../../index.html">Archive index</a> &middot; <a href="../../ember-archive.html">Ember view</a></p>
           <div class="sidebar-related">
@@ -842,7 +843,7 @@ ${relatedMarkup || '              <li class="related-item"><span class="related-
 
     <footer class="archive-footer">
       <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../minimal-archive.html">Minimal archive</a> &middot; <a href="../../ember-archive.html">Ember view</a> &middot; <a href="#top">Back to top</a></p>
+      <p><a href="../../index.html">Archive index</a> &middot; <a href="../../minimal-archive/">Minimal archive</a> &middot; <a href="../../ember-archive.html">Ember view</a> &middot; <a href="#top">Back to top</a></p>
     </footer>
   </div>
 </body>
@@ -900,7 +901,7 @@ function renderWorkPageEmber(item, items) {
           <span class="menu-item"><a href="../../ember-archive.html">INDEX</a></span>
           <span class="menu-spacer"></span>
           <span class="menu-item"><a href="../../index.html">PINK</a></span>
-          <span class="menu-item"><a href="../../minimal-archive.html">MINIMAL</a></span>
+          <span class="menu-item"><a href="../../minimal-archive/">MINIMAL</a></span>
         </div>
 
         <div class="ember-work-layout">
@@ -925,7 +926,7 @@ ${relatedMarkup || '                <span class="c-title" style="color:var(--amb
           <div class="dot-band" aria-hidden="true"></div>
           <div class="foot-meta mono">
             <span>PRIVATE ARCHIVE · PUBLIC DOORWAY</span>
-            <span><a href="../../index.html">INDEX</a> · <a href="../../minimal-archive.html">MINIMAL</a> · <a href="../../ember-archive.html">EMBER</a></span>
+            <span><a href="../../index.html">INDEX</a> · <a href="../../minimal-archive/">MINIMAL</a> · <a href="../../ember-archive.html">EMBER</a></span>
           </div>
         </footer>
       </div>
@@ -949,6 +950,23 @@ function resetDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
+function renderMinimalRedirect() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selected Works | oblivion is freedom</title>
+  <meta http-equiv="refresh" content="0; url=minimal-archive/">
+  <link rel="canonical" href="minimal-archive/">
+  <script>location.replace("minimal-archive/");</script>
+</head>
+<body style="margin:0;padding:2rem 2.4rem;background:#fff;color:#111;font-family:Georgia,'Times New Roman',serif;">
+  <p>This page has moved to <a href="minimal-archive/">minimal-archive/</a>.</p>
+</body>
+</html>`;
+}
+
 function writeFile(targetPath, content) {
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   fs.writeFileSync(targetPath, content, "utf8");
@@ -964,8 +982,11 @@ function writeOutputs(homePage, json, items) {
   writeFile(path.join(distDir, "knowledge-base.json"), json);
 
   const minimalArchive = renderMinimalArchive(items);
-  writeFile(path.join(rootDir, "minimal-archive.html"), minimalArchive);
-  writeFile(path.join(distDir, "minimal-archive.html"), minimalArchive);
+  writeFile(path.join(rootDir, "minimal-archive", "index.html"), minimalArchive);
+  writeFile(path.join(distDir, "minimal-archive", "index.html"), minimalArchive);
+  const minimalRedirect = renderMinimalRedirect();
+  writeFile(path.join(rootDir, "minimal-archive.html"), minimalRedirect);
+  writeFile(path.join(distDir, "minimal-archive.html"), minimalRedirect);
 
   const emberArchive = renderEmberArchive(items);
   writeFile(path.join(rootDir, "ember-archive.html"), emberArchive);
@@ -1014,7 +1035,7 @@ function main() {
   const json = `${JSON.stringify(data, null, 2)}\n`;
   const homePage = renderHomePage(data);
   writeOutputs(homePage, json, items);
-  console.log(`Generated index.html, knowledge-base.json, minimal-archive.html, and ${items.length} work pages with the existing archive layout.`);
+  console.log(`Generated index.html, knowledge-base.json, minimal-archive/index.html, ember-archive.html, and ${items.length} work pages (pink / minimal / ember).`);
 }
 
 main();
