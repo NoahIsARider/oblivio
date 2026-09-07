@@ -1,0 +1,25 @@
+{
+  "sites": [
+    { "id": "oblivio", "title": "oblivio", "note": "selected works · reading wall", "url": "https://noahisarider.github.io/oblivio/" },
+    { "id": "amber", "title": "Amber", "note": "selected works · computational terminal", "url": "https://noahisarider.github.io/oblivio/ember-archive.html" },
+    { "id": "platonia", "title": "Platonia", "note": "front-end archive · quiet pages", "url": "https://noahisarider.github.io/Platonia/" },
+    { "id": "bookclub", "title": "BookClub 2000", "note": "co-reading club & reading log", "url": "https://book-club-2000.vercel.app" },
+    { "id": "clube", "title": "Clube", "note": "film-club screening companion", "url": "https://clube.vercel.app" },
+    { "id": "sailordraft", "title": "Sailor Draft", "note": "screenwriting, unadorned", "url": "https://sailor-draft.vercel.app" },
+    { "id": "museum", "title": "Museum of AI Failures", "note": "failure case studies", "url": "https://museum-of-failures.vercel.app" },
+    { "id": "neowest", "title": "NEOWEST", "note": "", "url": "https://noahisarider.github.io/NEOWEST/" },
+    { "id": "geekrss", "title": "GeekRSS", "note": "self-hosted RSS reader", "url": "https://github.com/NoahIsARider/GeekRSS" }
+  ],
+  "images": [
+    { "file": "its-not-sport.jpg", "caption": "IT'S NOT SPORT — IT'S A BATTLE" },
+    { "file": "ss26-survival.jpg", "caption": "SS26 生存指南 · ANTA × ANTAGONISTS" },
+    { "file": "mach-farewell.jpg", "caption": "永别了，马赫临界 · ANTAGONISTS" },
+    { "file": "red-world.jpg", "caption": "世界水深火热，而我们在买鞋" },
+    { "file": "moonpit.jpg", "caption": "" },
+    { "file": "stellar-horizon.jpg", "caption": "" },
+    { "file": "pixel-mammoth.jpg", "caption": "" },
+    { "file": "vessel-interior.jpg", "caption": "" },
+    { "file": "ruin-field.jpg", "caption": "" },
+    { "file": "dataviz-ui.jpg", "caption": "" }
+  ]
+}

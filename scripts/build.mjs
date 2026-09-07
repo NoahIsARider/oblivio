@@ -314,6 +314,62 @@ function coverImageFor(slug) {
   return fs.existsSync(coverPath) ? `assets/covers/${slug}.jpg` : null;
 }
 
+
+function renderPortfolioSections(articleCount) {
+  const extra = JSON.parse(fs.readFileSync(path.join(contentDir, "portfolio-extra.json"), "utf8"));
+  const siteRows = extra.sites
+    .map(
+      (site) => `
+      <li>
+        <a class="pf-site" href="${escapeAttribute(site.url)}" target="_blank" rel="noreferrer">
+          <span class="pf-shot"><img src="../assets/portfolio/sites/${escapeAttribute(site.id)}.jpg" alt="${escapeAttribute(site.title)}" loading="lazy"><span class="pf-arrow" aria-hidden="true">↗</span></span>
+          <span class="pf-site-meta"><span class="pf-site-name">${escapeHtml(site.title)}</span><span class="pf-site-note">${escapeHtml(site.note)}</span></span>
+        </a>
+      </li>`,
+    )
+    .join("\n");
+  const imgRows = extra.images
+    .map(
+      (img) => `
+      <li class="pf-img-item">
+        <img class="pf-img" src="../assets/portfolio/images/${escapeAttribute(img.file)}" alt="${escapeAttribute(img.caption)}" loading="lazy">${
+          img.caption ? `\n        <p class="pf-img-cap">${escapeHtml(img.caption)}</p>` : ""
+        }
+      </li>`,
+    )
+    .join("\n");
+  return `
+  <section class="pf-sect" id="sites">
+    <div class="pf-sect-head">
+      <span class="pf-idx">01</span>
+      <h2 class="pf-sec-title">Sites</h2>
+      <span class="pf-sec-note">online works &amp; experiments</span>
+    </div>
+    <ul class="pf-site-grid">
+${siteRows}
+    </ul>
+  </section>
+
+  <section class="pf-sect" id="images">
+    <div class="pf-sect-head">
+      <span class="pf-idx">02</span>
+      <h2 class="pf-sec-title">Image Works</h2>
+      <span class="pf-sec-note">posters &amp; visual pieces</span>
+    </div>
+    <ul class="pf-img-grid">
+${imgRows}
+    </ul>
+  </section>
+
+  <section class="pf-sect pf-write" id="writing">
+    <div class="pf-sect-head">
+      <span class="pf-idx">03</span>
+      <h2 class="pf-sec-title">Writing</h2>
+      <span class="pf-sec-note">${articleCount} pieces &mdash; essays, research &amp; notes</span>
+    </div>
+  </section>`;
+}
+
 function renderMinimalArchive(items) {
   const entries = items
     .map((item) => {
@@ -382,7 +438,7 @@ ${cover}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Selected Works | oblivion is freedom</title>
-  <meta name="description" content="A quiet typographic archive of selected works — writing, research, and experiments.">
+  <meta name="description" content="A quiet portfolio — selected writing, image works and online experiments.">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" type="image/png" href="../${iconName}">
   <link rel="apple-touch-icon" href="../${iconName}">
@@ -394,6 +450,8 @@ ${cover}
       <a class="brand" href="../index.html">oblivio</a>
       <p class="archive-status" id="work-count">${entries.length} works</p>
     </header>
+
+${renderPortfolioSections(entries.length)}
 
     <div class="archive-grid">
       <aside class="archive-sidebar">
