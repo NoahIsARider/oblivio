@@ -67,6 +67,12 @@ img {
   text-decoration: none;
 }
 
+.topnav a.nav-archive {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
 .topbar-status {
   margin: 0;
   text-align: right;

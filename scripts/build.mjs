@@ -301,7 +301,7 @@ function renderHomePage(data) {
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="ember-archive.html">Amber</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="minimal-archive/">Portfolio</a> <3</p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </div>
@@ -770,7 +770,7 @@ ${relatedMarkup || '          <li class="link-item"><span class="link-meta">No r
     </section>
 
     <footer class="footer">
-      <p>Built for static deployment and action-based publishing.<br><a href="../ember-archive.html">Amber</a></p>
+      <p>Built for static deployment and action-based publishing.<br><a href="../minimal-archive/">Portfolio</a> <3</p>
       <p><a href="../index.html">Back to archive</a></p>
     </footer>
   </div>
