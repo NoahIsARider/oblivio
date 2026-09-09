@@ -528,7 +528,7 @@ function renderEmberArchive(items) {
       const meta = archiveCategoryMeta[sectionKey] || { label: item.category, short: String(item.category).toUpperCase() };
       return {
         title: item.title,
-        href: `works/ember/${item.slug}.html`,
+        href: `../works/ember/${item.slug}.html`,
         year: item.year,
         categoryLabel: meta.label,
       };
@@ -551,7 +551,7 @@ function renderEmberArchive(items) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Amber | oblivion is freedom</title>
-  <meta name="description" content="An amber CRT terminal merged with computational vision — halftone fields, particle networks and a phosphor index of the selected works.">
+  <meta name="description" content="Memory settles into amber. An ASCII butterfly preserved in the warm glow of a curved CRT archive.">
   <meta name="theme-color" content="#0b0703">
   <link rel="icon" type="image/png" href="../${iconName}">
   <link rel="apple-touch-icon" href="../${iconName}">
@@ -560,18 +560,31 @@ function renderEmberArchive(items) {
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../ember-archive.css">
 </head>
-<body>
-  <div class="crt" aria-hidden="true"></div>
-
+<body class="amber-index">
   <div class="ember-shell">
     <div class="ember-window">
+      <div class="crt" aria-hidden="true"></div>
       <div class="ember-titlebar">
         <span class="win-title">oblivio — amber.sys</span>
-        <span class="win-dots">─ □ ✕</span>
+        <span class="win-dots">CH. 01 / MEMORY</span>
       </div>
 
       <div class="ember-body">
-        <div class="ember-menu mono">
+        <section class="amber-memory" aria-labelledby="amber-heading">
+          <div class="memory-copy">
+            <p class="memory-kicker">OBLIVIO / PRESERVED SIGNALS</p>
+            <h1 id="amber-heading">AMBER<span>memory, held in light.</span></h1>
+            <p class="memory-note">What disappears leaves a trace.<br>What stays becomes amber.</p>
+            <a class="memory-enter" href="#archive">[ EXPLORE THE ARCHIVE ↓ ]</a>
+          </div>
+          <figure class="amber-specimen">
+            <div class="resin-field">
+              <pre class="butterfly-ascii" role="img" aria-label="The homepage butterfly, preserved in amber-colored ASCII characters">${escapeHtml(fs.readFileSync(path.join(contentDir, "amber-butterfly.txt"), "utf8"))}</pre>
+            </div>
+            <figcaption>FIG. 001 / A MEMORY IN SUSPENSION</figcaption>
+          </figure>
+        </section>
+        <div class="ember-menu mono" id="archive">
           <span class="menu-item active">ARCHIVE</span>
           <span class="menu-item">VIEW</span>
           <span class="menu-item">HELP</span>
@@ -579,7 +592,7 @@ function renderEmberArchive(items) {
           <span class="menu-item" id="menu-clock">00:00:00</span>
         </div>
 
-        <div class="ember-table mono" role="list">
+        <div class="ember-table mono" role="region" aria-label="Selected works">
           <div class="ember-thead">
             <span>NO.</span><span>TITLE</span><span>CATEGORY</span><span>YEAR</span>
           </div>
