@@ -39,8 +39,7 @@
           <span class="menu-item"><a href="../../portfolio/">PORTFOLIO</a></span>
         </div>
 
-        <div class="ember-work-layout">
-          <article class="ember-work-content">
+        <article class="ember-work-content">
 <p><strong>摘要</strong></p>
 <p>本研究针对深度学习人脸识别系统的性能优化问题，提出了一种基于端云协同架构的分布式计算方案，并创新性地引入了动态计算划分策略。通过对人脸识别流程中四个关键计算阶段（人脸检测、人脸对齐、特征提取、特征匹配）的性能特征分析，设计并实现了四种端云任务划分策略，并进一步实现了基于"状态感知-时间预测-最优决策"的动态计算划分机制。实验结果表明，最优的静态任务划分策略（端侧执行检测和对齐，云端执行特征提取和匹配）相比传统本地处理模式实现了平均57.4%的性能提升；而引入动态划分策略能够有效应对端侧负载和网络条件的动态变化。本研究的主要贡献在于提出了基于性能特征的任务划分方法，验证了端云协同架构在计算机视觉任务中的显著优势，并为动态计算划分策略提供了完整的实现框架和实验验证，为类似应用场景提供了可参考的架构设计、测试策略和动态优化方法。</p>
 <p><strong>1. 引言</strong></p>
@@ -1081,21 +1080,7 @@
 <li><p>Mao, Y., You, C., Zhang, J., Huang, K., &amp; Letaief, K. B. (2017). A Survey on Computation Offloading in Mobile Edge Computing. IEEE Access, 5, 6757-6779.</p></li>
 <li><p>Birrell, A. D., &amp; Nelson, B. J. (1984). Implementing remote procedure calls. ACM Transactions on Computer Systems, 2(1), 39-59. https://doi.org/10.1145/357360.357363</p></li>
 </ol>
-          </article>
-          <aside class="ember-work-sidebar">
-            <div class="ember-work-related">
-              <p class="ember-related-label mono">// RELATED ENTRIES</p>
-              <div class="ember-related-list mono">
-
-          <a class="ember-related-row" href="matchaflow.html" tabindex="0">
-            <span class="c-no">001</span>
-            <span class="c-title">MatchaFlow：多智能体软件项目管理模拟系统</span>
-            <span class="c-year">2025</span>
-          </a>
-              </div>
-            </div>
-          </aside>
-        </div>
+        </article>
 
         <div class="ember-prompt mono">
           <span class="ps1">oblivio@reader:~$</span> <span class="cmd">cat edge-cloud-face-recognition --view=reader</span><span class="cursor-block"></span>

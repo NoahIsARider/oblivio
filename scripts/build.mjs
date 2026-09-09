@@ -826,17 +826,6 @@ ${relatedMarkup || '              <li class="related-item"><span class="related-
 
 function renderWorkPageEmber(item, items) {
   const fragment = readFragment(item.slug);
-  const related = relatedItems(item, items);
-  const relatedMarkup = related
-    .map(
-      (entry) => `
-          <a class="ember-related-row" href="${escapeAttribute(entry.slug)}.html" tabindex="0">
-            <span class="c-no">${String(related.indexOf(entry) + 1).padStart(3, "0")}</span>
-            <span class="c-title">${escapeHtml(titleToEnglish(entry.title))}</span>
-            <span class="c-year">${escapeHtml(entry.year)}</span>
-          </a>`)
-    .join("\n");
-
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -878,19 +867,9 @@ function renderWorkPageEmber(item, items) {
           <span class="menu-item"><a href="../../portfolio/">PORTFOLIO</a></span>
         </div>
 
-        <div class="ember-work-layout">
-          <article class="ember-work-content">
+        <article class="ember-work-content">
 ${fragmentForDepth(fragment, 2)}
-          </article>
-          <aside class="ember-work-sidebar">
-            <div class="ember-work-related">
-              <p class="ember-related-label mono">// RELATED ENTRIES</p>
-              <div class="ember-related-list mono">
-${relatedMarkup || '                <span class="c-title" style="color:var(--amber-dim)">No related entries found.</span>'}
-              </div>
-            </div>
-          </aside>
-        </div>
+        </article>
 
         <div class="ember-prompt mono">
           <span class="ps1">oblivio@reader:~$</span> <span class="cmd">cat ${escapeHtml(item.slug)} --view=reader</span><span class="cursor-block"></span>

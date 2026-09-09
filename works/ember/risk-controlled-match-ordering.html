@@ -39,8 +39,7 @@
           <span class="menu-item"><a href="../../portfolio/">PORTFOLIO</a></span>
         </div>
 
-        <div class="ember-work-layout">
-          <article class="ember-work-content">
+        <article class="ember-work-content">
 <p><strong>摘要</strong> 本文围绕”五羽轮比”比赛的出场顺序决策问题进行讨论，建立了基于蒙特卡洛模拟和博弈论均衡的两个决策模型。利用蒙特卡洛方法、Nash均衡等知识分别建立决策模型，为在这一特殊形式的比赛中排兵布阵提供了建议，并深入地分析了模型的优点与缺点，提出了改善的方向。</p>
 <p>针对问题一，题目给出过往比赛中两支队伍不同二联选手组合之间对战结果的不完整数据。利用这些数据，基于蒙特卡洛方法，可以得出胜率矩阵，作为相对二联实力的量化展示。在已知对方出场顺序的情况下，可以搭建起一个蒙特卡洛模拟模型，找出获胜的最优顺序解。最终得到的计算结果是一个”富足”的混合策略解。为了达到优中选优的效果，引入了时间风险概念。在不牺牲混合策略获胜概率的前提下，选择能以较少局数结束游戏的方案。得出的最后的结果是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><msub><mi>A</mi><mn>2</mn></msub><mo>,</mo><msub><mi>A</mi><mn>3</mn></msub><mo>,</mo><msub><mi>A</mi><mn>4</mn></msub><mo>,</mo><msub><mi>A</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">A_{1},A_{2},A_{3},A_{4},A_{5}</annotation></semantics></math>。</p>
 <p>针对问题二，双方位置发生互换，对方在已知己方出场顺序的基础上排兵布阵。利用在解决问题一时搭建的蒙特卡洛模拟模型，求出了对方所有策略中相对最占优的三种策略，由优到次分别是：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mn>3</mn></msub><mo>,</mo><msub><mi>B</mi><mn>1</mn></msub><mo>,</mo><msub><mi>B</mi><mn>5</mn></msub><mo>,</mo><msub><mi>B</mi><mn>2</mn></msub><mo>,</mo><msub><mi>B</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">B_{3},B_{1},B_{5},B_{2},B_{4}</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mn>4</mn></msub><mo>,</mo><msub><mi>B</mi><mn>3</mn></msub><mo>,</mo><msub><mi>B</mi><mn>1</mn></msub><mo>,</mo><msub><mi>B</mi><mn>2</mn></msub><mo>,</mo><msub><mi>B</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">B_{4},B_{3},B_{1},B_{2},B_{5}</annotation></semantics></math>和<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mn>1</mn></msub><mo>,</mo><msub><mi>B</mi><mn>5</mn></msub><mo>,</mo><msub><mi>B</mi><mn>2</mn></msub><mo>,</mo><msub><mi>B</mi><mn>4</mn></msub><mo>,</mo><msub><mi>B</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">B_{1},B_{5},B_{2},B_{4},B_{3}</annotation></semantics></math>。此时针对对手的这三种策略，假设其发生可能性相同，利用蒙特卡洛模拟模型反过来求己方的最优顺序解，结果是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mn>4</mn></msub><mo>,</mo><msub><mi>A</mi><mn>5</mn></msub><mo>,</mo><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><msub><mi>A</mi><mn>3</mn></msub><mo>,</mo><msub><mi>A</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">A_{4},A_{5},A_{1},A_{3},A_{2}</annotation></semantics></math>。</p>
@@ -697,39 +696,7 @@
 <p>print(f"A队模拟获胜的概率: {sensitivity_results[change]['A_team_win_prob']:.2%}")</p>
 <p>print(f"B队模拟获胜的概率: {sensitivity_results[change]['B_team_win_prob']:.2%}")</p>
 <p>print()</p>
-          </article>
-          <aside class="ember-work-sidebar">
-            <div class="ember-work-related">
-              <p class="ember-related-label mono">// RELATED ENTRIES</p>
-              <div class="ember-related-list mono">
-
-          <a class="ember-related-row" href="embodied-intelligence-survey.html" tabindex="0">
-            <span class="c-no">001</span>
-            <span class="c-title">机械降神：基于感知、决策和执行的具身智能技术与发展调研报告</span>
-            <span class="c-year">2025</span>
-          </a>
-
-          <a class="ember-related-row" href="anta-strategy-bani-era.html" tabindex="0">
-            <span class="c-no">002</span>
-            <span class="c-title">世界水深火热，而我们还在买鞋</span>
-            <span class="c-year">2025</span>
-          </a>
-
-          <a class="ember-related-row" href="sins-of-ignorance.html" tabindex="0">
-            <span class="c-no">003</span>
-            <span class="c-title">无知之罪：聚焦字节跳动的商业伦理分析</span>
-            <span class="c-year">2025</span>
-          </a>
-
-          <a class="ember-related-row" href="meme-and-relationships.html" tabindex="0">
-            <span class="c-no">004</span>
-            <span class="c-title">“觅母（文化复制因子）”对人际关系的影响及调适方案</span>
-            <span class="c-year">2024</span>
-          </a>
-              </div>
-            </div>
-          </aside>
-        </div>
+        </article>
 
         <div class="ember-prompt mono">
           <span class="ps1">oblivio@reader:~$</span> <span class="cmd">cat risk-controlled-match-ordering --view=reader</span><span class="cursor-block"></span>
