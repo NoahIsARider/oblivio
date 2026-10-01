@@ -260,5 +260,29 @@
     "year": "2024",
     "excerpt": "2023年3月20日，美国亿万富翁埃隆·马斯克和人工智能领域顶尖专家、图灵奖得主约书亚等人联名签署了一封公开信，呼吁暂停开发比GPT-4更强大的AI系统至少6个月，称其\"对社会和人类构成潜在风险\"。但也有人怀疑马斯克的动机，\"马斯克之所以会签署它，是因为他想用自己的人工智能来赚钱...",
     "imageCount": 0
+  },
+  {
+    "slug": "cumcm2025a-smoke-screen-cooperative-deployment",
+    "title": "烟幕干扰弹协同投放策略的多层级优化建模",
+    "category": "research",
+    "year": "2025",
+    "excerpt": "随着现代战争中对精确干扰和防护需求的日益增长，烟幕干扰弹的优化投放策略已成为军事防御系统中的关键技术挑战。本文针对烟幕干扰弹投放中的五个重要问题，建立了基于三维运动学建模和智能优化算法的多层次数学模型，开发了高效的多目标优化框架与协同决策策略。",
+    "imageCount": 0
+  },
+  {
+    "slug": "mcm2026c-dwts-voting",
+    "title": "Dancing with the Data: Unveiling Hidden Votes and Architecting Fairness",
+    "category": "research",
+    "year": "2026",
+    "excerpt": "“Dancing with the Stars” (DWTS) represents a complex interplay between technical expertise (judges) and popular appeal (fans). The secrecy of fan votes and the evolving aggregation rules create a challenge in evaluating fairness and popularity. This study aims to reconstruct these hidden fan preferences, evaluate the impact of different voting systems, and propose a more robust framework for contestant elimination.",
+    "imageCount": 0
+  },
+  {
+    "slug": "comap2026e-passive-solar-design",
+    "title": "In Praise of Shadows and Light: Climate-Resilient Passive Solar Design for University Buildings",
+    "category": "research",
+    "year": "2026",
+    "excerpt": "As climate change intensifies the frequency of extreme weather events, the design of climate-resilient architecture becomes imperative. Passive solar strategies offer a sustainable pathway to decarbonization, yet their effectiveness varies drastically across climatic zones. This study constructs a comprehensive mathematical framework to optimize passive design, transitioning from single-building retrofits to global generalizability and future-proof construction.",
+    "imageCount": 0
   }
 ]
