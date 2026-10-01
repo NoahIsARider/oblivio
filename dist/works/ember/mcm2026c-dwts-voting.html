@@ -27,7 +27,7 @@
         <div class="ember-work-header">
           <p class="ember-work-kicker">READING // RESEARCH AND ANALYSIS</p>
           <h1 class="ember-work-title">Dancing with the Data: Unveiling Hidden Votes and Architecting Fairness</h1>
-          <p class="ember-work-meta">2026 &middot; text only</p>
+          <p class="ember-work-meta">2026 &middot; 13 images</p>
           <p class="ember-work-summary">“Dancing with the Stars” (DWTS) represents a complex interplay between technical expertise (judges) and popular appeal (...</p>
         </div>
 
@@ -42,6 +42,7 @@
         <article class="ember-work-content">
 <p class="work-authors"><strong>孟子程 · 郑达均 · 周方亚诺</strong></p>
 <p class="work-competition"><em>2026 MCM/ICM · Problem C</em></p>
+
 <h2>Summary</h2>
 <p>“Dancing with the Stars” (DWTS) represents a complex interplay between technical expertise (judges) and popular appeal (fans). The secrecy of fan votes and the evolving aggregation rules create a challenge in evaluating fairness and popularity. This study aims to reconstruct these hidden fan preferences, evaluate the impact of different voting systems, and propose a more robust framework for contestant elimination.</p>
 <p>Unveiling the Hidden Vote: We developed a Reconstructive Optimization Model to estimate fan votes. By treating the unknown fan votes as a variable in an optimization problem constrained by the known elimination outcomes, we accurately reconstructed the likely fan vote distribution for each week. Monte Carlo simulations were employed to quantify uncertainty. Our model achieved a consistency rate of 80-91% across seasons, with Season 19 exhibiting the highest consistency at 90.9%, validating its reliability in mirroring actual show dynamics.</p>
@@ -84,6 +85,7 @@
 <p>Figure 1: Distribution of Uncertainty in Reconstructed Fan Votes Across All Seasons</p>
 <h3>Data Quality and Preprocessing</h3>
 <p>Before analysis, we performed several preprocessing steps to ensure data quality and consistency. First, we standardized judge scores across seasons to account for minor variations in scoring scales. Second, we verified the elimination order against published records to correct any discrepancies. Third, we categorized continuous variables (age) into meaningful groups for certain analyses while retaining the continuous form for others.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image1.png" alt="figure">
 <p>Figure 1 illustrates the distribution of model uncertainty across all reconstructed fan votes, providing insight into where our estimates are more or less reliable. As expected, uncertainty tends to be higher in earlier weeks of each season when more contestants compete and the elimination signal is less discriminating.</p>
 <h3>Key Assumptions</h3>
 <p>Any inverse modeling approach requires explicit assumptions to transform the problem from ill-posed to tractable. We articulate the following key assumptions, which we will test for robustness throughout our analysis:</p>
@@ -116,8 +118,11 @@
 <p>Uncertainty Quantification. A key advantage of our Monte Carlo approach is that it provides natural uncertainty estimates. For each contestant, we compute: • Point Estimate: ˆ 𝑉 𝑐 𝑓 (mean of retained samples)</p>
 <p>• Uncertainty: 𝜎 𝑐 (standard deviation of retained samples)</p>
 <p>• Confidence Interval: 95% CI computed as [ ˆ 𝑉 𝑐 𝑓 − 1 . 96 𝜎 𝑐 , ˆ 𝑉 𝑐 𝑓 + 1 . 96 𝜎 𝑐 ] The uncertainty 𝜎 𝑐 varies systematically across contestants and weeks. Contests at the elimination boundary typically have higher uncertainty, as small changes in fan vote distribution could flip the elimination outcome. Conversely, front-runners with large fan leads have lower uncertainty.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image2.png" alt="figure">
 <p>Figure 3: Consistency Rate Across Seasons Figure 4: Uncertainty Levels by Season Results: Consistency and Uncertainty Our baseline reconstructive optimization model demonstrated high fidelity in reconstructing the fan vote narratives across all 34 seasons. We evaluate model performance using two primary metrics: Consistency Rate (what fraction of weeks our model successfully predicts the correct elimination) and Uncertainty Quantification (how precise our estimates are).</p>
 <p>Consistency Analysis. As shown in Figure 3, the model achieved a consistency rate exceeding 80% in the majority of seasons, with several seasons reaching rates above 90%. The highest consistency was observed in Season 19 (90.9%), while the most challenging seasons included early seasons with fewer data points and transition seasons where voting rules changed.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image3.png" alt="figure">
+<img src="../../assets/works/mcm2026c-dwts-voting/image4.png" alt="figure">
 <p>The consistency metric is computed as:</p>
 <p>if ˆ 𝐸 𝑤 = 𝐸 𝑤 Consistency 𝑤 = otherwise where ˆ 𝐸 𝑤 is our model’s predicted elimination and 𝐸 𝑤 is the observed elimination. The overall season consistency is the mean of weekly consistencies.</p>
 <p>Seasons employing the Percentage method generally showed higher consistency than Rank-method seasons, suggesting that the Percentage method’s mathematical structure may be more amenable to our inverse estimation approach. This makes intuitive sense: percentage-based scores create a continuous optimization landscape, while rank-based scores introduce discontinuities where small changes in vote shares can cause large jumps in ranking.</p>
@@ -155,11 +160,12 @@
 <p>Percentage-Based System (Seasons 3-27). Under the Percentage method, scores and votes are normalized to sum to 100%:</p>
 <p>1. Judge scores are converted to percentages of the total judge score across all contestants: 𝑃 𝑐 𝑗𝑢𝑑𝑔𝑒 = 𝑆 𝑐 𝑐 𝑆 𝑐 𝑗 / Í 𝑗 2. Fan votes are converted to percentages: 𝑃 𝑐 𝑓𝑎𝑛 = 𝑉 𝑐 𝑐 𝑉 𝑐 𝑓 / Í 𝑓 3. The combined score is: 𝑆 𝑐 𝑡𝑜𝑡𝑎𝑙 = 𝑃 𝑐 𝑗𝑢𝑑𝑔𝑒 + 𝑃 𝑐 𝑓𝑎𝑛 4. The contestant with the lowest combined score is eliminated The Percentage method has opposite mathematical properties: it amplifies outliers . A contestant with 50% of fan votes contributes 0.5 to their combined score, potentially overwhelming a judge score of 10% (contributing 0.1).</p>
 <p>Weighting Considerations. Both methods have evolved to incorporate different weightings of judge versus fan components. In some seasons, the judges’ scores were multiplied by a factor (e.g., × 2) before combination. We have normalized these variations in our analysis to focus on the fundamental structural differences.</p>
-
 <h3>Comparative Analysis</h3>
 <p>We applied both methods to all seasons using our estimated fan votes. This counterfactual analysis reveals how each contestant would have fared under the alternative system, holding fan support constant.</p>
 <p>Figure 5: Agreement Rate: Rank vs. Percentage Figure 6: Fan Vote Correlation Analysis The analysis reveals several fundamental structural biases:</p>
 <p>• The Percentage Method amplifies outliers. If a contestant gets 5% of judge scores but 50% of fan votes, the Percentage method allows the fan vote to overwhelmingly dominate.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image5.png" alt="figure">
+<img src="../../assets/works/mcm2026c-dwts-voting/image6.png" alt="figure">
 <p>• The Rank Method compresses variance. Even if a contestant is the most popular by a huge margin, they can only be ”Rank 1”. This limits the ”save” potential of a massive fan base against poor judging.</p>
 <p>Our data shows that the Percentage method consistently yields a higher correlation with fan votes (Avg Correlation ≈ 0 . 92) compared to the Rank method ( ≈ 0 . 81 for Season 2). This confirms that the Percentage method is more ”democratic” but less ”meritocratic.”</p>
 <p>To quantify the structural differences, we computed the agreement rate —the fraction of elimina- tions where both methods would produce the same outcome:</p>
@@ -180,10 +186,13 @@
 <p>Figure 7 shows Rice’s weekly rank trajectory for both judge scores and fan support. The shaded region in Figure 8 illustrates the ”rank divergence”—the gap between where Rice would have placed based on judge scores alone versus his combined ranking. Notably, even in weeks where Rice received the lowest possible judge score, his fan support was enough to prevent elimination.</p>
 <p>Counterfactual analysis suggests that under the Percentage method, Rice would likely have been eliminated approximately 3-4 weeks earlier than he actually was. The Percentage method would have allowed his lower numerical judge scores to more significantly impact his combined total, rather than being ”capped” by the ranking compression.</p>
 <p>Figure 7: Jerry Rice (S2) - Judge Rank vs. Fan Rank Trajectory Figure 8: Jerry Rice (S2) - Rank Divergence Analysis Bobby Bones (Season 27): If Jerry Rice exemplifies how the Rank method can protect low- scoring popular contestants, Bobby Bones exemplifies the opposite phenomenon under the Percentage method. The country radio host entered the finale with the lowest average judge scores of the final three contestants yet won the competition, triggering widespread debate about the fairness of the voting system.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image7.png" alt="figure">
 <p>Our reconstruction estimates that Bones received an extraordinarily high proportion of fan votes in the finale—approximately 45-50% of the total fan vote, despite receiving the lowest judge scores. Under the Percentage method’s mathematical structure, this fan vote dominance translated directly into a combined score advantage that overcame his judge score deficit.</p>
 <p>Figure 9 shows Bones’ rank trajectory across the season, revealing a pattern of steady fan vote growth that peaked during the finale. Figure 10 quantifies how his fan support increasingly outpaced his judge ranking as the season progressed, culminating in the controversial finale outcome.</p>
 <p>Critically, our counterfactual analysis suggests that under the Rank method, Bones’ path to victory would have been significantly more difficult. While his fan support was extraordinary, the Rank method would have capped the advantage he could derive from that support. He would likely have finished as runner-up rather than champion.</p>
 <p>Figure 9: Bobby Bones (S27) - Rank Trajectory Figure 10: Bobby Bones (S27) - Rank Divergence These two case studies illustrate the fundamental tension in voting system design:</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image8.png" alt="figure">
+<img src="../../assets/works/mcm2026c-dwts-voting/image9.png" alt="figure">
 <p>• The Rank method provides a ”floor” for popular contestants, preventing numerical score gaps from creating elimination risk • The Percentage method provides an ”amplifier” for popularity, allowing dominant fan support to overcome judge score deficits Neither system perfectly balances meritocracy and populism; each has structural tendencies that benefit certain types of contestants.</p>
 <p>Enhanced Comparison (Probabilistic Q3)</p>
 <p>We augmented the controversy analysis by sampling fan-vote uncertainty and reporting elimination probabilities rather than deterministic outcomes. This does not necessarily improve accuracy, but it improves statistical rigor by expressing how likely a controversial contestant would be eliminated under each rule. Thus, the enhanced Q3 is kept as a probabilistic interpretation layer, while the baseline remains the main narrative.</p>
@@ -191,6 +200,7 @@
 <h3>Factor Analysis</h3>
 <p>We employed a Random Forest Regressor to identify feature importance for predicting fan vote estimates. The Random Forest algorithm is well-suited for this task because:</p>
 <p>1. It captures non-linear relationships between features and outcomes 2. It handles interactions between features automatically 3. It provides robust importance measures through feature permutation 4. It is robust to outliers and irrelevant features The model was trained to predict fan vote estimates using contestant characteristics as features:</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image10.png" alt="figure">
 <p>• Demographics: Age, gender • Celebrity Type: Industry (athlete, actor, musician, etc.)</p>
 <p>• Partner: Professional dance partner identity • Performance: Judge scores (as a control for overall ability)</p>
 <p>Figure ?? displays the relative importance of each feature in predicting fan vote estimates. The importance score represents the total reduction in prediction error attributable to each feature across all trees in the forest.</p>
@@ -230,10 +240,13 @@
 <p>Fairness Improvements. The DP-B2 system significantly reduced the survival rate of contestants with the lowest judge scores:</p>
 <p>Δ Survival Rate = − 17 . 3% (average across seasons)</p>
 <p>This reduction is achieved without completely eliminating the path for popular contestants to survive occasional poor performances. The logarithmic damping compresses extreme fan support but does not eliminate the benefit of above-average popularity.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image11.png" alt="figure">
 <p>Figure 12: Elimination Flip Rate: DP-B2 vs. Historical Methods Figure 12 quantifies the ”flip rate”—the percentage of eliminations where DP-B2 would have produced a different outcome than the historical system. The average flip rate is approximately 12%, indicating that DP-B2 would have changed roughly 1 in 8 elimination decisions. This is substantial but not revolutionary; most eliminations would remain the same, with changes concentrated in edge cases.</p>
 <p>Maintaining Engagement. Despite the fairness improvements, DP-B2 maintains strong alignment with audience expectations:</p>
 <p>Average Match Rate = 78 . 4% This match rate is comparable to the agreement rate we observed between Rank and Percentage methods (approximately 78%), suggesting that DP-B2 does not radically depart from either historical approach but instead represents a principled middle ground.</p>
 <p>Figure 13: Weekly Minimum Score Gap Analysis Figure 13 illustrates the minimum score gap between the bottom contestant and the rest of the field under different systems. The DP-B2 system shows larger minimum gaps, indicating more decisive elimination decisions and reduced frequency of close calls at the bottom of the rankings.</p>
+<img src="../../assets/works/mcm2026c-dwts-voting/image12.png" alt="figure">
+<img src="../../assets/works/mcm2026c-dwts-voting/image13.png" alt="figure">
 <p>Case Study: Bobby Bones (Season 27). Under the actual Percentage system, Bobby Bones won Season 27 despite having the lowest average judge score among the final three contestants. Under DP-B2, our simulation suggests Bones would likely have finished as runner-up, with the combination of logarithmic damping reducing his vote dominance and the Bottom-2 Safeguard potentially being triggered in earlier rounds where his judge scores were even lower relative to competitors.</p>
 <p>This represents exactly the type of outcome DP-B2 is designed to produce: Bones still performs exceptionally well (finishing second is a strong result), but the ”technical outlier” scenario of a last-place judge score winning the competition is substantially less likely.</p>
 <p>Enhanced Comparison (Tuned DP-B2)</p>

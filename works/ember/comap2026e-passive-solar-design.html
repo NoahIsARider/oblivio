@@ -27,7 +27,7 @@
         <div class="ember-work-header">
           <p class="ember-work-kicker">READING // RESEARCH AND ANALYSIS</p>
           <h1 class="ember-work-title">In Praise of Shadows and Light: Climate-Resilient Passive Solar Design for University Buildings</h1>
-          <p class="ember-work-meta">2026 &middot; text only</p>
+          <p class="ember-work-meta">2026 &middot; 27 images</p>
           <p class="ember-work-summary">As climate change intensifies the frequency of extreme weather events, the design of climate-resilient architecture beco...</p>
         </div>
 
@@ -42,6 +42,7 @@
         <article class="ember-work-content">
 <p class="work-authors"><strong>孟子程 · 郑达均 · 周方亚诺</strong></p>
 <p class="work-competition"><em>2026 MCM/ICM · Problem E</em></p>
+
 <h2>Summary</h2>
 <p>As climate change intensifies the frequency of extreme weather events, the design of climate-resilient architecture becomes imperative. Passive solar strategies offer a sustainable pathway to decarbonization, yet their effectiveness varies drastically across climatic zones. This study constructs a comprehensive mathematical framework to optimize passive design, transitioning from single-building retrofits to global generalizability and future-proof construction.</p>
 <p>For Model 1, addressing the cooling-dominated context of Sungrove University (25.8°N), we formulate a Dynamic Thermal Balance Model (DTBM) coupled with Monte Carlo optimization to identify effective retrofit strategies. By rigorously computing hourly unshaded fractions for rectangular and arc-shaped shading, we identify Scheme A (Rectangular Overhang) as the superior solution. The optimal design achieves a 46.9% reduction in annual cooling load (91,323 kWh saved) while maintaining visual comfort, demonstrating that geometric simplicity can yield substantial thermodynamic benefits in subtropical climates.</p>
@@ -85,6 +86,8 @@
 <p>Solar Irradiance Decomposition and Vector Analysis The driving force of the thermal model is the precise decomposition of solar irradiance on vertical facades. For any given hour f, the sun’s position vector is defined by the altitude angle a(t) and azimuth A;(t). The angle of incidence 6(f) relative to a facade with surface azimuth @ is computed via spherical trigonometry[4]:</p>
 <p>cos 6(t) = sina(t) cos B + cos a(t) sin B cos(A,;(t) — B) (1)</p>
 <p>The total incident irradiance /;..(t) on the facade is synthesized from three components: direct beam Jgir, isotropic diffuse sky radiation Ig, and ground-reflected radiation Igrq.</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image1.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image2.jpeg" alt="figure">
 <p>Tgix(t) = max{0, DNI(t) cos 6(t) } (2a) Layn(t) = DHI(t) -~*S°5F (2b) Ipei(t) = pg GHI(1) - SF (2c)</p>
 <p>Here, , (ground reflectivity) is treated as a decision variable, acknowledging that landscape modifications (e.g., paving materials, grass) can alter the thermal environment.</p>
 <p>Algorithmic Shading Projection A distinct feature of this model is the dynamic computation of the unshaded fraction finshadea(t), Which governs direct solar ingress. Unlike static solstice-based methods, our algorithm integrates shading effects over the entire academic year. For Scheme A (Rectangular Overhang), the vertical projection angle (VPA) is derived from the solar profile angle: tan a(t) (3) cos AA(ft)</p>
@@ -94,6 +97,8 @@
 <p>tan(VPA(f)) = Shadow union example (Astar) at 2026-03-10 12:00:00-04:00 CODE Ee Ee Ce ee a LSE ES ES EE Ee es Ee Eee Ee TE 0 30 Al x along facade (m)</p>
 <p>oN BO i) 60 (a) Scheme A*: 2D Projection Shadow union example (Bstar) at 2026-03-10 12:00:00-04:00 SN IN NN IN IN NN NN RE NN NN IN NN NN Ne Ne Ne 0 30 4 x along facade (m)</p>
 <p>(b) Scheme B*: 2D Projection oN BOO of 60 Figure 2: 2D geometric validation of shadow coverage on the South facade (Solar Noon, March 10). The red regions indicate shadows cast by the overhangs; the blue rectangles are window modules. The overlap area is rigorously calculated to determine instantaneous solar gain.</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image3.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image4.jpeg" alt="figure">
 <p>3D shading scene (Astar) at 2026-03-10 12:00:00-04:00 3D shading scene (Bstar) at 2026-03-10 12:00:00-04:00 VA Ui fi 40 Mitr TRE oF NY Bu oo a z(m)</p>
 <p>(a) Scheme A* (b) Scheme B* Figure 3: 3D visualization of the computed shadow cast for optimal Scheme A and Scheme B at solar noon, March 10. The algorithms precisely determine the unshaded window fraction (fiunshadeq) for every hour of the simulation.</p>
 <p>Sol-air Temperature and Envelope Heat Transfer To account for solar absorption on opaque surfaces (brick veneer walls and roof) without modeling a full 3D conduction field, we utilize the Sol-air Temperature metric (Tgo-air)[5]._ This equivalent temperature linearizes the radiative heat balance:</p>
@@ -103,6 +108,8 @@
 <p>Tin (t + At) = Tin (t) At This formulation explicitly couples the thermal mass (Cz n-) with the instantaneous heat fluxes.</p>
 <p>Crone = Qenv(t) + Ovent(t) + Osolar.in (t) + Oint(t) ~ Onvac(t) (6)</p>
 <p>• Solar Gain: Qsolar.in (f) = Awin - SHGC - Sunshade (1) . I window (t)</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image5.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image6.jpeg" alt="figure">
 <p>* Ventilation: Qyen(t) accounts for both constant background ventilation and an optional Night Flush strategy, which activates enhanced airflow when Joy &lt; Tin — AT, • during unoccupied nights to purge stored heat.</p>
 <p>Optimization Problem Formulation The retrofit design is formulated as a constrained implementation of the global optimization problem. The specific objective function J maximizes the Net Energy Benefit, defined as the cooling savings minus a weighted penalty for winter heating loss:</p>
 <p>max J (x) = (obese _ 2(%)cos1} —w- (Oe sinter - 2%) sola winter] (7)</p>
@@ -118,11 +125,21 @@
 <p>Figure 4: Hourly performance dynamics on March 10. (a) Schemes A* and B* maintain near-zero direct solar exposure during peak irradiance hours. (b) This geometric shielding results in a dramatic reduction in peak cooling demand compared to the unshaded baseline.</p>
 <p>While the objective function includes a penalty for lost winter solar gain, the results show a trade-off: winter solar heat gain drops by approximately 76%. However, given Sungrove’s warm, cooling-dominated climate, this loss is acceptable as the reduction in cooling load (approx. 80,000 kWh) far outweighs the loss in winter gain (approx. 27,000 kWh), resulting in a substantial net positive energy balance. Furthermore, the problem statement highlights an issue with glare in the classrooms. While not explicitly part of the objective function, the shading design serves a dual function. By significantly reducing the unshaded fraction funshadea during work hours, the optimal overhangs naturally mitigate direct sunlight penetration, thereby alleviating visual discomfort and glare risks for students and faculty.</p>
 <p>Parameter Sensitivity and Robustness Analysis Figure 5 presents the response surface of net benefit with respect to SHGC and p, for both schemes, showing lower SHGC generally yields higher net benefits in Sungrove’s cooling-dominated climate, while ground reflectivity exhibits more complex trade-offs. It decomposes the net benefit of A* into Triangulated surface (scheme A) — net benefit over SHGCxrho_g Triangulated surface (scheme B) — net benefit over SHGCxrho_g 0 0 c © -50000 = z 2! -50000 4! +7 oO 8 8 -100000 1! 2 2 2 5 100000 =! 3} o -150000 -150000 -200000 (a) Scheme A Surface Fi ‘heme A) — obj over SHGCxrho_g 285000 68000 0000 255000 $000 52000 225000 fit_kWh kWhth 44000 er_kWh_th 195000 *)</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image7.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image8.jpeg" alt="figure">
 <p>75000 02 03 oa 0s 06 o7 shoe 4000 (c) A*: Net Benefit (d) A*: Cooling Load (e) A*: Winter Gain Figure 5: (a)(b) show the response surface of Net Benefit (kWh) vs. SHGC and Ground Reflectivity (Pz) for Scheme A and B. (c) to (e) show the component decomposition of the objective function. The heatmaps illustrate the conflict between minimizing cooling load (darker is better) and maximizing winter gain (lighter is better), resulting in the net benefit topology.</p>
 <p>annual cooling load and winter solar gain in the second row, revealing the dominant conflict: higher SHGC increases winter gain but penalizes cooling performance, with net benefit strongly driven by cooling reduction.</p>
 <p>Uncertainty distribution — net benefit (kWh) for AY/B* Uncertainty distribution — annual cooling (kWh_th) Uncertainty distribution — discomfort hours (work time)</p>
 <p>0.000200 = 0.040 ia 0.00020 a eo a Koos Noshade 03s] = Neshade 000150 0030 0.00015 o.000125 - . 0025 3 o.o0o10 4g 0.000100 $0020 0.000075 ons 0.00005 0.000050 ania o.0002s 0.005 a 40000 42500 45000 47500 50000 52500 55000 57500 80000 100000 120000 140000 160000 180000 - 00 120 140 160 180 200 bj. net_beneft kWh a kh 80 u -ool_year_kWh_th discomfort_hours, wor (a) Net Benefit Distribution (b) Cooling Load Distribution (c) Discomfort Hours Distribution Figure 6: Uncertainty analysis distributions for key performance indicators. The histograms show the frequency of outcomes across 20 Monte Carlo weather scenarios.</p>
 <p>To assess robustness against climate variability, a Monte Carlo simulation with perturbed weather inputs was conducted. Figure 6 shows the resulting distributions for net benefit, annual cooling load, and discomfort hours. The optimal designs remain robust: for Scheme A*, the 95% confidence interval for annual cooling load is [83,956, 95,672] kWh, representing at least a 44% reduction versus the deterministic baseline (171,876 kWh) even under unfavorable conditions. Discomfort hours stay within acceptable limits in most scenarios. This confirms the long-term resilience of the design, ensuring significant energy savings and comfort protection under future climate variability.</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image9.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image10.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image11.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image12.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image13.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image14.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image15.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image16.jpeg" alt="figure">
 <h2>4 Model 2: Thermal Mass Integration for Borealis University</h2>
 <p>This section addresses the design challenge for Borealis University (60°N), a heating-dominated sub-arctic climate where the primary objective shifts from cooling load minimization to heating load reduction while managing overheating risks during transitional seasons. We extend the Dynamic Thermal Balance Model (DTBM) with three critical enhancements: (1) thermal mass integration, (2) dual-setpoint heating, and (3) dynamic reflective blinds.</p>
 <h3>4.1 Climate Context and Baseline Issues</h3>
@@ -151,6 +168,11 @@
 <p>To verify the transferability of passive design principles identified in Models 1-2, we conduct multilocation experiments across 30 sites spanning latitudes from 15°S to 75°N. This analysis answers a critical question: How do optimal passive design parameters vary with climate, and what universal design rules emerge?</p>
 <h3>5.1 Multi-Location Experimental Design</h3>
 <p>Site Selection and Climate Representation We select 20 prominent university locations worldwide plus 10 random points to ensure geographic diversity (Table 4). Each site is characterized by geographic coordinates (latitude • and longitude Table 4: Representative Site Catalog for Multi-Location Analysis Site Name (Proxy) Latitude (°N) Winter Weight (w) Diffuse Fraction Climate Zone Singapore 1.35 0.2 0.62 Tropical Miami 25.8 0.5 0.48 Subtropical Los Angeles 34.0 1.2 0.32 Mediterranean Beying 39.9 2.1 0.45 Continental London 51.5 2.3 0.68 Temperate Moscow 55.8 2.5 0.52 Cold Continental Helsinki 60.2 2.5 0.61 Subarctic Reykjavik 64.1 2.5 0.73 Arctic A), climate indicators (synthetic temperature archetypes representing cooling/heating balance), solar geometry (derived solar altitude distributions ago0, @•gi60), and radiation structure (direct/diffuse fraction during work hours).</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image17.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image18.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image19.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image20.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image21.jpeg" alt="figure">
 <p>Experimental Protocol For each location, we execute the same optimization framework used in Models 1-2, with consistent constraints and objective formulation. Key experimental parameters include the sample size (1,500 random search iterations per location), design variables ([L,e, SHGC, pg, UAscaie, Czone]), performance metrics (net benefit J, heating/cooling loads, discomfort hours, feasibility rate), and the analysis method (Spearman rank correlation to identify monotonic relationships).</p>
 <h3>5.2 Key Findings: Cross-Latitude Design Principles</h3>
 <p>Spearman correlation analysis reveals statistically significant relationships between climate indicators and optimal design parameters (Table 5). These correlations form the basis for transferable design principles.</p>
@@ -160,6 +182,8 @@
 <p>Design implication: When designing for cold climates, prioritize thermal mass integration (e.g., exposed concrete floors, masonry walls) but with cost-benefit analysis to avoid economically impractical solutions.</p>
 <p>Principle 2: Envelope UA Coupling with Solar Geometry Envelope thermal conductance (UA) shows moderate positive correlation with latitude (0 = +0.574) and negative correlation with solar altitude (9 = —0.545). Contrary to simplistic ’colder = more insulation” intuition, UA optimization depends on solar geometry interaction.</p>
 <p>144 ° tl e o 1.24 3 e e e e 1.0 8 3 e e a wo! &gt; “os J . e e@ e 0.64 . ° e e e°e e 0.44 e s ° 0.5 1.0 15 2.0 2.5 winter_weight_w Figure 10: Envelope UA scaling factor vs. winter weight. UA increases with heating dominance but shows significant scatter due to solar geometry interactions.</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image22.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image23.jpeg" alt="figure">
 <p>Mechanism: UA affects both heat loss (negative in winter) and heat gain management (critical for overheating prevention). At high latitudes with low solar angles, the same UA value has different implications for solar gain utilization versus conductive losses.</p>
 <p>Design implication: Insulation design should coordinate with solar access strategy. In high-latitude sites with good winter solar access, moderately high UA may be optimal; in cloudy high-latitude sites, maximum insulation is preferable.</p>
 <p>Principle 3: SHGC as Comfort Regulator Rather Than Energy Optimizer Solar Heat Gain Coefficient (SHGC) selection shows complex behavior. While energy optimization might suggest high SHGC for heating-dominated sites, we find SHGC strongly negatively correlated with feasibility rate (0 = —0.498).</p>
@@ -167,6 +191,7 @@
 <p>Mechanism: High SHGC increases both winter solar gain (beneficial) and overheating risk (detrimental). In locations where comfort constraints are tight (low feasibility rate), the optimizer selects lower SHGC to prevent violations, even at the cost of reduced winter gain.</p>
 <p>Design implication: SHGC selection should be driven by comfort considerations first, energy optimization second. Use lower SHGC in climates with significant shoulder-season overheating risk, regardless of winter heating needs.</p>
 <p>Principle 4: Net Shading Benefit Decreases with Heating Dominance The net benefit of shading strategies (considering both cooling reduction and winter penalty) shows negative correlation with winter weight (9 = —0.539). Figure 12 illustrates this trend across latitudes. Mechanism: In heating-dominated climates, shading reduces valuable winter solar gain, partially offsetting summer cooling benefits. The net effect diminishes as winter heating needs dominate. Design implication: In cold climates, use selective shading strategies that block summer sun while admitting winter sun (e.g., horizontal overhangs sized for seasonal sun angles, deciduous vegetation).</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image24.jpeg" alt="figure">
 <p>120000 4 £ oe? e oO 100000 4 .? co e = = = 80000 4 2 vo a wl 2 =! 600004 ° ° 2 3 e ee e e e e 40000 4 e eo 6 #® e ® e e @ e e 20000 + + + + + + —40 -20 0 20 40 60 latitude (deg)</p>
 <p>Figure 12: Net benefit of optimal shading vs. latitude. Maximum benefits occur in mid-latitudes with balanced heating/cooling needs.</p>
 <p>Principle 5: Geometric Parameters Show Weak Climate Dependence Shading geometry parameters (LZ, e) show surprisingly weak correlations with climate indicators. Overhang length L has maximum correlation of only p = +0.205 with direct radiation fraction.</p>
@@ -175,6 +200,8 @@
 <p>Design implication: Shading geometry can be optimized locally with less concern for climate adaptation. Focus first on thermal mass and glazing properties, then fine-tune geometry.</p>
 <h3>5.3 Climate Classification and Design Adaptation</h3>
 <p>Based on correlation patterns, we propose a climate classification framework for passive design adaptation (Table 6).</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image25.jpeg" alt="figure">
+<img src="../../assets/works/comap2026e-passive-solar-design/image26.jpeg" alt="figure">
 <p>Table 6: Climate-Based Passive Design Adaptation Framework Climate Type Winter Weight Range Priority 1 Priority 2 Cooling-Dominated w &lt;0.8 Minimize SHGC (0.15-0.25) Maximize shading depth Balanced Mixed 0.8&lt;w&lt;1.8 Moderate SHGC (0.25-0.40) Optimize thermal mass Heating-Dominated w&gt;1.8 Maximize thermal mass Selective shading with high SHGC (0.40-0.60)</p>
 <h3>5.4 Synthesis: Transferable Design Rules</h3>
 <p>The multi-location analysis yields five transferable design rules for passive solar architecture: (1) the thermal mass priority rule indicates that in heating-dominated climates (w &gt; 1.8), thermal mass is the most impactful parameter for energy reduction; (2) the insulation coordination rule stipulates that envelope insulation (UA) should be coordinated with solar geometry, not just heating degree-days; (3) the SHGC constraint rule shows that SHGC selection is primarily constrained by comfort feasibility, and secondarily by energy optimization; (4) the shading benefit rule demonstrates that net shading benefits peak in balanced climates, and thus in heating-dominated regions, seasonally selective shading should be used; and (5) the geometry flexibility rule reveals that shading geometry (L, e) has high design flexibility with weak climate dependence.</p>
@@ -202,6 +229,7 @@
 <h3>6.5 Implementation Recommendations</h3>
 <p>Based on the KPI analysis, implementation should prioritize balancing energy efficiency with daylight quality and comfort. Key actions include using high-selectivity glass (SHGC smaller than or equal to 0.16, VT bigger than 0.6) and adaptive shading like louvers to reduce daylight deficit risks, while integrating zonal controls to leverage robust energy savings for enhanced occupant experience.</p>
 <p>To address glare variability, employ adjustable exterior shades and interior operable layers, coupled with explicit constraints in optimization. Lightweight, modular shading systems can ensure practicality, aligning with the net-zero goal while maintaining architectural flexibility for Sungrove University’s retrofit.</p>
+<img src="../../assets/works/comap2026e-passive-solar-design/image27.jpeg" alt="figure">
 <h2>7 Evaluation and Improvement</h2>
 <h3>7.1 Strengths and Weaknesses</h3>
 <p>The Dynamic Thermal Balance Model (DTBM) excels through its integration of physics-based geometry with high-speed stochastic optimization, featuring algorithmic shading projection for precise hourly unshaded fraction calculations that outperform static methods, computational efficiency enabling extensive design space exploration to identify global optima, cross-location validity confirmed by strong thermodynamic correlations (9 &gt; 0.5), and robustness verified via Monte Carlo analysis with Scheme A* maintaining over 44% cooling reduction under weather uncertainties.</p>

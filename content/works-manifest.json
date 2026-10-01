@@ -267,7 +267,7 @@
     "category": "research",
     "year": "2025",
     "excerpt": "随着现代战争中对精确干扰和防护需求的日益增长，烟幕干扰弹的优化投放策略已成为军事防御系统中的关键技术挑战。本文针对烟幕干扰弹投放中的五个重要问题，建立了基于三维运动学建模和智能优化算法的多层次数学模型，开发了高效的多目标优化框架与协同决策策略。",
-    "imageCount": 0
+    "imageCount": 8
   },
   {
     "slug": "mcm2026c-dwts-voting",
@@ -275,7 +275,7 @@
     "category": "research",
     "year": "2026",
     "excerpt": "“Dancing with the Stars” (DWTS) represents a complex interplay between technical expertise (judges) and popular appeal (fans). The secrecy of fan votes and the evolving aggregation rules create a challenge in evaluating fairness and popularity. This study aims to reconstruct these hidden fan preferences, evaluate the impact of different voting systems, and propose a more robust framework for contestant elimination.",
-    "imageCount": 0
+    "imageCount": 13
   },
   {
     "slug": "comap2026e-passive-solar-design",
@@ -283,6 +283,6 @@
     "category": "research",
     "year": "2026",
     "excerpt": "As climate change intensifies the frequency of extreme weather events, the design of climate-resilient architecture becomes imperative. Passive solar strategies offer a sustainable pathway to decarbonization, yet their effectiveness varies drastically across climatic zones. This study constructs a comprehensive mathematical framework to optimize passive design, transitioning from single-building retrofits to global generalizability and future-proof construction.",
-    "imageCount": 0
+    "imageCount": 27
   }
 ]
