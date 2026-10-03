@@ -336,16 +336,18 @@ function titleFromFile(file) {
 }
 
 function imagePath(entry) {
-  const raw = entry.cover || entry.image;
+  // Only the real cover counts. Works without one (the three modelling papers)
+  // stay word-only: no figure plucked from the article body.
+  const raw = entry.cover;
   if (!raw) return null;
   if (/^[a-z]+:/i.test(raw)) return raw;
   return `../${raw.replace(/^\.\.\//, "")}`;
 }
 
-function listRow({ name, sup, href, image, target, category, lightbox }) {
+function listRow({ name, sup, href, image, full, target, category, lightbox }) {
   return `
       <div class="pf-item"${category ? ` data-category="${escapeAttribute(category)}"` : ""}>
-        <a class="pf-link" href="${escapeAttribute(href)}"${target ? ` target="${escapeAttribute(target)}" rel="noreferrer"` : ""}${image ? ` data-image="${escapeAttribute(image)}"` : ""}${lightbox ? " data-lightbox" : ""} title="${escapeAttribute(name)}">
+        <a class="pf-link" href="${escapeAttribute(href)}"${target ? ` target="${escapeAttribute(target)}" rel="noreferrer"` : ""}${image ? ` data-image="${escapeAttribute(image)}"` : ""}${full ? ` data-full="${escapeAttribute(full)}"` : ""}${lightbox ? " data-lightbox" : ""} title="${escapeAttribute(name)}">
           <h3 class="pf-name">${escapeHtml(name)}${sup ? `<sup class="pf-sup">${escapeHtml(sup)}</sup>` : ""}</h3>
         </a>
       </div>`;
@@ -428,6 +430,7 @@ function renderMinimalArchive(items) {
         name: img.caption || titleFromFile(img.file),
         href: src,
         image: src,
+        full: `../assets/portfolio/images/full/${img.file}`,
         lightbox: true,
       });
     }),
@@ -487,12 +490,14 @@ ${renderNameList(rows)}
       img.classList.add("is-loaded");
     });
 
+    // Every row is wired up, not just the ones with artwork: a row with no
+    // cover (the three modelling papers) clears the stage instead of leaving
+    // the previous image hanging there.
     Array.prototype.slice.call(list.querySelectorAll(".pf-link")).forEach(function (link) {
       var src = link.getAttribute("data-image");
-      if (!src) return;
-      link.addEventListener("mouseenter", function () { show(src); });
+      link.addEventListener("mouseenter", function () { if (src) { show(src); } else { hide(); } });
       link.addEventListener("mouseleave", hide);
-      link.addEventListener("focus", function () { show(src); });
+      link.addEventListener("focus", function () { if (src) { show(src); } else { hide(); } });
       link.addEventListener("blur", hide);
     });
 
@@ -565,7 +570,9 @@ ${renderNameList(rows)}
     triggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (event) {
         event.preventDefault();
-        open(trigger.getAttribute("data-image") || trigger.getAttribute("href"), trigger.getAttribute("title") || "");
+        // The list carries the ink-treated print; the enlarged view opens the
+        // untouched original.
+        open(trigger.getAttribute("data-full") || trigger.getAttribute("data-image") || trigger.getAttribute("href"), trigger.getAttribute("title") || "");
       });
     });
     box.addEventListener("click", function (event) {

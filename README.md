@@ -2,6 +2,14 @@
 
 This project is now a static portfolio archive rather than a bookmark index.
 
+## the three pages
+
+Each page carries a line of its own:
+
+- `index.html` — *oblivion is freedom*
+- `portfolio/index.html` — *I don't remember your face or your hair or your name or your smile*
+- `amber/index.html` — *What disappears leaves a trace. What stays becomes amber.*
+
 ## what the build does
 
 - reads `content/works-manifest.json`
