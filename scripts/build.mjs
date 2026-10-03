@@ -51,6 +51,11 @@ const categoryMeta = {
 
 const categoryOrder = ["research", "essays", "writing", "project", "talk"];
 
+// The portfolio works index mirrors a24films.com/films: names only, artwork on
+// hover. A24 keeps the image slot empty until the first hover; true shows the
+// first visible work's cover as a resting state instead.
+const STAGE_RESTING_COVER = true;
+
 const archiveCategoryMeta = {
   research: { label: "Research", short: "RSRCH" },
   essays: { label: "Essays", short: "ESSAY" },
@@ -315,62 +320,73 @@ function coverImageFor(slug) {
 }
 
 
-function renderPortfolioSections(articleCount) {
-  const extra = JSON.parse(fs.readFileSync(path.join(contentDir, "portfolio-extra.json"), "utf8"));
-  const siteRows = extra.sites
-    .map(
-      (site) => `
-      <li>
-        <a class="pf-site" href="${escapeAttribute(site.url)}" target="_blank" rel="noreferrer">
-          <span class="pf-shot"><img src="../assets/portfolio/sites/${escapeAttribute(site.id)}.jpg" alt="${escapeAttribute(site.title)}" loading="lazy"><span class="pf-arrow" aria-hidden="true">↗</span></span>
-          <span class="pf-site-meta"><span class="pf-site-name">${escapeHtml(site.title)}</span><span class="pf-site-note">${escapeHtml(site.note)}</span></span>
-        </a>
-      </li>`,
-    )
-    .join("\n");
-  const imgRows = extra.images
-    .map(
-      (img) => `
-      <li class="pf-img-item">
-        <img class="pf-img" src="../assets/portfolio/images/${escapeAttribute(img.file)}" alt="${escapeAttribute(img.caption)}" loading="lazy">${
-          img.caption ? `\n        <p class="pf-img-cap">${escapeHtml(img.caption)}</p>` : ""
-        }
-      </li>`,
-    )
-    .join("\n");
+// ---- A24 film-list clone -------------------------------------------------
+// a24films.com/films is a single full-width list: the name is the interface,
+// the artwork sits absolutely at the right edge behind the text (z-index -1)
+// and only fades in while a name is hovered. Sites, image works and written
+// works all use the same list.
+
+function titleFromFile(file) {
+  return String(file)
+    .replace(/\.[a-z0-9]+$/i, "")
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((word) => (/^[a-z]/.test(word) ? word.charAt(0).toUpperCase() + word.slice(1) : word))
+    .join(" ");
+}
+
+function imagePath(entry) {
+  const raw = entry.cover || entry.image;
+  if (!raw) return null;
+  if (/^[a-z]+:/i.test(raw)) return raw;
+  return `../${raw.replace(/^\.\.\//, "")}`;
+}
+
+function listRow({ name, sup, href, image, target, category, lightbox }) {
   return `
-  <section class="pf-sect" id="sites">
-    <div class="pf-sect-head">
-      <span class="pf-idx">01</span>
-      <h2 class="pf-sec-title">Sites</h2>
-      <span class="pf-sec-note">online works &amp; experiments</span>
-    </div>
-    <ul class="pf-site-grid">
-${siteRows}
-    </ul>
-  </section>
+      <div class="pf-item"${category ? ` data-category="${escapeAttribute(category)}"` : ""}>
+        <a class="pf-link" href="${escapeAttribute(href)}"${target ? ` target="${escapeAttribute(target)}" rel="noreferrer"` : ""}${image ? ` data-image="${escapeAttribute(image)}"` : ""}${lightbox ? " data-lightbox" : ""} title="${escapeAttribute(name)}">
+          <h3 class="pf-name">${escapeHtml(name)}${sup ? `<sup class="pf-sup">${escapeHtml(sup)}</sup>` : ""}</h3>
+        </a>
+      </div>`;
+}
 
-  <section class="pf-sect" id="images">
-    <div class="pf-sect-head">
-      <span class="pf-idx">02</span>
-      <h2 class="pf-sec-title">Image Works</h2>
-      <span class="pf-sec-note">posters &amp; visual pieces</span>
-    </div>
-    <ul class="pf-img-grid">
-${imgRows}
-    </ul>
-  </section>
+function renderNameList(rows) {
+  return `    <div class="pf-list">${rows.join("")}
+      <div class="pf-stage" aria-hidden="true"><img alt="" decoding="async"></div>
+    </div>`;
+}
 
-  <section class="pf-sect pf-write" id="writing">
-    <div class="pf-sect-head">
-      <span class="pf-idx">03</span>
-      <h2 class="pf-sec-title">Writing</h2>
-      <span class="pf-sec-note">${articleCount} pieces &mdash; essays, research &amp; notes</span>
-    </div>
-  </section>`;
+// Sites and image works have short names; the written works have long ones.
+// Spreading the short ones evenly through the long ones keeps the list
+// breathable instead of stacking twenty short rows and then thirty-five long
+// ones. Each stream keeps its own order.
+function mergeForRhythm(shortRows, longRows) {
+  if (!shortRows.length) return longRows.slice();
+  if (!longRows.length) return shortRows.slice();
+  const total = shortRows.length + longRows.length;
+  const shortAt = new Set(shortRows.map((_, index) => Math.floor((index * total) / shortRows.length)));
+  const out = [];
+  let short = 0;
+  let long = 0;
+  for (let slot = 0; slot < total; slot += 1) {
+    if (shortAt.has(slot) && short < shortRows.length) {
+      out.push(shortRows[short]);
+      short += 1;
+    } else if (long < longRows.length) {
+      out.push(longRows[long]);
+      long += 1;
+    } else {
+      out.push(shortRows[short]);
+      short += 1;
+    }
+  }
+  return out;
 }
 
 function renderMinimalArchive(items) {
+  const extra = JSON.parse(fs.readFileSync(path.join(contentDir, "portfolio-extra.json"), "utf8"));
+
   const entries = items
     .map((item) => {
       const sectionKey = getSectionKey(item);
@@ -383,10 +399,6 @@ function renderMinimalArchive(items) {
         href: `../works/minimal/${item.slug}.html`,
         year: item.year,
         category: sectionKey,
-        categoryLabel: meta.label,
-        categoryShort: meta.short,
-        medium: `${meta.label} / ${item.imageCount > 0 ? imageCountLabel(item.imageCount) : "text only"}`,
-        glyph: firstGlyph(item.title),
         image: item.imageCount > 0 ? firstImageOf(item) : null,
         cover: coverImageFor(item.slug),
       };
@@ -397,40 +409,40 @@ function renderMinimalArchive(items) {
         left.title.localeCompare(right.title, "zh-Hans-CN"),
     );
 
-  const dataJson = JSON.stringify(entries, null, 2);
+  // One flat list, no headings, no filter, no chrome — the short site / image
+  // names are interleaved with the long written works so the column keeps a
+  // rhythm instead of running short-short-...-long-long.
+  const shortRows = [
+    ...extra.sites.map((site) =>
+      listRow({
+        name: site.title,
+        sup: site.note,
+        href: site.url,
+        target: "_blank",
+        image: `../assets/portfolio/sites/${site.id}.jpg`,
+      }),
+    ),
+    ...extra.images.map((img) => {
+      const src = `../assets/portfolio/images/${img.file}`;
+      return listRow({
+        name: img.caption || titleFromFile(img.file),
+        href: src,
+        image: src,
+        lightbox: true,
+      });
+    }),
+  ];
 
-  const catNav = [
-    `<button type="button" class="cat-btn active" data-filter="all">All</button>`,
-    ...categoryOrder
-      .filter((key) => entries.some((entry) => entry.category === key))
-      .map(
-        (key) =>
-          `<button type="button" class="cat-btn" data-filter="${escapeAttribute(key)}">${escapeHtml(archiveCategoryMeta[key].label)}</button>`,
-      ),
-  ].join("\n");
+  const longRows = entries.map((entry) =>
+    listRow({
+      name: entry.title,
+      sup: entry.year,
+      href: entry.href,
+      image: imagePath(entry),
+    }),
+  );
 
-  const rows = entries
-    .map((entry) => {
-      const cover = entry.cover
-        ? `<div class="work-cover">
-            <img class="cover-img" src="${escapeAttribute("../" + entry.cover)}" alt="" loading="lazy">
-          </div>`
-        : `<div class="work-cover work-cover-text" aria-hidden="true">
-            <span class="cover-cat">${escapeHtml(entry.categoryShort)}</span>
-            <span class="cover-char">${escapeHtml(entry.glyph)}</span>
-            <span class="cover-year">${escapeHtml(entry.year)}</span>
-          </div>`;
-      return `
-        <li class="work-row" data-category="${escapeAttribute(entry.category)}">
-          <div class="work-info">
-            <h3 class="work-title"><a href="${escapeAttribute(entry.href)}">${escapeHtml(entry.title)}</a></h3>
-            <p class="work-medium">${escapeHtml(entry.medium)}</p>
-          </div>
-          <span class="work-year">${escapeHtml(entry.year)}</span>
-${cover}
-        </li>`;
-    })
-    .join("\n");
+  const rows = mergeForRhythm(shortRows, longRows);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -446,75 +458,92 @@ ${cover}
 </head>
 <body>
   <div class="archive-shell">
-    <header class="archive-topbar" id="top">
-      <a class="brand" href="../index.html">oblivio</a>
-      <p class="archive-status" id="work-count">${entries.length} works</p>
-    </header>
-
-${renderPortfolioSections(entries.length)}
-
-    <div class="archive-grid">
-      <aside class="archive-sidebar">
-        <h2 class="artist-name">Noahisarider</h2>
-        <nav class="cat-nav" aria-label="Filter works by category">
-${catNav}
-        </nav>
-        <div class="sidebar-links">
-          <a href="https://github.com/NoahIsARider" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://codeberg.org/NoahIsARider" target="_blank" rel="noreferrer">Codeberg</a>
-        </div>
-      </aside>
-
-      <main class="archive-main">
-        <ul class="work-list">
-${rows}
-        </ul>
-      </main>
-    </div>
-
-    <footer class="archive-footer">
-      <p>Built for static deployment and action-based publishing.</p>
-      <p><a href="../index.html">Archive index</a> · <a href="../amber/">Amber</a> · <a href="#top">Back to top</a></p>
-    </footer>
+${renderNameList(rows)}
   </div>
 
   <script>
   (function () {
-    var rows = Array.prototype.slice.call(document.querySelectorAll(".work-row"));
-    var buttons = Array.prototype.slice.call(document.querySelectorAll(".cat-btn"));
-    var count = document.getElementById("work-count");
-    var total = rows.length;
+    var list = document.querySelector(".pf-list");
+    var stage = list ? list.querySelector(".pf-stage") : null;
+    var img = stage ? stage.querySelector("img") : null;
+    if (!list || !stage || !img) return;
+    var shown = "";
 
-    buttons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        buttons.forEach(function (other) {
-          other.classList.remove("active");
-        });
-        button.classList.add("active");
-        var filter = button.getAttribute("data-filter");
-        var visible = 0;
-        rows.forEach(function (row) {
-          var show = filter === "all" || row.getAttribute("data-category") === filter;
-          row.style.display = show ? "" : "none";
-          if (show) {
-            visible += 1;
-          }
-        });
-        if (count) {
-          count.textContent = visible + " / " + total + " works";
-        }
-      });
+    function show(src) {
+      if (!src) return;
+      if (src !== shown) {
+        shown = src;
+        img.classList.remove("is-loaded");
+        img.src = src;
+      }
+      stage.classList.add("is-active");
+      request();
+    }
+    function hide() {
+      stage.classList.remove("is-active");
+    }
+
+    img.addEventListener("load", function () {
+      img.classList.add("is-loaded");
     });
+
+    Array.prototype.slice.call(list.querySelectorAll(".pf-link")).forEach(function (link) {
+      var src = link.getAttribute("data-image");
+      if (!src) return;
+      link.addEventListener("mouseenter", function () { show(src); });
+      link.addEventListener("mouseleave", hide);
+      link.addEventListener("focus", function () { show(src); });
+      link.addEventListener("blur", hide);
+    });
+
+    // A24 pins the artwork 20vh below the viewport top once the list has
+    // scrolled past it. Width and right offset are measured so the image lines
+    // up with the archive shell instead of the raw viewport edge.
+    var ticking = false;
+    function resolve() {
+      ticking = false;
+      var stageHeight = stage.offsetHeight;
+      if (window.innerWidth < 641 || !stageHeight) {
+        stage.classList.remove("is-sticky");
+        stage.style.top = "";
+        stage.style.width = "";
+        stage.style.right = "";
+        return;
+      }
+      var rect = list.getBoundingClientRect();
+      var vh = window.innerHeight;
+      if (rect.top < vh * 0.2 && rect.bottom > 0) {
+        // Never allowed to slide past the end of the list.
+        stage.style.top = Math.round(Math.min(vh * 0.2, Math.max(0, rect.bottom - stageHeight))) + "px";
+        stage.style.width = Math.round(rect.width * 0.5833333) + "px";
+        stage.style.right = Math.max(0, document.documentElement.clientWidth - rect.right) + "px";
+        stage.classList.add("is-sticky");
+      } else {
+        stage.classList.remove("is-sticky");
+        stage.style.top = "";
+        stage.style.width = "";
+        stage.style.right = "";
+      }
+    }
+    function request() {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(resolve);
+      }
+    }
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
+    resolve();
   })();
   (function () {
-    var imgs = Array.prototype.slice.call(document.querySelectorAll(".pf-img"));
-    if (!imgs.length) return;
+    var triggers = Array.prototype.slice.call(document.querySelectorAll("[data-lightbox]"));
+    if (!triggers.length) return;
     var box = document.createElement("div");
     box.className = "pf-lightbox";
     box.setAttribute("role", "dialog");
     box.setAttribute("aria-modal", "true");
     box.setAttribute("aria-label", "Enlarged image");
-    box.innerHTML = '<img alt=""><button class="pf-lightbox-close" type="button" aria-label="Close">\u00d7</button>';
+    box.innerHTML = '<img alt=""><button class="pf-lightbox-close" type="button" aria-label="Close">\\u00d7</button>';
     document.body.appendChild(box);
     var big = box.querySelector("img");
     var closeBtn = box.querySelector(".pf-lightbox-close");
@@ -533,17 +562,10 @@ ${rows}
       document.body.style.overflow = "";
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
-    imgs.forEach(function (img) {
-      img.setAttribute("tabindex", "0");
-      img.setAttribute("role", "button");
-      img.addEventListener("click", function () {
-        open(img.currentSrc || img.src, img.alt);
-      });
-      img.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
-          event.preventDefault();
-          open(img.currentSrc || img.src, img.alt);
-        }
+    triggers.forEach(function (trigger) {
+      trigger.addEventListener("click", function (event) {
+        event.preventDefault();
+        open(trigger.getAttribute("data-image") || trigger.getAttribute("href"), trigger.getAttribute("title") || "");
       });
     });
     box.addEventListener("click", function (event) {
@@ -557,7 +579,6 @@ ${rows}
 </body>
 </html>`;
 }
-
 
 const ASCII_ORGANISM = String.raw`
         .  .  .     .  .

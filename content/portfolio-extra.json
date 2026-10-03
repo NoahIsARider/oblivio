@@ -2,7 +2,7 @@
   "sites": [
     {
       "id": "noahsroom",
-      "title": "Noah's Room",
+      "title": "NOAH'S ROOM",
       "note": "night desk · every object a door",
       "url": "https://noahisarider.github.io/noahsroom/"
     },
@@ -80,27 +80,27 @@
     },
     {
       "file": "moonpit.jpg",
-      "caption": ""
+      "caption": "Moonpit"
     },
     {
       "file": "stellar-horizon.jpg",
-      "caption": ""
+      "caption": "Stellar Horizon"
     },
     {
       "file": "pixel-mammoth.jpg",
-      "caption": ""
+      "caption": "Pixel Mammoth"
     },
     {
       "file": "vessel-interior.jpg",
-      "caption": ""
+      "caption": "Vessel Interior"
     },
     {
       "file": "ruin-field.jpg",
-      "caption": ""
+      "caption": "Ruin Field"
     },
     {
       "file": "dataviz-ui.jpg",
-      "caption": ""
+      "caption": "Hermes Dataviz UI"
     }
   ]
 }
