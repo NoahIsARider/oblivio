@@ -506,6 +506,53 @@ ${rows}
       });
     });
   })();
+  (function () {
+    var imgs = Array.prototype.slice.call(document.querySelectorAll(".pf-img"));
+    if (!imgs.length) return;
+    var box = document.createElement("div");
+    box.className = "pf-lightbox";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", "Enlarged image");
+    box.innerHTML = '<img alt=""><button class="pf-lightbox-close" type="button" aria-label="Close">\u00d7</button>';
+    document.body.appendChild(box);
+    var big = box.querySelector("img");
+    var closeBtn = box.querySelector(".pf-lightbox-close");
+    var lastFocus = null;
+    function open(src, alt) {
+      lastFocus = document.activeElement;
+      big.src = src;
+      big.alt = alt || "";
+      box.classList.add("open");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+    function close() {
+      box.classList.remove("open");
+      big.removeAttribute("src");
+      document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    imgs.forEach(function (img) {
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("role", "button");
+      img.addEventListener("click", function () {
+        open(img.currentSrc || img.src, img.alt);
+      });
+      img.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+          event.preventDefault();
+          open(img.currentSrc || img.src, img.alt);
+        }
+      });
+    });
+    box.addEventListener("click", function (event) {
+      if (event.target === box || event.target === closeBtn) close();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && box.classList.contains("open")) close();
+    });
+  })();
   </script>
 </body>
 </html>`;
