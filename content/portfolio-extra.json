@@ -1,6 +1,12 @@
 {
   "sites": [
     {
+      "id": "noahsroom",
+      "title": "Noah's Room",
+      "note": "night desk · every object a door",
+      "url": "https://noahisarider.github.io/noahsroom/"
+    },
+    {
       "id": "oblivio",
       "title": "oblivio",
       "note": "selected works · reading wall",
