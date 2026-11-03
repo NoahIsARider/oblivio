@@ -57,6 +57,10 @@
   ],
   "images": [
     {
+      "file": "arena.jpg",
+      "caption": "THE ARENA"
+    },
+    {
       "file": "its-not-sport.jpg",
       "caption": "IT'S NOT SPORT — IT'S A BATTLE"
     },
