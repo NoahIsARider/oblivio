@@ -192,7 +192,7 @@ function buildData(items) {
         id: meta.id.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
         title: meta.title,
         originalTitle: meta.title,
-        parent: "Selected Works",
+        parent: "Portfolio",
         sectionKey,
         note: meta.note,
         span: meta.span,
@@ -261,7 +261,7 @@ function renderHomePage(data) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>oblivion is freedom</title>
-  <meta name="description" content="A reading wall of selected works adapted from source documents and published in the existing archive style.">
+  <meta name="description" content="A reading wall of the portfolio, adapted from source documents and published in the existing archive style.">
   <meta name="theme-color" content="#e7a1c4">
   <link rel="icon" type="image/png" href="${iconName}">
   <link rel="apple-touch-icon" href="${iconName}">
@@ -273,7 +273,7 @@ function renderHomePage(data) {
       <a class="brand" href="${escapeAttribute(data.site.ownerUrl)}" target="_blank" rel="noreferrer">${escapeHtml(data.site.owner)}</a>
       <nav class="topnav" aria-label="Site sections">
         ${renderTopNav(data.sections)}
-        <a class="nav-archive" href="portfolio/" title="Selected works portfolio">Portfolio</a>
+        <a class="nav-archive" href="portfolio/" title="Portfolio">Portfolio</a>
       </nav>
       <p class="topbar-status">${data.stats.totalLinks} works<br>${data.stats.totalSections} sections</p>
     </header>
@@ -281,7 +281,7 @@ function renderHomePage(data) {
     <section class="intro-grid" aria-label="Site introduction">
       <article class="intro-block">
         <h2>Index</h2>
-        <p>A translated reading wall for selected works, rebuilt from original documents while preserving the archive layout.</p>
+        <p>A translated reading wall for the portfolio, rebuilt from original documents while preserving the archive layout.</p>
       </article>
       <article class="intro-block">
         <h2>Focus</h2>
@@ -452,7 +452,7 @@ function renderMinimalArchive(items) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Selected Works | oblivion is freedom</title>
+  <title>Portfolio | oblivion is freedom</title>
   <meta name="description" content="A quiet portfolio — selected writing, image works and online experiments.">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" type="image/png" href="../${iconName}">
@@ -667,7 +667,7 @@ function renderEmberArchive(items) {
           <span class="menu-item" id="menu-clock">00:00:00</span>
         </div>
 
-        <div class="ember-table mono" role="region" aria-label="Selected works">
+        <div class="ember-table mono" role="region" aria-label="Portfolio">
           <div class="ember-thead">
             <span>NO.</span><span>TITLE</span><span>CATEGORY</span><span>YEAR</span>
           </div>
@@ -985,7 +985,7 @@ function renderRedirectStub(href, label) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Selected Works | oblivion is freedom</title>
+  <title>Portfolio | oblivion is freedom</title>
   <meta http-equiv="refresh" content="0; url=${target}">
   <link rel="canonical" href="${target}">
   <script>location.replace("${target}");</script>
